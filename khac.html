@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Các Tài Liệu Khác - Vovinam</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body
+
+style="background: linear-gradient(135deg, #1e1e2f 0%, #2a2a4a 100%); margin: 0; font-family: 'Segoe UI', Arial, sans-serif; overflow-x: hidden; animation: gradientShift 15s ease infinite; background-size: 200% 200%;">
+    <!-- Hạt sáng di chuyển -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Đường viền phát sáng -->
+    <div class="glowing-border"></div>
+ <!-- Nút quay lại -->
+    <a href="xemthem.html" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+   <script>
+    // Kiểm tra xác thực
+    function checkAuth() {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        const loginTime = localStorage.getItem('loginTime');
+        
+        // Nếu chưa đăng nhập hoặc phiên đã hết hạn (24 giờ)
+        if (!isAuthenticated || (Date.now() - parseInt(loginTime)) > 24 * 60 * 60 * 1000) {
+            // Xóa dữ liệu xác thực nếu có
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('username');
+            localStorage.removeItem('loginTime');
+            
+            // Chuyển hướng về trang đăng nhập
+            window.location.href = 'index.html';
+        }
+    }
+    
+    // Thực hiện kiểm tra ngay khi trang tải
+    checkAuth();
+</script>
+    <!-- Menu bên trái -->
+    <nav class="side-menu">
+        <div class="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="menu-items">
+            <li class="menu-item">
+                <a href="vo-dao.html">
+                    <i class="fas fa-fist-raised"></i>
+                    <span>VÕ ĐẠO</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="basic-techniques.html">
+                    <i class="fas fa-video"></i>
+                    <span>VIDEO KỸ THUẬT</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="tlk.html">
+                    <i class="fas fa-book"></i>
+                    <span>CÁC TÀI LIỆU KHÁC</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="xemthem.html">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>XEM THÊM</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="ttlh.html">
+                    <i class="fas fa-envelope"></i>
+                    <span>THÔNG TIN LIÊN HỆ</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Nội dung chính -->
+    <section style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin-left: 250px; padding: 20px; animation: fadeIn 1.2s ease forwards;">
+        <h1 style="font-size: 3em; color: #e0e0ff; margin-bottom: 40px; text-shadow: 0 0 10px rgba(0, 123, 255, 0.8), 0 0 20px rgba(0, 123, 255, 0.4); font-weight: 700; animation: glow 2s ease-in-out infinite;">CÁC VIDEO KHÁC</h1>
+        <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;">
+            <a href="vidhdk.html" style="text-decoration: none; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 2px solid rgba(0, 123, 255, 0.5); border-radius: 16px; padding: 30px; width: 340px; box-shadow: 0 0 20px rgba(0, 123, 255, 0.3); transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease; display: flex; flex-direction: column; align-items: center; animation: fadeInUp 0.6s ease forwards;">
+                <i class="fas fa-microchip" style="font-size: 2.5em; color: #00ddeb; margin-bottom: 15px; text-shadow: 0 0 10px rgba(0, 221, 235, 0.5);"></i>
+                <h2 style="font-size: 1.8em; color: #e0e0ff; margin: 0; text-align: center; font-weight: 600; text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">HỌC VI ĐIỀU KHIỂN,...</h2>
+            </a>
+            <a href="vidk.html" style="text-decoration: none; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 2px solid rgba(0, 123, 255, 0.5); border-radius: 16px; padding: 30px; width: 340px; box-shadow: 0 0 20px rgba(0, 123, 255, 0.3); transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease; display: flex; flex-direction: column; align-items: center; animation: fadeInUp 0.6s ease forwards; animation-delay: 0.3s;">
+                <i class="fas fa-video" style="font-size: 2.5em; color: #ff00ff; margin-bottom: 15px; text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);"></i>
+                <h2 style="font-size: 1.8em; color: #e0e0ff; margin: 0; text-align: center; font-weight: 600; text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);">VIDEO KHÁC</h2>
+            </a>
+        </div>
+    </section>
+
+    <script src="js/main.js"></script>
+    <script>
+        const boxes = document.querySelectorAll('a[style*="box-shadow"]');
+        boxes.forEach(box => {
+            box.addEventListener('mouseenter', () => {
+                box.style.transform = 'translateY(-15px) scale(1.05)';
+                box.style.boxShadow = '0 0 30px rgba(0, 123, 255, 0.6), 0 0 40px rgba(255, 255, 255, 0.2)';
+                box.style.borderColor = 'rgba(0, 123, 255, 1)';
+            });
+            box.addEventListener('mouseleave', () => {
+                box.style.transform = 'translateY(0) scale(1)';
+                box.style.boxShadow = '0 0 20px rgba(0, 123, 255, 0.3)';
+                box.style.borderColor = 'rgba(0, 123, 255, 0.5)';
+            });
+        });
+    </script>
+    <style>
+          .back-button {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--secondary-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 101;
+            transition: var(--transition-normal);
+        }
+
+        .back-button:hover {
+            transform: scale(1.1);
+            background-color: #e61c18;
+        }
+
+        .back-button i {
+            color: var(--text-light);
+            font-size: 24px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px rgba(0, 123, 255, 0.8), 0 0 20px rgba(0, 123, 255, 0.4); }
+            50% { text-shadow: 0 0 15px rgba(0, 123, 255, 1), 0 0 30px rgba(0, 123, 255, 0.6); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</body>
+</html>

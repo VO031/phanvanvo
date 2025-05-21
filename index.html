@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(45deg, #a1c4fd, #c2e9fb, #fbc2eb, #a6c1ee);
+            background-size: 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .login-container:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25), 0 0 20px rgba(163, 112, 237, 0.3);
+        }
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #2d1b5e;
+            font-size: 2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2d1b5e;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 0.9rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            color: #2d1b5e;
+            background-color: #f0f4ff;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .input-group input:focus {
+            outline: none;
+            background: linear-gradient(90deg, #e0e7ff, #f3e8ff);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5), 0 0 20px rgba(163, 112, 237, 0.3);
+        }
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(90deg, #7c3aed, #db2777);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: linear-gradient(90deg, #6d28d9, #be185d);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(219, 39, 119, 0.4), 0 0 20px rgba(124, 58, 237, 0.5);
+        }
+        button:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .error {
+            color: #ff3f3f;
+            text-align: center;
+            margin-top: 1.25rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        @media (max-width: 400px) {
+            .login-container {
+                padding: 1.75rem;
+                max-width: 90%;
+            }
+            .login-container h2 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <form class="login-container" onsubmit="event.preventDefault(); login();">
+        <h2>Đăng Nhập</h2>
+        <div class="input-group">
+            <label for="username">Tên đăng nhập</label>
+            <input type="text" id="username" placeholder="Nhập tên đăng nhập" required>
+        </div>
+        <div class="input-group">
+            <label for="password">Mật khẩu</label>
+            <input type="password" id="password" placeholder="Nhập mật khẩu" required>
+        </div>
+        <button type="submit">Đăng Nhập</button>
+        <p class="error" id="error-message"></p>
+    </form>
+
+    <!-- Firebase SDK phiên bản 8.x -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+        // Cấu hình Firebase
+        const firebaseConfig = {
+          apiKey: "AIzaSyBNAFhMZtU3ubH5R6ZaYZ1rmt-4PLONfj4",
+  authDomain: "myweb-34625.firebaseapp.com",
+  projectId: "myweb-34625",
+  storageBucket: "myweb-34625.firebasestorage.app",
+  messagingSenderId: "140146495176",
+  appId: "1:140146495176:web:47027bcb3f5750a0b89ffd",
+  measurementId: "G-7GNXDSY3F2"
+        };
+
+        // Khởi tạo Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Hàm đăng nhập
+        function login() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const errorMessage = document.getElementById('error-message');
+
+    if (!username || !password) {
+        errorMessage.textContent = 'Vui lòng nhập đầy đủ thông tin!';
+        return;
+    }
+
+    // Kiểm tra thông tin đăng nhập trong Realtime Database
+    database.ref('users/' + username).once('value').then((snapshot) => {
+        if (snapshot.exists()) {
+            const userData = snapshot.val();
+            if (userData.password === password) {
+                // Lưu thông tin xác thực vào localStorage
+                localStorage.setItem('isAuthenticated', 'true');
+                localStorage.setItem('username', username);
+                // Thêm timestamp để kiểm soát thời gian phiên
+                localStorage.setItem('loginTime', Date.now());
+                
+                window.location.href = 'home.html';
+            } else {
+                errorMessage.textContent = 'Mật khẩu không đúng!';
+            }
+        } else {
+            errorMessage.textContent = 'Tên đăng nhập không tồn tại!';
+        }
+    }).catch((error) => {
+        errorMessage.textContent = 'Lỗi: ' + error.message;
+    });
+}
+        // Xử lý nhấn Enter
+        document.getElementById('username').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                login();
+            }
+        });
+        document.getElementById('password').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                login();
+            }
+        });
+    </script>
+</body>
+</html>

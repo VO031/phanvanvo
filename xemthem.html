@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XEM THÊM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+       <script>
+    // Kiểm tra xác thực
+    function checkAuth() {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        const loginTime = localStorage.getItem('loginTime');
+        
+        // Nếu chưa đăng nhập hoặc phiên đã hết hạn (24 giờ)
+        if (!isAuthenticated || (Date.now() - parseInt(loginTime)) > 24 * 60 * 60 * 1000) {
+            // Xóa dữ liệu xác thực nếu có
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('username');
+            localStorage.removeItem('loginTime');
+            
+            // Chuyển hướng về trang đăng nhập
+            window.location.href = 'index.html';
+        }
+    }
+    
+    // Thực hiện kiểm tra ngay khi trang tải
+    checkAuth();
+</script>
+    <!-- Nút quay về trang chủ -->
+    <a href="home.html" class="home-button">
+        <i class="fas fa-home"></i>
+    </a>
+    <!-- Hạt sáng di chuyển -->
+    <div class="particles">
+        <div class="particle" style="position: absolute; background: rgba(255, 255, 255, 0.7); border-radius: 50%; width: 10px; height: 10px; animation: moveParticle 5s infinite ease-in-out;"></div>
+        <div class="particle" style="position: absolute; background: rgba(255, 255, 255, 0.7); border-radius: 50%; width: 10px; height: 10px; animation: moveParticle 5s infinite ease-in-out; animation-delay: 0.5s;"></div>
+        <div class="particle" style="position: absolute; background: rgba(255, 255, 255, 0.7); border-radius: 50%; width: 10px; height: 10px; animation: moveParticle 5s infinite ease-in-out; animation-delay: 1s;"></div>
+        <div class="particle" style="position: absolute; background: rgba(255, 255, 255, 0.7); border-radius: 50%; width: 10px; height: 10px; animation: moveParticle 5s infinite ease-in-out; animation-delay: 1.5s;"></div>
+        <div class="particle" style="position: absolute; background: rgba(255, 255, 255, 0.7); border-radius: 50%; width: 10px; height: 10px; animation: moveParticle 5s infinite ease-in-out; animation-delay: 2s;"></div>
+    </div>
+
+    <!-- Đường viền phát sáng -->
+    <div class="glowing-border" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; border: 2px solid transparent; animation: glowing 2s infinite;"></div>
+
+    <!-- Menu bên trái -->
+    <nav class="side-menu" style="position: fixed; left: 0; top: 0; height: 100%; background: #333; color: #fff; width: 250px; transition: width 0.3s;">
+        <div class="menu-toggle" style="padding: 15px; font-size: 24px; cursor: pointer;">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="menu-items" style="list-style: none; padding: 0;">
+            <li class="menu-item" style="margin: 10px 0;">
+                <a href="vo-dao.html" onmouseover="this.style.backgroundColor='#1e90ff'; this.style.transform='scale(1.05)';" onmouseout="this.style.backgroundColor=''; this.style.transform='scale(1)';" style="display: flex; align-items: center; padding: 10px; border-radius: 5px; color: #fff; text-decoration: none; transition: all 0.3s ease;">
+                    <i class="fas fa-fist-raised"></i>
+                    <span style="margin-left: 10px;">VÕ ĐẠO</span>
+                </a>
+            </li>
+            <li class="menu-item" style="margin: 10px 0;">
+                <a href="basic-techniques.html" onmouseover="this.style.backgroundColor='#1e90ff'; this.style.transform='scale(1.05)';" onmouseout="this.style.backgroundColor=''; this.style.transform='scale(1)';" style="display: flex; align-items: center; padding: 10px; border-radius: 5px; color: #fff; text-decoration: none; transition: all 0.3s ease;">
+                    <i class="fas fa-video"></i>
+                    <span style="margin-left: 10px;">VIDEO KỸ THUẬT</span>
+                </a>
+            </li>
+            <li class="menu-item" style="margin: 10px 0;">
+                <a href="tlk.html" onmouseover="this.style.backgroundColor='#1e90ff'; this.style.transform='scale(1.05)';" onmouseout="this.style.backgroundColor=''; this.style.transform='scale(1)';" style="display: flex; align-items: center; padding: 10px; border-radius: 5px; color: #fff; text-decoration: none; transition: all 0.3s ease;">
+                    <i class="fas fa-book"></i>
+                    <span style="margin-left: 10px;">CÁC TÀI LIỆU KHÁC</span>
+                </a>
+            </li>
+            <li class="menu-item" style="margin: 10px 0;">
+                <a href="xemthem.html" onmouseover="this.style.backgroundColor='#1e90ff'; this.style.transform='scale(1.05)';" onmouseout="this.style.backgroundColor=''; this.style.transform='scale(1)';" style="display: flex; align-items: center; padding: 10px; border-radius: 5px; color: #fff; text-decoration: none; transition: all 0.3s ease;">
+                    <i class="fas fa-plus-circle"></i>
+                    <span style="margin-left: 10px;">XEM THÊM</span>
+                </a>
+            </li>
+            <li class="menu-item" style="margin: 10px 0;">
+                <a href="ttlh.html" onmouseover="this.style.backgroundColor='#1e90ff'; this.style.transform='scale(1.05)';" onmouseout="this.style.backgroundColor=''; this.style.transform='scale(1)';" style="display: flex; align-items: center; padding: 10px; border-radius: 5px; color: #fff; text-decoration: none; transition: all 0.3s ease;">
+                    <i class="fas fa-envelope"></i>
+                    <span style="margin-left: 10px;">THÔNG TIN LIÊN HỆ</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Nội dung chính -->
+    <div class="xem-them-content" style="margin-left: 260px; padding: 20px; opacity: 0; animation: fadeIn 1s ease-in forwards;">
+        <div class="content-boxes" style="display: flex; flex-wrap: wrap; gap: 20px;">
+            <div class="content-box ca-nhan-toi" onclick="checkPassword()" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 16px rgba(0, 0, 0, 0.3)'; this.style.background='linear-gradient(45deg, #1e90ff, #00b7eb)'; this.style.color='#fff';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0, 0, 0, 0.2)'; this.style.background=''; this.style.color='';" style="flex: 1; min-width: 300px; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); transition: all 0.3s ease; cursor: pointer;">
+                <h2 style="margin-top: 0;">CÁ NHÂN TÔI</h2>
+                <div class="content">
+                    <p>Nhấn để xem vào trang cá nhân (yêu cầu mật khẩu).</p>
+                </div>
+            </div>
+            <div class="content-box khac" onclick="window.location.href='khac.html'" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 16px rgba(0, 0, 0, 0.3)'; this.style.background='linear-gradient(45deg, #1e90ff, #00b7eb)'; this.style.color='#fff';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0, 0, 0, 0.2)'; this.style.background=''; this.style.color='';" style="flex: 1; min-width: 300px; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); transition: all 0.3s ease; cursor: pointer;">
+    <h2 style="margin-top: 0;">KHÁC</h2>
+    <div class="content">
+        <p>Không có mật khẩu vào thoải mái</p>
+    </div>
+</div>
+        </div>
+    </div>
+
+    <style>
+         .home-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 101;
+            transition: var(--transition-normal);
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .home-button img {
+            width: 60%; /* Điều chỉnh kích thước hình ảnh bên trong nút */
+            height: 60%;
+        }
+
+        .home-button:hover {
+            transform: scale(1.1); /* Thêm hiệu ứng phóng to khi hover */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes moveParticle {
+            0% { transform: translate(0, 0); opacity: 0.8; }
+            50% { transform: translate(100px, -100px); opacity: 0.3; }
+            100% { transform: translate(0, 0); opacity: 0.8; }
+        }
+
+        @keyframes glowing {
+            0% { border-color: #1e90ff; box-shadow: 0 0 10px #1e90ff; }
+            50% { border-color: #00b7eb; box-shadow: 0 0 20px #00b7eb; }
+            100% { border-color: #1e90ff; box-shadow: 0 0 10px #1e90ff; }
+        }
+    </style>
+
+    <script>
+        function checkPassword() {
+            const password = prompt("Vui lòng nhập mật khẩu:");
+            const correctPassword = "phanvanvo";
+            if (password === correctPassword) {
+                window.location.href = "cnt.html";
+            } else {
+                alert("Mật khẩu không đúng. Vui lòng thử lại.");
+            }
+        }
+
+        // Định vị ngẫu nhiên cho các hạt sáng
+        document.addEventListener("DOMContentLoaded", () => {
+            const particles = document.querySelectorAll(".particle");
+            particles.forEach((particle) => {
+                const randomX = Math.random() * window.innerWidth;
+                const randomY = Math.random() * window.innerHeight;
+                particle.style.left = `${randomX}px`;
+                particle.style.top = `${randomY}px`;
+            });
+        });
+    </script>
+
+    <!-- Cloudflare scripts (giữ nguyên từ mã gốc) -->
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93d8ba2df878bca4',t:'MTc0Njg3MjY3MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93eb0a6ebfeeb061',t:'MTc0NzA2NDcwMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
+</html>

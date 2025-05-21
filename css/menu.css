@@ -1,0 +1,98 @@
+/* =========================================
+   VOVINAM MENU STYLESHEET
+   Author: Phan Văn Võ
+   Version: 1.0
+   ========================================= */
+
+/* ----------------------------------------
+   1. SIDE MENU STYLING
+   ---------------------------------------- */
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 100;
+}
+
+.menu-toggle {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 101;
+    transition: var(--transition-normal);
+}
+
+.menu-toggle i {
+    color: var(--text-light);
+    font-size: 24px;
+    transition: var(--transition-normal);
+}
+
+.menu-toggle:hover {
+    background-color: var(--primary-light);
+    transform: scale(1.05);
+}
+
+.menu-items {
+    position: absolute;
+    top: 0;
+    left: -300px; /* Đặt bên trái, ngoài màn hình */
+    width: 280px;
+    height: 100%;
+    background: rgba(30, 90, 187, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 90px 20px 20px;
+    list-style: none;
+    transition: transform var(--transition-normal);
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+}
+
+.side-menu:hover .menu-items {
+    transform: translateX(300px); /* Di chuyển sang phải để hiển thị */
+}
+
+.menu-item {
+    margin-bottom: 15px;
+}
+
+.menu-item a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-light);
+    padding: 12px 15px;
+    border-radius: var(--radius-md);
+    transition: var(--transition-fast);
+    border-right: 3px solid transparent; /* Đổi từ border-left sang border-right */
+}
+
+.menu-item a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-right: 3px solid var(--accent-color); /* Đổi từ border-left sang border-right */
+    transform: translateX(-5px); /* Đổi từ translateX(5px) sang translateX(-5px) */
+}
+
+.menu-item i {
+    font-size: 18px;
+    width: 30px;
+    margin-right: 10px;
+    color: var(--accent-color);
+}
+
+.menu-item span {
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    font-size: 14px;
+}

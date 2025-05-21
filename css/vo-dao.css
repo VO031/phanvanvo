@@ -1,0 +1,314 @@
+/* VOVINAM VÕ ĐẠO STYLESHEET */
+.vo-dao-content, .vo-dai-content {
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 0;
+    z-index: 2;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.home-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 101;
+    transition: var(--transition-normal);
+    color: var(--text-light);
+    text-decoration: none;
+}
+
+.home-button:hover {
+    background-color: var(--primary-light);
+    transform: scale(1.05);
+}
+
+.level-boxes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    gap: 2rem;
+}
+
+.level-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: transform var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    padding: 1rem;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.level-box h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    margin-bottom: 1rem;
+}
+
+.level-box:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.sub-level-boxes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    width: 100%;
+    gap: 1rem;
+}
+
+.sub-level-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(26, 77, 140, 0.8), rgba(15, 46, 90, 0.8));
+    border-radius: var(--radius-md);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform var(--transition-normal);
+    text-decoration: none;
+    position: relative;
+    z-index: 2;
+}
+
+.sub-level-box h3 {
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.sub-level-box:hover {
+    transform: scale(1.05);
+}
+
+.so-dang {
+    background: linear-gradient(135deg, rgba(26, 77, 140, 0.8), rgba(15, 46, 90, 0.8));
+}
+
+.so-dang h2 {
+    color: var(--accent-color);
+}
+
+.trung-dang {
+    background: linear-gradient(135deg, rgba(255, 222, 89, 0.8), rgba(255, 192, 0, 0.8));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.trung-dang h2 {
+    color: var(--secondary-color);
+}
+
+/* Tùy chỉnh màu sắc cho các ô nhỏ trong Trung Đẳng */
+.trung-dang .sub-level-box {
+    background: #FFD700; /* Màu vàng */
+}
+
+.trung-dang .sub-level-box h3 {
+    color: #FF0000; /* Chữ đỏ */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); /* Giữ text-shadow để chữ nổi bật */
+}
+
+.trung-dang .sub-level-box:hover {
+    background: #FFEA00; /* Màu vàng sáng hơn khi hover */
+    transform: scale(1.05); /* Giữ hiệu ứng phóng to */
+}
+
+.cao-dang {
+    background: linear-gradient(135deg, rgba(199, 24, 21, 0.8), rgba(165, 14, 12, 0.8));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cao-dang h2 {
+    color: var(--text-light);
+}
+
+.content {
+    padding: 1rem;
+    text-align: left;
+    width: 100%;
+    overflow-y: auto;
+    max-height: 70vh;
+}
+
+.content h3 {
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.content p, .content ol, .content ul {
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 992px) {
+    .level-boxes {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        height: auto;
+        gap: 1.5rem;
+    }
+
+    .sub-level-boxes {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, auto);
+    }
+
+    .level-box {
+        max-height: 60vh;
+    }
+
+    .content {
+        max-height: 55vh;
+    }
+}
+
+@media (max-width: 768px) {
+    .vo-dao-content, .vo-dai-content {
+        padding: 5rem 0;
+    }
+
+    .home-button {
+        top: 15px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+    }
+
+    .level-box h2 {
+        font-size: 1.5rem;
+    }
+
+    .sub-level-box h3 {
+        font-size: 1rem;
+    }
+
+    .level-box {
+        max-height: 50vh;
+    }
+
+    .content {
+        max-height: 45vh;
+    }
+}
+
+@media (max-width: 480px) {
+    .vo-dao-content, .vo-dai-content {
+        padding: 4rem 0;
+    }
+
+    .level-box h2 {
+        font-size: 1.3rem;
+    }
+
+    .sub-level-box h3 {
+        font-size: 0.9rem;
+    }
+
+    .home-button {
+        top: 12px;
+        right: 12px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .level-box {
+        max-height: 40vh;
+    }
+
+    .content {
+        max-height: 35vh;
+    }
+}
+
+/* Under Development Message */
+.under-development {
+    text-align: center;
+    font-style: italic;
+    color: var(--text-light);
+    font-size: 1rem;
+    margin-top: 1rem;
+    opacity: 0.8;
+}
+
+/* Quiz Styles */
+.quiz-button, .submit-quiz-button {
+    background: linear-gradient(135deg, rgba(26, 77, 140, 0.8), rgba(15, 46, 90, 0.8));
+    color: var(--accent-color);
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 1rem 0;
+    transition: transform var(--transition-normal);
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.quiz-button:hover, .submit-quiz-button:hover {
+    transform: scale(1.05);
+    background: linear-gradient(135deg, rgba(26, 77, 140, 1), rgba(15, 46, 90, 1));
+}
+
+.quiz-section {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius-md);
+}
+
+.quiz-question {
+    margin-bottom: 1.5rem;
+}
+
+.quiz-question p {
+    margin-bottom: 0.5rem;
+}
+
+.quiz-question label {
+    margin-left: 0.5rem;
+    color: var(--text-light);
+}
+
+/* Wrong Answer Styles */
+.wrong-answer {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-left: 4px solid #ff5555; /* Đường viền đỏ để đánh dấu câu sai */
+}
+
+.wrong-answer p {
+    margin: 0.3rem 0;
+}
+
+.wrong-answer p:nth-child(2) {
+    color: #ff5555; /* Đáp án người dùng chọn: màu đỏ */
+}
+
+.wrong-answer p:nth-child(3) {
+    color: #55ff55; /* Đáp án đúng: màu xanh lá */
+}

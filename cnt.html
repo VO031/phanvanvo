@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CÁ NHÂN</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+          .back-button {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--secondary-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 101;
+            transition: var(--transition-normal);
+        }
+
+        .back-button:hover {
+            transform: scale(1.1);
+            background-color: #e61c18;
+        }
+
+        .back-button i {
+            color: var(--text-light);
+            font-size: 24px;
+        }
+
+       body {
+    background: linear-gradient(135deg, #1e1e2f 0%, #2a2a4a 100%);
+    color: #fff;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-height: 100vh;
+}
+
+.video-section {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    opacity: 0;
+    animation: fadeIn 1s ease forwards;
+    min-height: 100%;
+}
+
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    min-height: 100%;
+}
+
+.glowing-border {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 3px solid transparent;
+    border-image: linear-gradient(45deg, #007bff, #ff00ff, #00ddeb) 1;
+    pointer-events: none;
+    animation: pulseGradient 3s infinite ease-in-out;
+    z-index: 0;
+}
+        .video-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(45deg, #2a2a4a, #3b3b6a);
+            padding: 10px;
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+            animation-delay: calc(0.1s * var(--index));
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .video-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 123, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .video-item video,
+        .video-item iframe {
+            width: 100%;
+            height: auto;
+            display: block;
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+        }
+
+        .video-item h3 {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #e0e0ff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* CSS cho thanh tìm kiếm */
+        .search-bar {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            max-width: 600px;
+            padding: 12px 40px 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(45deg, #3b3b6a, #5a5a9a);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            background: linear-gradient(45deg, #5a5a9a, #7a7aba);
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
+            transform: scale(1.02);
+        }
+
+        .search-bar input::placeholder {
+            color: #b0b0d0;
+        }
+
+        .search-bar::after {
+            content: '\f002';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #b0b0d0;
+        }
+
+        /* CSS cho menu */
+        .side-menu {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .side-menu .menu-toggle {
+            color: #e0e0ff;
+            padding: 15px;
+        }
+
+        .side-menu .menu-item {
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideInLeft 0.5s ease forwards;
+            animation-delay: calc(0.1s * var(--index));
+            margin: 10px 0;
+        }
+
+        .side-menu .menu-item a {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            color: #e0e0ff;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .side-menu .menu-item:hover a {
+            background: linear-gradient(45deg, #007bff, #00ddeb);
+            color: #fff;
+        }
+
+        .side-menu .menu-item i {
+            margin-right: 10px;
+        }
+
+        /* CSS cho hạt sáng */
+        .particle {
+            position: absolute;
+            background: linear-gradient(45deg, #007bff, #00ddeb);
+            border-radius: 50%;
+            box-shadow: 0 rubs 10px rgba(0, 123, 255, 0.8);
+            animation: float 6s infinite ease-in-out, blink 1.5s infinite;
+        }
+
+        .particle:nth-child(1) { width: 12px; height: 12px; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 18px; height: 18px; left: 30%; animation-delay: 1s; }
+        .particle:nth-child(3) { width: 10px; height: 10px; left: 50%; animation-delay: 2s; }
+        .particle:nth-child(4) { width: 15px; height: 15px; left: 70%; animation-delay: 3s; }
+        .particle:nth-child(5) { width: 12px; height: 12px; left: 90%; animation-delay: 4s; }
+
+        /* CSS cho đường viền phát sáng */
+        .glowing-border {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #007bff, #ff00ff, #00ddeb) 1;
+            pointer-events: none;
+            animation: pulseGradient 3s infinite ease-in-out;
+        }
+
+        /* Keyframes cho hiệu ứng */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-60px) translateX(30px); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes pulseGradient {
+            0%, 100% { border-image: linear-gradient(45deg, #007bff, #ff00ff, #00ddeb) 1; }
+            50% { border-image: linear-gradient(45deg, #ff00ff, #00ddeb, #007bff) 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .video-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-bar input {
+                font-size: 14px;
+                padding: 10px 30px 10px 15px;
+            }
+
+            .search-bar::after {
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+       <script>
+    // Kiểm tra xác thực
+    function checkAuth() {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        const loginTime = localStorage.getItem('loginTime');
+        
+        // Nếu chưa đăng nhập hoặc phiên đã hết hạn (24 giờ)
+        if (!isAuthenticated || (Date.now() - parseInt(loginTime)) > 24 * 60 * 60 * 1000) {
+            // Xóa dữ liệu xác thực nếu có
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('username');
+            localStorage.removeItem('loginTime');
+            
+            // Chuyển hướng về trang đăng nhập
+            window.location.href = 'index.html';
+        }
+    }
+    
+    // Thực hiện kiểm tra ngay khi trang tải
+    checkAuth();
+</script>
+    <!-- Hạt sáng di chuyển -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Đường viền phát sáng -->
+    <div class="glowing-border"></div>
+ <!-- Nút quay lại -->
+    <a href="xemthem.html" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+    <!-- Menu bên trái -->
+    <nav class="side-menu">
+        <div class="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="menu-items">
+            <li class="menu-item" style="--index: 1;">
+                <a href="vo-dao.html">
+                    <i class="fas fa-fist-raised"></i>
+                    <span>VÕ ĐẠO</span>
+                </a>
+            </li>
+            <li class="menu-item" style="--index: 2;">
+                <a href="basic-techniques.html">
+                    <i class="fas fa-video"></i>
+                    <span>VIDEO KỸ THUẬT</span>
+                </a>
+            </li>
+            <li class="menu-item" style="--index: 3;">
+                <a href="tlk.html">
+                    <i class="fas fa-book"></i>
+                    <span>CÁC TÀI LIỆU KHÁC</span>
+                </a>
+            </li>
+            <li class="menu-item" style="--index: 4;">
+                <a href="xemthem.html">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>XEM THÊM</span>
+                </a>
+            </li>
+            <li class="menu-item" style="--index: 5;">
+                <a href="ttlh.html">
+                    <i class="fas fa-envelope"></i>
+                    <span>THÔNG TIN LIÊN HỆ</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Phần lưới video -->
+    <section class="video-section">
+        <h2>Cá Nhân</h2>
+        <!-- Thanh tìm kiếm -->
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Tìm kiếm video...">
+        </div>
+        <div class="video-grid">
+             <!-- Video 1: MP4 từ máy chủ -->
+         <div class="video-item" style="--index: 1;">
+                <iframe src="https://www.youtube.com/embed/_ixqqtaBeb0?si=tPvxnFh_9GadVaUg" frameborder="0" allowfullscreen></iframe>
+                <h3>NHẠC 1</h3>
+            </div>
+            <!-- Video 2: MP4 từ máy chủ -->
+            <div class="video-item" style="--index: 2;">
+                <iframe src="https://www.youtube.com/embed/skJPX0Cp5QU?si=TLfEqAHKWH8y-PW4" frameborder="0" allowfullscreen></iframe>
+                <h3>NHẠC 2</h3>
+            </div>
+            <!-- Video 3: YouTube nhúng -->
+            <div class="video-item" style="--index: 3;">
+                <iframe src="https://www.youtube.com/embed/KhfP7GV16ak?si=sA6mpfI_5zzQeAjb" frameborder="0" allowfullscreen></iframe>
+                <h3>NHẠC 3</h3>
+            </div>
+            <!-- Video 4: YouTube nhúng -->
+            <div class="video-item" style="--index: 4;">
+                <iframe src="https://www.youtube.com/embed/PVdGGWXmuRA?si=DLQ3LIzazPfZn7X0" frameborder="0" allowfullscreen></iframe>
+                <h3>NHẠC 4</h3>
+            </div>
+            <!-- Thêm video khác nếu cần -->
+              <!-- Video 4: YouTube nhúng -->
+            <div class="video-item" style="--index: 5;">
+                <iframe src="https://www.youtube.com/embed/FxTSucSET70?si=uaGIU0iZ7pwNgapV" frameborder="0" allowfullscreen></iframe>
+                <h3>NHẠC 5</h3>
+            </div>
+               <!-- Video 1: MP4 từ máy chủ -->
+         <div class="video-item" style="--index: 6;">
+                <iframe src="https://www.youtube.com/embed/BSXF1iECU9E?si=57SIe6fzMoI9wfts" frameborder="0" allowfullscreen></iframe>
+                <h3>NHẠC 6</h3>
+            </div>
+            <!-- Thêm video khác nếu cần -->
+        </div>
+    </section>
+
+    <script>
+        // JavaScript cho tìm kiếm video
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.trim().toLowerCase(); // Xóa khoảng trắng và chuyển thành chữ thường
+            const searchWords = searchTerm.split(/\s+/).filter(word => word.length > 0); // Tách thành mảng các từ
+            const videoItems = document.querySelectorAll('.video-item');
+
+            videoItems.forEach(item => {
+                const titleElement = item.querySelector('h3');
+                // Kiểm tra xem tiêu đề có tồn tại không
+                if (titleElement) {
+                    const title = titleElement.textContent.toLowerCase();
+                    // Nếu không có từ khóa tìm kiếm, hiển thị tất cả video
+                    if (searchTerm === '') {
+                        item.style.display = 'block';
+                        item.style.opacity = '0'; // Đặt opacity về 0 để chạy lại animation
+                        item.style.animation = 'fadeInUp 0.5s ease forwards'; // Áp dụng lại animation
+                    } else {
+                        // Kiểm tra xem tất cả các từ trong searchWords có xuất hiện trong tiêu đề không
+                        const allWordsMatch = searchWords.every(word => title.includes(word));
+                        if (allWordsMatch) {
+                            // Nếu tất cả từ khóa đều khớp, hiển thị video
+                            item.style.display = 'block';
+                            item.style.opacity = '0'; // Đặt opacity về 0 để chạy lại animation
+                            item.style.animation = 'fadeInUp 0.5s ease forwards'; // Áp dụng lại animation
+                        } else {
+                            // Nếu không khớp, ẩn video
+                            item.style.display = 'none';
+                        }
+                    }
+                } else {
+                    // Nếu không tìm thấy tiêu đề, ẩn video để tránh lỗi
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // Script Cloudflare
+        (function() {
+            function c() {
+                var b = a.contentDocument || a.contentWindow.document;
+                if (b) {
+                    var d = b.createElement('script');
+                    d.innerHTML = "window.__CF$cv$params={r:'93eb232ff8567221',t:'MTc0NzA2NTcxNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
+                    b.getElementsByTagName('head')[0].appendChild(d);
+                }
+            }
+            if (document.body) {
+                var a = document.createElement('iframe');
+                a.height = 1;
+                a.width = 1;
+                a.style.position = 'absolute';
+                a.style.top = 0;
+                a.style.left = 0;
+                a.style.border = 'none';
+                a.style.visibility = 'hidden';
+                document.body.appendChild(a);
+                if ('loading' !== document.readyState) {
+                    c();
+                } else if (window.addEventListener) {
+                    document.addEventListener('DOMContentLoaded', c);
+                } else {
+                    var e = document.onreadystatechange || function() {};
+                    document.onreadystatechange = function(b) {
+                        e(b);
+                        if ('loading' !== document.readyState) {
+                            document.onreadystatechange = e;
+                            c();
+                        }
+                    };
+                }
+            }
+        })();
+    </script>
+</body>
+</html>

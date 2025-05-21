@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoang Đai I - Phan Văn Võ</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/vo-dao.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+       <script>
+    // Kiểm tra xác thực
+    function checkAuth() {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        const loginTime = localStorage.getItem('loginTime');
+        
+        // Nếu chưa đăng nhập hoặc phiên đã hết hạn (24 giờ)
+        if (!isAuthenticated || (Date.now() - parseInt(loginTime)) > 24 * 60 * 60 * 1000) {
+            // Xóa dữ liệu xác thực nếu có
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('username');
+            localStorage.removeItem('loginTime');
+            
+            // Chuyển hướng về trang đăng nhập
+            window.location.href = 'index.html';
+        }
+    }
+    
+    // Thực hiện kiểm tra ngay khi trang tải
+    checkAuth();
+</script>
+    <!-- Hạt sáng di chuyển -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Đường viền phát sáng -->
+    <div class="glowing-border"></div>
+
+    <!-- Menu bên trái -->
+    <nav class="side-menu">
+        <div class="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="menu-items">
+            <li class="menu-item">
+                <a href="vo-dao.html">
+                    <i class="fas fa-fist-raised"></i>
+                    <span>VÕ ĐẠO</span>
+                </a>
+            </li>
+        <li class="menu-item">
+    <a href="basic-techniques.html">
+        <i class="fas fa-video"></i>
+        <span>VIDEO KỸ THUẬT</span>
+    </a>
+</li>
+            <li class="menu-item">
+                <a href="tlk.html">
+                    <i class="fas fa-book"></i>
+                    <span>CÁC TÀI LIỆU KHÁC</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="xemthem.html">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>XEM THÊM</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="ttlh.html">
+                    <i class="fas fa-envelope"></i>
+                    <span>THÔNG TIN LIÊN HỆ</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Nút quay về trang chủ -->
+    <a href="index.html" class="home-button">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <!-- Nội dung trang Hoang Đai I -->
+    <main class="vo-dai-content">
+        <div class="level-box">
+            <h2>HOANG ĐAI I</h2>
+            <div class="content">
+                <h3>KIẾN THỨC CHUNG</h3>
+                
+                <p><strong>Câu 1: Vovinam có mấy điều tâm niệm? Nội dung của từng điều tâm niệm?</strong></p>
+                <p><strong>MƯỜI ĐIỀU TÂM NIỆM</strong></p>
+                <ol>
+                    <li>Việt võ đạo sinh nguyện đạt tới cao độ của nghệ thuật để phục vụ dân tộc và nhân loại.</li>
+                    <li>Việt võ đạo sinh nguyện trung kiên phát huy môn phái, xây dựng thế hệ thanh niên dấn thân hiến ích.</li>
+                    <li>Việt võ đạo sinh đồng tâm nhất trí, tôn kính người trên, thương mến đồng đạo.</li>
+                    <li>Việt võ đạo sinh tuyệt đối tôn trọng kỷ luật, nêu cao danh dự võ sĩ.</li>
+                    <li>Việt võ đạo sinh tôn trọng các võ phái khác, chỉ dùng võ để tự vệ và bênh vực lẽ phải.</li>
+                    <li>Việt võ đạo sinh chuyên cần học tập, rèn luyện tinh thần, trau dồi đạo hạnh.</li>
+                    <li>Việt võ đạo sinh sống trong sạch, giản dị, trung thực và cao thượng.</li>
+                    <li>Việt võ đạo sinh kiện toàn một ý chí đanh thép, nỗ lực tự thân cầu tiến.</li>
+                    <li>Việt võ đạo sinh sáng suốt nhận định, bền gan tranh đấu, tháo vát hành động.</li>
+                    <li>Việt võ đạo sinh tự tín, tự thắng, khiêm cung, độ lượng, luôn luôn kiểm điểm để tiến bộ.</li>
+                </ol>
+
+                <p><strong>Câu 2: Về nội dung, Vovinam có mấy phần?</strong></p>
+                <p>Về nội dung, Vovinam có 2 phần: Võ thuật Việt Nam (Việt võ thuật) và Võ đạo Việt Nam (Việt võ đạo)</p>
+
+                <p><strong>Câu 3: Vovinam là gì?</strong></p>
+                <p>Vovinam là từ quốc tế hóa của từ võ thuật - võ đạo Việt Nam.<br>
+                Vovinam là gốc rễ, cội nguồn, còn Việt võ đạo là hoa trái của Vovinam sau quá trình phát triển.</p>
+
+                <p><strong>Câu 4: Danh tính, ngày sinh và ngày mất của Võ sư Sáng tổ môn phái Vovinam - Việt võ đạo?</strong></p>
+                <p>Võ sư Sáng tổ Nguyễn Lộc<br>
+                - Sinh ngày mùng 8 tháng 4 năm Nhâm Tý (24/5/1912) tại làng Hữu Bằng, huyện Thạch Thất, tỉnh Sơn Tây (nay thuộc Hà Nội).<br>
+                - Mất ngày mùng 4 tháng 4 năm Canh Tý (29/04/1960) tại Sài Gòn.</p>
+
+                <p><strong>Câu 5: Danh tính của Võ sư Chưởng môn Môn phái Vovinam - Việt võ đạo đời thứ II (Giai đoạn 1964-1986; 1990-2010)? Ông sinh ra và mất năm nào?</strong></p>
+                <p>Võ sư Lê Sáng. (1920-2010)</p>
+
+                <p><strong>Câu 6: Danh tính của Võ sư Chưởng môn Môn phái Vovinam – Việt võ đạo đời thứ III (Giai đoạn 1986-1990)? Ông sinh ra và mất năm nào?</strong></p>
+                <p>Võ sư Trần Huy Phong (1938-1997)</p>
+
+                <p><strong>Câu 7: Danh tính của Võ sư Chánh Chưởng quản đầu tiên môn phái Vovinam - Việt võ đạo giai đoạn (2010 – 2020)? Ông sinh ra và mất năm nào?</strong></p>
+                <p>Võ sư Nguyễn Văn Chiếu. (1949 - 2020)</p>
+
+                <p><strong>Câu 8: Vovinam là môn võ của Quốc gia nào?</strong></p>
+                <p>Việt Nam</p>
+
+                <p><strong>Câu 9: Việc nghiên cứu Vovinam được hoàn thành năm nào? Cuộc biểu diễn Vovinam đầu tiên được tổ chức tại đâu?</strong></p>
+                <p>Hoàn thành năm 1938. Biểu diễn Vovinam lần đầu tiên được tổ chức tại Nhà hát lớn Hà Nội vào năm 1939.</p>
+
+                <p><strong>Câu 10: Lớp Vovinam công khai đầu tiên được tổ chức khi nào? Tại đâu?</strong></p>
+                <p>Lớp Vovinam công khai đầu tiên được khai giảng năm 1940 tại trường Sư phạm Hà Nội.</p>
+
+                <p><strong>Câu 11: Hiện nay, Vovinam - Việt võ đạo đang phát triển như thế nào?</strong></p>
+                <p>Vovinam Việt Võ đạo đang phát triển mạnh trong nước và được truyền bá sang hơn 70 quốc gia và vùng lãnh thổ trên thế giới</p>
+
+                <p><strong>Câu 12: Năm 2023 là kỷ niệm bao nhiêu năm thành lập môn phái Vovinam Việt võ đạo?</strong></p>
+                <p>Năm 2023 là kỷ niệm 85 năm thành lập môn phái Vovinam Việt võ đạo</p>
+
+                <p><strong>Câu 13: Hội Đồng Võ Sư Chưởng Quản môn phái được thành lập khi nào? Ai là người đứng đầu?</strong></p>
+                <p>Ngày 31/03/2010, do võ sư Nguyễn Văn Chiếu đứng đầu</p>
+
+                <p><strong>Câu 14: Chức danh của người đứng đầu Hội đồng Võ sư Chưởng quản Môn phái là gì?</strong></p>
+                <p>Chánh chưởng quản</p>
+
+                <p><strong>Câu 15: Chánh chưởng quản Hội đồng Võ sư Chưởng quản Môn phái được bầu lại lần 2 khi nào?</strong></p>
+                <p>Ngày 28/04/2024</p>
+
+                <p><strong>Câu 16: Võ sư Chánh chưởng quản Hội đồng Võ sư Chưởng quản Môn phái hiện nay là ai?</strong></p>
+                <p>Võ sư Trần Văn Mỹ</p>
+
+                <p><strong>Câu 17: Giải Vô địch Vovinam Thế Giới lần đầu tiên được tổ chức vào năm nào? Tại quốc gia nào?</strong></p>
+                <p>Tháng 7/2009, tại Nhà thi đấu Phú Thọ, Quận 11, Thành phố Hồ Chí Minh, Việt Nam.</p>
+
+                <p><strong>Câu 18: Giải Vô địch Vovinam Thế giới lần thứ 7 được tổ chức vào năm nào? Tại quốc gia nào?</strong></p>
+                <p>Tháng 11/2023, tại Nhà thi đấu Phú Thọ, Quận 11, Thành phố Hồ Chí Minh, Việt Nam.</p>
+
+                <p><strong>Câu 19: Vovinam được chính thức xuất hiện lần đầu tiên ở Đại hội Thể thao Đông Nam Á lần thứ mấy? Năm nào? Tại quốc gia nào?</strong></p>
+                <p>Vovinam chính thức xuất hiện lần đầu tiên ở SEA Games 26, năm 2011, tại Indonesia</p>
+
+                <p><strong>Câu 20: Vovinam đã được thi đấu chính thức ở những kỳ SEA Games nào? Tại quốc gia nào?</strong></p>
+                <p>- SEA Games 26, năm 2011 tại Indonesia<br>
+                - SEA Games 27, năm 2013 tại Myanmar<br>
+                - SEA Games 31, năm 2021 tại Việt Nam<br>
+                - SEA Games 32, năm 2023 tại Campuchia</p>
+
+                <h3>KIẾN THỨC HOÀNG ĐAI I</h3>
+
+                <p><strong>Câu 1: Ý nghĩa màu đai Đỏ Vovinam Việt Võ Đạo:</strong></p>
+                <p>Tượng trưng cho màu máu, màu của lửa sống hào hùng kiên quyết, với ý nghĩa võ thuật và tinh thần võ đạo đã thấm sâu vào máu huyết, đang lưu thông trong thân thể của người môn sinh.</p>
+
+                <p><strong>Câu 2: Ý nghĩa màu đai Trắng Vovinam Việt Võ Đạo:</strong></p>
+                <p>Tượng trưng cho màu xương, với ý nghĩa võ thuật và tinh thần võ đạo đã ngấm sâu vào xương tủy, biến căn cốt con người, tượng trưng cho tinh hoa môn phái.</p>
+
+                <p><strong>Câu 3: Hãy chọn câu phát biểu đúng với ý nghĩa điều tâm niệm thứ 7?</strong></p>
+                <p>Nói về tâm nguyện sống của VVĐS, đó là sống trong sạch, giản dị, trung thực và cao thượng</p>
+
+                <p><strong>Câu 4: Hãy chọn câu phát biểu đúng với ý nghĩa điều tâm niệm thứ 4?</strong></p>
+                <p>Nói về kỷ luật Việt Võ Đạo là kỷ luật tự giác, nghĩa là tự mình hiểu và tôn trọng kỷ luật.</p>
+
+                <p><strong>Câu 5: Hãy chọn câu phát biểu đúng với ý nghĩa điều tâm niệm thứ 8?</strong></p>
+                <p>Nói về ý chí của VVĐS, đó là phải rèn luyện cho bản thân một ý chí đanh thép, thích nghi với mọi thử thách, gian nguy và nỗ lực tự thân cầu tiến.</p>
+
+                <p><strong>Câu 6: Mỗi màu đai của môn phái Vovinam Việt Võ Đạo có mấy cấp?</strong></p>
+                <p>Xanh có 03 cấp, Vàng có 03 cấp, Đỏ có 07 cấp, Trắng có 01 cấp</p>
+
+                <p><strong>Câu 7: Danh tính cố võ sư Chưởng Môn của môn phái Vovinam Việt Võ Đạo? Ông sinh ra và mất năm nào?</strong></p>
+                <p>Lê Sáng (1920 - 2010)</p>
+
+                <p><strong>Câu 8: Hội đồng Võ sư Chưởng quản môn phái gồm bao nhiêu Võ sư, Chánh chưởng môn phái là ai?</strong></p>
+                <p>Gồm 9 Võ sư – Nguyễn Văn Chiếu</p>
+
+                <p><strong>Câu 9: Danh tính cố võ sư Trần Huy Phong của môn phái Vovinam Việt Võ Đạo? Ông sinh ra và mất năm nào?</strong></p>
+                <p>Trần Huy Phong – 1938 – 1997</p>
+
+                <p><strong>Câu 10: Danh tính cố võ sư Chánh chưởng quản môn phái Vovinam Việt Võ Đạo? Ông sinh ra và mất năm nào?</strong></p>
+                <p>Nguyễn Văn Chiếu – 1949 – 2020</p>
+
+                <p><strong>Câu 11: Danh tính, ngày sinh, nơi sinh cố võ sư Sáng Tổ Môn Phái Vovinam Việt Võ Đạo?</strong></p>
+                <p>Nguyễn Lộc (08 - 04 - 1912) tại làng Hữu Bằng, huyện Thạch Thất, tỉnh Sơn Tây (nay là Hà Tây).</p>
+
+                <p><strong>Câu 12: Ngày qua đời, nơi qua đời của cố võ sư Sáng Tổ Môn Phái Vovinam Việt Võ Đạo</strong></p>
+                <p>Ngày 04 - 04 - 1960. Sài Gòn (TP-HCM)</p>
+
+                <p><strong>Câu 13: Cố Võ sư Nguyễn Văn Chiếu là Chánh Chưởng quản môn phái Vovinam Việt Võ Đạo từ năm nào đến năm nào?</strong></p>
+                <p>2010 - 2020</p>
+
+                <p><strong>Câu 14: Như thế nào là một trường dạy Võ đạo?</strong></p>
+                <p>Hướng dẫn người học võ kỹ thuật dùng sức, còn trao dồi cho họ một quan niệm sống đúng đắn để cho mọi người kính trọng và thành công trong đời sống.</p>
+
+                <p><strong>Câu 15: Như thế nào là một trường dạy Võ thuật?</strong></p>
+                <p>Hướng dẫn người học võ kỹ thuật dùng sức để ứng chiến với người và vật.</p>
+
+                <p><strong>Câu 16: Về võ thuật, Vovinam-Việt võ đạo huấn luyện môn sinh ra sao?</strong></p>
+                <p>Vovinam Việt võ đạo huấn luyện cho môn sinh một kỷ thuật dùng sức tinh vi để tự vệ hữu hiệu hầu đạt tới một nghệ thuật cao quí để phục vụ con người và sẵn sàng bênh vực lẽ phải.</p>
+
+                <p><strong>Câu 17: Về võ đạo, Vovinam-Việt võ đạo huấn luyện môn sinh ra sao?</strong></p>
+                <p>Vovinam-Việt võ đạo rèn luyện cho môn sinh một tâm hồn cao thượng, một ý chí quật cường, một phong thái hào hiệp, một tinh thần kỷ luật tự giác, một nếp sống hợp quần trong tinh thần đồng đạo, một truyền thống hy sinh cao cả. Một đức độ khoan dung từ ái để phục vụ hữu hiệu cho bản thân, gia đình, dân tộc và nhân loại.</p>
+
+                <p><strong>Câu 18: Về võ lực, Vovinam-Việt võ đạo huấn luyện môn sinh ra sao?</strong></p>
+                <p>Vovinam Việt võ đạo huấn luyện cho môn sinh một thân hình rắn rỏi vững chắc, một sức lực mạnh mẽ dẻo dai, để có thể chịu đựng khó khăn cực nhọc, phòng chống bệnh tật, giữ cho thân thể luôn tráng kiện và lành mạnh.</p>
+
+                <p><strong>Câu 19: Muốn tình sư đệ được thiêng liêng thân thiết, thầy trò phải đối xử với nhau ra sao?</strong></p>
+                <p>Thầy phải xứng đáng là thầy (có tác phong, tư cách, có tinh thần phục vụ cao cả)<br>
+                Tận tâm dạy bảo, thương mến trò, coi trò như gan ruột tay chân.<br>
+                Trò phải trung thực, tôn kính, biết ơn và làm vinh danh thầy bằng cách thực nghiệm những điều đã thụ huấn.</p>
+
+                <p><strong>Câu 20: Thế nào là bạn tâm giao?</strong></p>
+                <p>Là bạn cùng tâm hồn, cùng khuynh hướng, đồng cam, cộng khổ</p>
+
+                <!-- Nút Quiz -->
+                <button id="quizButton" class="quiz-button">BẮT ĐẦU QUIZ</button>
+                <!-- Khu vực hiển thị câu hỏi trắc nghiệm -->
+                <div id="quizSection" class="quiz-section" style="display: none;">
+                    <h3>QUIZ KIẾN THỨC VOVINAM</h3>
+                    <div id="quizQuestions"></div>
+                    <button id="submitQuiz" class="submit-quiz-button" style="display: none;">NỘP BÀI</button>
+                    <div id="quizResult" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Dữ liệu 100 câu hỏi trắc nghiệm
+        const questions = [
+            { question: "Vovinam có mấy điều tâm niệm?", correctAnswer: "10", incorrectAnswers: ["8", "12", "15"] },
+            { question: "Điều tâm niệm số 1 của Vovinam là gì?", correctAnswer: "Đạt tới cao độ của nghệ thuật để phục vụ dân tộc và nhân loại", incorrectAnswers: ["Tôn trọng kỷ luật", "Sống trong sạch", "Tôn kính người trên"] },
+            { question: "Điều tâm niệm số 2 của Vovinam nói về điều gì?", correctAnswer: "Phát huy môn phái, xây dựng thế hệ thanh niên", incorrectAnswers: ["Tôn trọng các võ phái khác", "Sáng suốt nhận định", "Kiện toàn ý chí"] },
+            { question: "Theo điều tâm niệm số 3, Việt võ đạo sinh phải làm gì?", correctAnswer: "Đồng tâm nhất trí, tôn kính người trên", incorrectAnswers: ["Sống giản dị", "Tự tín, tự thắng", "Chuyên cần học tập"] },
+            { question: "Điều tâm niệm số 4 của Vovinam liên quan đến gì?", correctAnswer: "Tôn trọng kỷ luật, nêu cao danh dự võ sĩ", incorrectAnswers: ["Phát huy môn phái", "Tôn kính đồng đạo", "Sống cao thượng"] },
+            { question: "Điều tâm niệm số 5 của Vovinam nói gì về các võ phái khác?", correctAnswer: "Tôn trọng và chỉ dùng võ để tự vệ", incorrectAnswers: ["Cạnh tranh để phát triển", "Học hỏi để vượt qua", "Tránh giao lưu"] },
+            { question: "Điều tâm niệm số 6 của Vovinam khuyến khích điều gì?", correctAnswer: "Chuyên cần học tập, rèn luyện tinh thần", incorrectAnswers: ["Sống giản dị", "Tự tín, tự thắng", "Bền gan tranh đấu"] },
+            { question: "Theo điều tâm niệm số 7, Việt võ đạo sinh sống như thế nào?", correctAnswer: "Trong sạch, giản dị, trung thực", incorrectAnswers: ["Cao ngạo, phô trương", "Hào nhoáng, xa hoa", "Tham vọng, cạnh tranh"] },
+            { question: "Điều tâm niệm số 8 của Vovinam nhấn mạnh điều gì?", correctAnswer: "Kiện toàn ý chí đanh thép", incorrectAnswers: ["Tôn kính người trên", "Sống trong sạch", "Tôn trọng kỷ luật"] },
+            { question: "Điều tâm niệm số 9 của Vovinam đề cập đến đức tính nào?", correctAnswer: "Sáng suốt nhận định, bền gan tranh đấu", incorrectAnswers: ["Tự tín, tự thắng", "Chuyên cần học tập", "Sống giản dị"] },
+            { question: "Điều tâm niệm số 10 của Vovinam khuyến khích điều gì?", correctAnswer: "Tự tín, tự thắng, luôn kiểm điểm để tiến bộ", incorrectAnswers: ["Tôn trọng kỷ luật", "Phát huy môn phái", "Sống trong sạch"] },
+            { question: "Về nội dung, Vovinam có mấy phần?", correctAnswer: "2", incorrectAnswers: ["3", "4", "5"] },
+            { question: "Hai phần nội dung của Vovinam là gì?", correctAnswer: "Võ thuật Việt Nam và Võ đạo Việt Nam", incorrectAnswers: ["Võ thuật và Thiền", "Võ đạo và Thể dục", "Võ thuật và Văn hóa"] },
+            { question: "Vovinam là gì?", correctAnswer: "Từ quốc tế hóa của võ thuật - võ đạo Việt Nam", incorrectAnswers: ["Một môn võ Nhật Bản", "Một môn võ Trung Quốc", "Một môn võ Thái Lan"] },
+            { question: "Vovinam được xem là gì của Việt võ đạo?", correctAnswer: "Gốc rễ, cội nguồn", incorrectAnswers: ["Hoa trái", "Mục tiêu", "Phương pháp"] },
+            { question: "Võ sư Sáng tổ môn phái Vovinam - Việt võ đạo là ai?", correctAnswer: "Nguyễn Lộc", incorrectAnswers: ["Lê Sáng", "Nguyễn Văn Chiếu", "Trần Huy Phong"] },
+            { question: "Võ sư Nguyễn Lộc sinh ngày nào?", correctAnswer: "24/05/1912", incorrectAnswers: ["24/05/1920", "24/05/1930", "24/05/1940"] },
+            { question: "Võ sư Nguyễn Lộc mất ngày nào?", correctAnswer: "29/04/1960", incorrectAnswers: ["29/04/1950", "29/04/1970", "29/04/1980"] },
+            { question: "Võ sư Lê Sáng sinh năm nào?", correctAnswer: "1920", incorrectAnswers: ["1910", "1930", "1940"] },
+            { question: "Võ sư Lê Sáng mất năm nào?", correctAnswer: "2010", incorrectAnswers: ["2000", "2020", "1990"] },
+            { question: "Võ sư Trần Huy Phong sinh năm nào?", correctAnswer: "1938", incorrectAnswers: ["1928", "1948", "1958"] },
+            { question: "Võ sư Trần Huy Phong mất năm nào?", correctAnswer: "1997", incorrectAnswers: ["1987", "2007", "2017"] },
+            { question: "Võ sư Nguyễn Văn Chiếu sinh năm nào?", correctAnswer: "1949", incorrectAnswers: ["1939", "1959", "1969"] },
+            { question: "Võ sư Nguyễn Văn Chiếu mất năm nào?", correctAnswer: "2020", incorrectAnswers: ["2010", "2030", "2000"] },
+            { question: "Vovinam là môn võ của quốc gia nào?", correctAnswer: "Việt Nam", incorrectAnswers: ["Nhật Bản", "Trung Quốc", "Thái Lan"] },
+            { question: "Việc nghiên cứu Vovinam được hoàn thành năm nào?", correctAnswer: "1938", incorrectAnswers: ["1940", "1935", "1945"] },
+            { question: "Cuộc biểu diễn Vovinam đầu tiên được tổ chức ở đâu?", correctAnswer: "Nhà hát lớn Hà Nội", incorrectAnswers: ["Sài Gòn", "Huế", "Đà Nẵng"] },
+            { question: "Lớp Vovinam công khai đầu tiên được tổ chức khi nào?", correctAnswer: "1940", incorrectAnswers: ["1938", "1939", "1942"] },
+            { question: "Hiện nay, Vovinam phát triển như thế nào?", correctAnswer: "Phát triển mạnh trong nước và hơn 70 quốc gia", incorrectAnswers: ["Chỉ trong nước", "Hơn 50 quốc gia", "Hơn 100 quốc gia"] },
+            { question: "Năm 2023 kỷ niệm bao nhiêu năm thành lập Vovinam?", correctAnswer: "85 năm", incorrectAnswers: ["80 năm", "90 năm", "75 năm"] },
+            { question: "Hội Đồng Võ Sư Chưởng Quản được thành lập khi nào?", correctAnswer: "31/03/2010", incorrectAnswers: ["31/03/2000", "31/03/2015", "31/03/2020"] },
+            { question: "Chức danh người đứng đầu Hội đồng Võ sư Chưởng quản là gì?", correctAnswer: "Chánh chưởng quản", incorrectAnswers: ["Chưởng môn", "Sáng tổ", "Tổng thư ký"] },
+            { question: "Chánh chưởng quản được bầu lại lần 2 vào ngày nào?", correctAnswer: "28/04/2024", incorrectAnswers: ["28/04/2020", "28/04/2022", "28/04/2023"] },
+            { question: "Võ sư Chánh chưởng quản hiện nay là ai?", correctAnswer: "Trần Văn Mỹ", incorrectAnswers: ["Nguyễn Văn Chiếu", "Lê Sáng", "Nguyễn Lộc"] },
+            { question: "Giải Vô địch Vovinam Thế Giới lần đầu tiên diễn ra năm nào?", correctAnswer: "2009", incorrectAnswers: ["2005", "2011", "2013"] },
+            { question: "Vovinam xuất hiện lần đầu ở SEA Games vào năm nào?", correctAnswer: "2011", incorrectAnswers: ["2009", "2013", "2015"] },
+            { question: "Vovinam đã thi đấu ở những kỳ SEA Games nào?", correctAnswer: "26, 27, 31, 32", incorrectAnswers: ["25, 26, 27, 28", "28, 29, 30, 31", "30, 31, 32, 33"] },
+            { question: "Ý nghĩa màu đai Đỏ của Vovinam là gì?", correctAnswer: "Tượng trưng cho máu, lửa sống hào hùng kiên quyết, võ thuật và tinh thần võ đạo thấm sâu vào máu huyết", incorrectAnswers: ["Tượng trưng cho Vương đạo", "Tượng trưng cho sự khởi đầu", "Tượng trưng cho sự hòa bình"] },
+            { question: "Ý nghĩa màu đai Trắng của Vovinam là gì?", correctAnswer: "Tượng trưng cho xương, võ thuật và tinh thần võ đạo ngấm sâu vào xương tủy", incorrectAnswers: ["Tượng trưng cho máu và lửa sống", "Tượng trưng cho Vương đạo", "Tượng trưng cho sự khởi đầu"] },
+            { question: "Ý nghĩa điều tâm niệm thứ 7 của Vovinam là gì?", correctAnswer: "Sống trong sạch, giản dị, trung thực và cao thượng", incorrectAnswers: ["Tôn kính người trên", "Phát huy môn phái", "Tự tín, tự thắng"] },
+            { question: "Ý nghĩa điều tâm niệm thứ 4 của Vovinam là gì?", correctAnswer: "Kỷ luật tự giác, tự mình hiểu và tôn trọng kỷ luật", incorrectAnswers: ["Sống trong sạch", "Tôn trọng các võ phái khác", "Phát huy môn phái"] },
+            { question: "Ý nghĩa điều tâm niệm thứ 8 của Vovinam là gì?", correctAnswer: "Rèn luyện ý chí đanh thép, thích nghi với thử thách", incorrectAnswers: ["Tôn kính người trên", "Sống giản dị", "Tự tín, tự thắng"] },
+            { question: "Mỗi màu đai của Vovinam có mấy cấp?", correctAnswer: "Xanh 3 cấp, Vàng 3 cấp, Đỏ 7 cấp, Trắng 1 cấp", incorrectAnswers: ["Xanh 2 cấp, Vàng 2 cấp, Đỏ 5 cấp, Trắng 2 cấp", "Xanh 4 cấp, Vàng 4 cấp, Đỏ 8 cấp, Trắng 1 cấp", "Xanh 3 cấp, Vàng 3 cấp, Đỏ 6 cấp, Trắng 2 cấp"] },
+            { question: "Hội đồng Võ sư Chưởng quản môn phái gồm bao nhiêu võ sư?", correctAnswer: "9", incorrectAnswers: ["7", "10", "12"] },
+            { question: "Ai là Chánh chưởng quản của Hội đồng Võ sư Chưởng quản?", correctAnswer: "Nguyễn Văn Chiếu", incorrectAnswers: ["Lê Sáng", "Nguyễn Lộc", "Trần Huy Phong"] },
+            { question: "Cố Võ sư Nguyễn Văn Chiếu làm Chánh Chưởng quản từ năm nào đến năm nào?", correctAnswer: "2010 - 2020", incorrectAnswers: ["2000 - 2010", "2015 - 2020", "2005 - 2015"] },
+            { question: "Trường dạy Võ đạo là gì?", correctAnswer: "Hướng dẫn kỹ thuật và trao dồi quan niệm sống đúng đắn", incorrectAnswers: ["Chỉ dạy kỹ thuật chiến đấu", "Chỉ dạy tự vệ", "Chỉ dạy biểu diễn"] },
+            { question: "Trường dạy Võ thuật là gì?", correctAnswer: "Hướng dẫn kỹ thuật dùng sức để ứng chiến", incorrectAnswers: ["Dạy quan niệm sống", "Dạy tinh thần võ đạo", "Dạy biểu diễn võ thuật"] },
+            { question: "Vovinam huấn luyện môn sinh về võ thuật như thế nào?", correctAnswer: "Kỹ thuật dùng sức tinh vi để tự vệ và bênh vực lẽ phải", incorrectAnswers: ["Chỉ để thi đấu", "Chỉ để biểu diễn", "Chỉ để rèn sức mạnh"] },
+            { question: "Vovinam huấn luyện môn sinh về võ đạo như thế nào?", correctAnswer: "Rèn tâm hồn cao thượng, ý chí quật cường, tinh thần kỷ luật tự giác", incorrectAnswers: ["Chỉ dạy kỹ thuật chiến đấu", "Chỉ rèn sức mạnh", "Chỉ dạy tự vệ"] },
+            { question: "Vovinam huấn luyện môn sinh về võ lực như thế nào?", correctAnswer: "Rèn thân hình rắn rỏi, sức lực mạnh mẽ dẻo dai", incorrectAnswers: ["Chỉ dạy kỹ thuật", "Chỉ rèn tinh thần", "Chỉ dạy biểu diễn"] },
+            { question: "Thầy trò trong Vovinam đối xử với nhau như thế nào để tình sư đệ thiêng liêng?", correctAnswer: "Thầy tận tâm dạy bảo, trò trung thực tôn kính", incorrectAnswers: ["Thầy nghiêm khắc, trò sợ hãi", "Thầy thờ ơ, trò tự học", "Thầy cạnh tranh, trò ganh đua"] },
+            { question: "Bạn tâm giao trong Vovinam là gì?", correctAnswer: "Bạn cùng tâm hồn, đồng cam cộng khổ", incorrectAnswers: ["Bạn cùng thi đấu", "Bạn cùng lớp học", "Bạn cùng môn phái"] },
+            { question: "Vovinam được thành lập vào năm nào?", correctAnswer: "1938", incorrectAnswers: ["1940", "1935", "1945"] },
+            { question: "Vovinam huấn luyện môn sinh về mấy phương diện?", correctAnswer: "3", incorrectAnswers: ["2", "4", "5"] },
+            { question: "Ba phương diện huấn luyện của Vovinam là gì?", correctAnswer: "Võ lực, võ thuật, tinh thần võ đạo", incorrectAnswers: ["Võ thuật, thể lực, tâm linh", "Võ lực, kỹ thuật, biểu diễn", "Võ đạo, sức mạnh, tốc độ"] },
+            { question: "Võ sư Nguyễn Lộc sinh ở đâu?", correctAnswer: "Làng Hữu Bằng, huyện Thạch Thất", incorrectAnswers: ["Sài Gòn", "Huế", "Đà Nẵng"] },
+            { question: "Võ sư Nguyễn Lộc mất ở đâu?", correctAnswer: "Sài Gòn", incorrectAnswers: ["Hà Nội", "Huế", "Đà Nẵng"] },
+            { question: "Lớp Vovinam công khai đầu tiên được tổ chức ở đâu?", correctAnswer: "Trường Sư phạm Hà Nội", incorrectAnswers: ["Nhà hát lớn Hà Nội", "Sài Gòn", "Huế"] },
+            { question: "Giải Vô địch Vovinam Thế Giới lần đầu tiên diễn ra ở đâu?", correctAnswer: "TP.HCM, Việt Nam", incorrectAnswers: ["Pháp", "Campuchia", "Algeria"] },
+            { question: "SEA Games 26 được tổ chức ở đâu?", correctAnswer: "Indonesia", incorrectAnswers: ["Việt Nam", "Malaysia", "Myanmar"] },
+            { question: "Võ sư Nguyễn Lộc sống bao nhiêu năm?", correctAnswer: "48 năm", incorrectAnswers: ["38 năm", "58 năm", "68 năm"] },
+            { question: "Võ sư Lê Sáng sống bao nhiêu năm?", correctAnswer: "90 năm", incorrectAnswers: ["80 năm", "100 năm", "70 năm"] },
+            { question: "Võ sư Nguyễn Văn Chiếu sống bao nhiêu năm?", correctAnswer: "71 năm", incorrectAnswers: ["61 năm", "81 năm", "51 năm"] },
+            { question: "Võ sư Trần Huy Phong sống bao nhiêu năm?", correctAnswer: "59 năm", incorrectAnswers: ["49 năm", "69 năm", "79 năm"] },
+            { question: "Ý nghĩa của tinh thần kỷ luật tự giác trong Vovinam là gì?", correctAnswer: "Tự mình hiểu và tôn trọng kỷ luật", incorrectAnswers: ["Làm theo mệnh lệnh", "Tránh vi phạm", "Học hỏi người khác"] },
+            { question: "Vovinam rèn luyện ý chí quật cường để làm gì?", correctAnswer: "Thích nghi với thử thách, gian nguy", incorrectAnswers: ["Thi đấu thành công", "Biểu diễn tốt", "Tự vệ hiệu quả"] }
+        ];
+
+        // Biến toàn cục để lưu trữ bộ câu hỏi đã hiển thị
+        let displayedQuestions = [];
+
+        // Hàm chọn ngẫu nhiên 20 câu hỏi không trùng lặp
+        function getRandomQuestions() {
+            const availableQuestions = [...questions];
+            const selectedQuestions = [];
+            for (let i = 0; i < 20; i++) {
+                if (availableQuestions.length === 0) break;
+                const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+                selectedQuestions.push(availableQuestions.splice(randomIndex, 1)[0]);
+            }
+            return selectedQuestions;
+        }
+
+        // Hàm xáo trộn đáp án
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Hàm hiển thị quiz
+        function displayQuiz() {
+            const quizQuestionsDiv = document.getElementById('quizQuestions');
+            displayedQuestions = getRandomQuestions(); // Lưu trữ bộ câu hỏi đã hiển thị
+            quizQuestionsDiv.innerHTML = '';
+
+            displayedQuestions.forEach((q, index) => {
+                const allAnswers = [...q.incorrectAnswers, q.correctAnswer];
+                const shuffledAnswers = shuffleArray(allAnswers);
+
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'quiz-question';
+                questionDiv.innerHTML = `
+                    <p><strong>Câu ${index + 1}: ${q.question}</strong></p>
+                    ${shuffledAnswers.map((answer, i) => `
+                        <label>
+                            <input type="radio" name="question${index}" value="${answer}">
+                            ${answer}
+                        </label><br>
+                    `).join('')}
+                `;
+                quizQuestionsDiv.appendChild(questionDiv);
+            });
+
+            document.getElementById('quizSection').style.display = 'block';
+            document.getElementById('submitQuiz').style.display = 'block';
+            document.getElementById('quizResult').style.display = 'none'; // Ẩn kết quả khi bắt đầu quiz mới
+        }
+
+        // Hàm kiểm tra và hiển thị kết quả
+        function submitQuiz() {
+            let score = 0;
+            const wrongAnswers = []; // Mảng lưu các câu trả lời sai
+
+            // Kiểm tra từng câu hỏi
+            displayedQuestions.forEach((q, index) => {
+                const selectedAnswer = document.querySelector(`input[name="question${index}"]:checked`);
+                const isCorrect = selectedAnswer && selectedAnswer.value === q.correctAnswer;
+
+                if (isCorrect) {
+                    score++;
+                } else {
+                    // Lưu thông tin câu trả lời sai
+                    wrongAnswers.push({
+                        questionNumber: index + 1,
+                        question: q.question,
+                        userAnswer: selectedAnswer ? selectedAnswer.value : "Không chọn đáp án",
+                        correctAnswer: q.correctAnswer
+                    });
+                }
+            });
+
+            const resultDiv = document.getElementById('quizResult');
+            resultDiv.style.display = 'block';
+
+            // Hiển thị điểm số
+            let resultHTML = `<p>Điểm của bạn: ${score}/20</p>`;
+
+            // Hiển thị các câu trả lời sai
+            if (wrongAnswers.length > 0) {
+                resultHTML += `<h4>Các câu trả lời sai:</h4>`;
+                wrongAnswers.forEach(wrong => {
+                    resultHTML += `
+                        <div class="wrong-answer">
+                            <p><strong>Câu ${wrong.questionNumber}: ${wrong.question}</strong></p>
+                            <p>Lựa chọn của bạn: ${wrong.userAnswer}</p>
+                            <p>Đáp án đúng: ${wrong.correctAnswer}</p>
+                        </div>
+                    `;
+                });
+            } else {
+                resultHTML += `<p>Chúc mừng! Bạn trả lời đúng tất cả các câu.</p>`;
+            }
+
+            resultDiv.innerHTML = resultHTML;
+            document.getElementById('submitQuiz').style.display = 'none';
+        }
+
+        // Gắn sự kiện cho nút Quiz
+        document.getElementById('quizButton').addEventListener('click', displayQuiz);
+        document.getElementById('submitQuiz').addEventListener('click', submitQuiz);
+    </script>
+
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93c27b3afa56adf4',t:'MTc0NjYzOTQwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93ca46ff0a4ae590',t:'MTc0NjcyMTE1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
+</html>

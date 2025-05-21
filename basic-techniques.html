@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Kỹ Thuật Cơ Bản - Vovinam</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+                /* Nút Trang chủ (CSS mới từ bạn) */
+        .home-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 101;
+            transition: var(--transition-normal);
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .home-button img {
+            width: 60%; /* Điều chỉnh kích thước hình ảnh bên trong nút */
+            height: 60%;
+        }
+
+        .home-button:hover {
+            transform: scale(1.1); /* Thêm hiệu ứng phóng to khi hover */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .page-title {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-light);
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            padding: 10px 30px;
+            border-radius: var(--radius-full);
+            background-color: rgba(30, 90, 187, 0.2);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 10;
+        }
+
+        .video-container {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: calc(100% - 140px);
+            overflow-y: auto;
+            padding: 20px;
+            z-index: 10;
+        }
+
+        .box-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-top: 20px;
+            padding: 10px;
+        }
+
+        .video-box {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all var(--transition-normal);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            height: auto;
+        }
+
+        .video-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent-color);
+        }
+
+        .box-header {
+            background-color: rgba(30, 90, 187, 0.5);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Sơ Đẳng: Nền xanh, chữ vàng cho box-header */
+        .video-box:nth-child(1) .box-header {
+            background-color: #1e5abb; /* Màu xanh */
+            color: #ffd700; /* Màu vàng */
+        }
+
+        /* Trung Đẳng: Nền vàng, chữ đỏ cho box-header */
+        .video-box:nth-child(2) .box-header {
+            background-color: #ffd700; /* Màu vàng */
+            color: #ff0000; /* Màu đỏ */
+        }
+
+        .box-icon {
+            font-size: 24px;
+            color: var(--accent-color);
+        }
+
+        /* Đảm bảo biểu tượng và tiêu đề trong Sơ Đẳng có màu vàng */
+        .video-box:nth-child(1) .box-header .box-icon,
+        .video-box:nth-child(1) .box-header .box-title {
+            color: #ffd700; /* Màu vàng */
+        }
+
+        /* Đảm bảo biểu tượng và tiêu đề trong Trung Đẳng có màu đỏ */
+        .video-box:nth-child(2) .box-header .box-icon,
+        .video-box:nth-child(2) .box-header .box-title {
+            color: #ff0000; /* Màu đỏ */
+        }
+
+        .box-title {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        .sub-box-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .sub-video-box {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            transition: all var(--transition-normal);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            height: 150px;
+        }
+
+        .sub-video-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+            border-color: var(--accent-color);
+        }
+
+        .sub-box-header {
+            background-color: rgba(30, 90, 187, 0.3);
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Sơ Đẳng: Nền xanh, chữ vàng cho sub-box-header */
+        .video-box:nth-child(1) .sub-box-header {
+            background-color: #1e5abb; /* Màu xanh */
+            color: #ffd700; /* Màu vàng */
+        }
+
+        /* Trung Đẳng: Nền vàng, chữ đỏ cho sub-box-header */
+        .video-box:nth-child(2) .sub-box-header {
+            background-color: #ffd700; /* Màu vàng */
+            color: #ff0000; /* Màu đỏ */
+        }
+
+        .sub-box-icon {
+            font-size: 18px;
+            color: var(--accent-color);
+        }
+
+        /* Đảm bảo biểu tượng và tiêu đề trong sub-box-header của Sơ Đẳng có màu vàng */
+        .video-box:nth-child(1) .sub-box-header .sub-box-icon,
+        .video-box:nth-child(1) .sub-box-header .sub-box-title {
+            color: #ffd700; /* Màu vàng */
+        }
+
+        /* Đảm bảo biểu tượng và tiêu đề trong sub-box-header của Trung Đẳng có màu đỏ */
+        .video-box:nth-child(2) .sub-box-header .sub-box-icon,
+        .video-box:nth-child(2) .sub-box-header .sub-box-title {
+            color: #ff0000; /* Màu đỏ */
+        }
+
+        .sub-box-title {
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        .sub-box-content {
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: calc(100% - 47px);
+        }
+
+        .sub-box-description {
+            font-size: 13px;
+            color: var(--neutral-200);
+            line-height: 1.4;
+            flex: 1;
+            margin: 0;
+            padding-right: 15px;
+        }
+
+        .sub-box-button {
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            border-radius: var(--radius-full);
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            white-space: nowrap;
+            font-size: 13px;
+        }
+
+        .sub-box-button:hover {
+            background-color: #e61c18;
+            transform: scale(1.05);
+        }
+
+        .sub-box-button i {
+            font-size: 16px;
+        }
+
+        .sub-box-button span {
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .back-button {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--secondary-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 101;
+            transition: var(--transition-normal);
+        }
+
+        .back-button:hover {
+            transform: scale(1.1);
+            background-color: #e61c18;
+        }
+
+        .back-button i {
+            color: var(--text-light);
+            font-size: 24px;
+        }
+
+        .video-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .video-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-full);
+        }
+
+        .video-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-full);
+        }
+
+        .video-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        @media screen and (max-width: 768px) {
+            .page-title {
+                font-size: 22px;
+                padding: 8px 20px;
+                top: 20px;
+            }
+
+            .video-container {
+                width: 90%;
+                top: 80px;
+            }
+
+            .box-container {
+                gap: 20px;
+            }
+
+            .sub-box-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .sub-box-header {
+                padding: 8px 12px;
+            }
+
+            .sub-box-title {
+                font-size: 14px;
+            }
+
+            .sub-box-content {
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: space-between;
+                height: calc(100% - 43px);
+            }
+
+            .sub-box-description {
+                font-size: 12px;
+                margin-bottom: 10px;
+                padding-right: 0;
+            }
+
+            .sub-box-button {
+                align-self: flex-end;
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .sub-video-box {
+                height: 180px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .page-title {
+                font-size: 18px;
+                padding: 6px 15px;
+            }
+
+            .video-container {
+                width: 95%;
+                top: 70px;
+            }
+
+            .sub-box-icon {
+                font-size: 16px;
+            }
+
+            .sub-box-title {
+                font-size: 13px;
+            }
+
+            .sub-box-description {
+                font-size: 11px;
+            }
+
+            .sub-box-button {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+
+            .back-button {
+                bottom: 20px;
+                left: 20px;
+                width: 40px;
+                height: 40px;
+            }
+
+            .back-button i {
+                font-size: 20px;
+            }
+
+            .sub-video-box {
+                height: 200px;
+            }
+            
+        }
+    </style>
+</head>
+<body>
+       <script>
+    // Kiểm tra xác thực
+    function checkAuth() {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        const loginTime = localStorage.getItem('loginTime');
+        
+        // Nếu chưa đăng nhập hoặc phiên đã hết hạn (24 giờ)
+        if (!isAuthenticated || (Date.now() - parseInt(loginTime)) > 24 * 60 * 60 * 1000) {
+            // Xóa dữ liệu xác thực nếu có
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('username');
+            localStorage.removeItem('loginTime');
+            
+            // Chuyển hướng về trang đăng nhập
+            window.location.href = 'index.html';
+        }
+    }
+    
+    // Thực hiện kiểm tra ngay khi trang tải
+    checkAuth();
+</script>
+    <!-- Hạt sáng di chuyển -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+    <!-- Nút quay về trang chủ -->
+    <a href="home.html" class="home-button">
+        <i class="fas fa-home"></i>
+    </a>
+    <!-- Đường viền phát sáng -->
+    <div class="glowing-border"></div>
+
+    <!-- Menu bên trái -->
+    <nav class="side-menu">
+        <div class="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="menu-items">
+            <li class="menu-item">
+                <a href="vo-dao.html">
+                    <i class="fas fa-fist-raised"></i>
+                    <span>VÕ ĐẠO</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="video.html">
+                    <i class="fas fa-video"></i>
+                    <span>VIDEO KỸ THUẬT</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="tlk.html">
+                    <i class="fas fa-book"></i>
+                    <span>CÁC TÀI LIỆU KHÁC</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="xemthem.html">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>XEM THÊM</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="ttlh.html">
+                    <i class="fas fa-envelope"></i>
+                    <span>THÔNG TIN LIÊN HỆ</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Tiêu đề trang -->
+    <div class="page-title">VIDEO KỸ THUẬT THAM KHẢO</div>
+
+    <!-- Container video -->
+    <div class="video-container">
+        <div class="box-container">
+            <div class="video-box">
+                <div class="box-header">
+                    <i class="fas fa-star box-icon"></i>
+                    <h2 class="box-title">SƠ ĐẲNG</h2>
+                </div>
+                <div class="sub-box-container">
+                    <div class="sub-video-box">
+                        <div class="sub-box-header">
+                            <i class="fas fa-belt box-icon"></i>
+                            <h3 class="sub-box-title">THI LAM ĐAI</h3>
+                        </div>
+                        <div class="sub-box-content">
+                            <p class="sub-box-description">
+                              
+                            </p>
+                            <a href="vidld.html" class="sub-box-button">
+                                <i class="fas fa-play-circle"></i>
+                                <span>XEM VIDEO</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="sub-video-box">
+                        <div class="sub-box-header">
+                            <i class="fas fa-belt box-icon"></i>
+                            <h3 class="sub-box-title">THI LAM ĐAI I</h3>
+                        </div>
+                        <div class="sub-box-content">
+                            <p class="sub-box-description">
+                         
+                            </p>
+                            <a href="vidld1.html" class="sub-box-button">
+                                <i class="fas fa-play-circle"></i>
+                                <span>XEM VIDEO</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="sub-video-box">
+                        <div class="sub-box-header">
+                            <i class="fas fa-belt box-icon"></i>
+                            <h3 class="sub-box-title">THI LAM ĐAI II</h3>
+                        </div>
+                        <div class="sub-box-content">
+                            <p class="sub-box-description">
+                           
+                            </p>
+                            <a href="vidld2.html" class="sub-box-button">
+                                <i class="fas fa-play-circle"></i>
+                                <span>XEM VIDEO</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="sub-video-box">
+                        <div class="sub-box-header">
+                            <i class="fas fa-belt box-icon"></i>
+                            <h3 class="sub-box-title">THI LAM ĐAI III</h3>
+                        </div>
+                        <div class="sub-box-content">
+                            <p class="sub-box-description">
+                             
+                            </p>
+                            <a href="vidld3.html" class="sub-box-button">
+                                <i class="fas fa-play-circle"></i>
+                                <span>XEM VIDEO</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="video-box">
+                <div class="box-header">
+                    <i class="fas fa-shield-alt box-icon"></i>
+                    <h2 class="box-title">TRUNG ĐẲNG</h2>
+                </div>
+                <div class="sub-box-container">
+                    <div class="sub-video-box">
+                        <div class="sub-box-header">
+                            <i class="fas fa-belt box-icon"></i>
+                            <h3 class="sub-box-title">THI HOÀNG ĐAI</h3>
+                        </div>
+                        <div class="sub-box-content">
+                            <p class="sub-box-description">
+                          
+                            </p>
+                            <a href="vidhd.html" class="sub-box-button">
+                                <i class="fas fa-play-circle"></i>
+                                <span>XEM VIDEO</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="sub-video-box">
+                        <div class="sub-box-header">
+                            <i class="fas fa-belt box-icon"></i>
+                            <h3 class="sub-box-title">THI HOÀNG ĐAI I</h3>
+                        </div>
+                        <div class="sub-box-content">
+                            <p class="sub-box-description">
+                               
+                            </p>
+                            <a href="vidhd1.html" class="sub-box-button">
+                                <i class="fas fa-play-circle"></i>
+                                <span>XEM VIDEO</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="sub-video-box">
+                        <div class="sub-box-header">
+                            <i class="fas fa-belt box-icon"></i>
+                            <h3 class="sub-box-title">THI HOÀNG ĐAI II</h3>
+                        </div>
+                        <div class="sub-box-content">
+                            <p class="sub-box-description">
+                             
+                            </p>
+                            <a href="vidhd2.html" class="sub-box-button">
+                                <i class="fas fa-play-circle"></i>
+                                <span>XEM VIDEO</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="sub-video-box">
+                        <div class="sub-box-header">
+                            <i class="fas fa-belt box-icon"></i>
+                            <h3 class="sub-box-title">THI HOÀNG ĐAI III</h3>
+                        </div>
+                        <div class="sub-box-content">
+                            <p class="sub-box-description">
+                             
+                            </p>
+                            <a href="vidhd3.html" class="sub-box-button">
+                                <i class="fas fa-play-circle"></i>
+                                <span>XEM VIDEO</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

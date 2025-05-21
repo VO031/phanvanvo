@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vovinam - Phan Văn Võ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .back-button {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 101;
+            transition: var(--transition-normal);
+        }
+
+        .back-button:hover {
+            transform: scale(1.1);
+            background-color: #e61c18;
+        }
+
+        .back-button i {
+            color: var(--text-light);
+            font-size: 24px;
+        }
+
+        :root {
+            --primary-color: #007bff;
+            --text-light: #ffffff;
+            --background-dark: #1a1a2e;
+            --accent-color: #00d4ff;
+            --transition-normal: all 0.3s ease-in-out;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f2f5, #dfe6e9);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.8), transparent);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .particle:nth-child(1) { width: 20px; height: 20px; top: 10%; left: 15%; animation-duration: 12s; }
+        .particle:nth-child(2) { width: 15px; height: 15px; top: 30%; left: 40%; animation-duration: 18s; }
+        .particle:nth-child(3) { width: 25px; height: 25px; top: 50%; left: 60%; animation-duration: 14s; }
+        .particle:nth-child(4) { width: 18px; height: 18px; top: 70%; left: 25%; animation-duration: 16s; }
+        .particle:nth-child(5) { width: 22px; height: 22px; top: 20%; left: 80%; animation-duration: 20s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+            50% { transform: translateY(-50px) scale(1.2); opacity: 0.9; }
+        }
+
+        .glowing-border {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 4px solid transparent;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5), inset 0 0 20px rgba(0, 212, 255, 0.5);
+            pointer-events: none;
+            z-index: 2;
+            animation: glow 3s infinite ease-in-out;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.5), inset 0 0 20px rgba(0, 212, 255, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(0, 212, 255, 0.8), inset 0 0 30px rgba(0, 212, 255, 0.8); }
+        }
+
+        .home-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            z-index: 101;
+            transition: var(--transition-normal);
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .home-button i {
+            font-size: 1.8rem;
+        }
+
+        .home-button:hover {
+            transform: scale(1.15) rotate(10deg);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+        }
+
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--background-dark), #2d3436);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+            transition: var(--transition-normal);
+            z-index: 100;
+        }
+
+        .menu-toggle:hover + .side-menu, .side-menu:hover {
+            left: 0;
+        }
+
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: var(--text-light);
+            z-index: 101;
+        }
+
+        .menu-toggle i {
+            font-size: 1.5rem;
+        }
+
+        .menu-items {
+            list-style: none;
+            padding: 60px 20px;
+            margin: 0;
+        }
+
+        .menu-item {
+            margin: 15px 0;
+        }
+
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: var(--transition-normal);
+        }
+
+        .menu-item a i {
+            margin-right: 10px;
+            font-size: 1.3rem;
+        }
+
+        .menu-item a:hover {
+            background: var(--primary-color);
+            transform: translateX(10px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            max-width: 90%;
+            z-index: 101;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #ffffff, #e8ecef);
+            border-radius: 25px;
+            padding: 8px 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: var(--transition-normal);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .search-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            border-color: rgba(0, 212, 255, 0.5);
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 1rem;
+            color: #2d3436;
+            width: 100%;
+            padding: 5px;
+        }
+
+        .search-box button {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition-normal);
+        }
+
+        .search-box button i {
+            color: var(--text-light);
+            font-size: 1.2rem;
+        }
+
+        .search-box button:hover {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 30px;
+            max-width: 1400px;
+            margin: 100px auto;
+            padding: 0 30px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .grid-box {
+            background: linear-gradient(135deg, #ffffff, #e8ecef);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            text-decoration: none;
+            color: #2d3436;
+            transition: var(--transition-normal);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            height: 260px; /* Increased height */
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+
+        .grid-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.3), transparent);
+            transition: var(--transition-normal);
+        }
+
+        .grid-box:hover::before {
+            left: 100%;
+        }
+
+        .grid-box img {
+            width: 100%;
+            height: 140px; /* Increased image height */
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            transition: var(--transition-normal);
+        }
+
+        .grid-box:hover img {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        .grid-box span {
+            font-size: 1.2rem; /* Adjusted font size */
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            line-height: 1.3;
+            z-index: 1;
+        }
+
+        .grid-box:hover {
+            transform: translateY(-10px) scale(1.03);
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: var(--text-light);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+            border-color: rgba(0, 212, 255, 0.5);
+        }
+
+        .grid-box.hidden {
+            display: none;
+        }
+
+        @media (max-width: 1200px) {
+            .grid-container {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 25px;
+            }
+            .grid-box {
+                height: 240px;
+            }
+            .grid-box img {
+                height: 120px;
+            }
+            .grid-box span {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+                margin: 80px auto;
+            }
+            .grid-box {
+                height: 220px;
+            }
+            .grid-box img {
+                height: 100px;
+            }
+            .grid-box span {
+                font-size: 1rem;
+            }
+            .side-menu {
+                width: 250px;
+                left: -250px;
+            }
+            .menu-toggle {
+                left: 20px;
+            }
+            .menu-item a {
+                font-size: 1rem;
+            }
+            .search-container {
+                width: 250px;
+                top: 70px;
+            }
+            .search-box input {
+                font-size: 0.9rem;
+            }
+            .search-box button {
+                width: 30px;
+                height: 30px;
+            }
+            .search-box button i {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                margin: 90px auto;
+            }
+            .grid-box {
+                height: 200px;
+            }
+            .grid-box img {
+                height: 90px;
+            }
+            .grid-box span {
+                font-size: 0.95rem;
+            }
+            .home-button {
+                width: 50px;
+                height: 50px;
+            }
+            .home-button i {
+                font-size: 1.5rem;
+            }
+            .side-menu {
+                width: 220px;
+                left: -220px;
+            }
+            .menu-toggle {
+                width: 35px;
+                height: 35px;
+            }
+            .menu-toggle i {
+                font-size: 1.2rem;
+            }
+            .search-container {
+                width: 200px;
+                top: 60px;
+            }
+            .search-box input {
+                font-size: 0.8rem;
+            }
+            .search-box button {
+                width: 28px;
+                height: 28px;
+            }
+            .search-box button i {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+       <script>
+    // Kiểm tra xác thực
+    function checkAuth() {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        const loginTime = localStorage.getItem('loginTime');
+        
+        // Nếu chưa đăng nhập hoặc phiên đã hết hạn (24 giờ)
+        if (!isAuthenticated || (Date.now() - parseInt(loginTime)) > 24 * 60 * 60 * 1000) {
+            // Xóa dữ liệu xác thực nếu có
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('username');
+            localStorage.removeItem('loginTime');
+            
+            // Chuyển hướng về trang đăng nhập
+            window.location.href = 'index.html';
+        }
+    }
+    
+    // Thực hiện kiểm tra ngay khi trang tải
+    checkAuth();
+</script>
+    <!-- Hạt sáng di chuyển -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Đường viền phát sáng -->
+    <div class="glowing-border"></div>
+
+    <!-- Nút Trang chủ -->
+    <a href="home.html" class="home-button" aria-label="Về Trang Chủ">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <!-- Nút quay lại -->
+    <a href="tlk.html" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+
+    <!-- Search box -->
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Tìm kiếm..." aria-label="Tìm kiếm">
+            <button onclick="performSearch()" aria-label="Tìm kiếm">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Menu bên trái -->
+    <nav class="side-menu">
+        <div class="menu-toggle" aria-label="Bật/Tắt Menu">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="menu-items">
+            <li class="menu-item"><a href="vo-dao.html"><i class="fas fa-fist-raised"></i> VÕ ĐẠO</a></li>
+            <li class="menu-item"><a href="basic-techniques.html"><i class="fas fa-video"></i> VIDEO KỸ THUẬT</a></li>
+            <li class="menu-item"><a href="tlk.html"><i class="fas fa-book"></i> CÁC TÀI LIỆU KHÁC</a></li>
+            <li class="menu-item"><a href="xemthem.html"><i class="fas fa-plus-circle"></i> XEM THÊM</a></li>
+            <li class="menu-item"><a href="ttlh.html"><i class="fas fa-envelope"></i> THÔNG TIN LIÊN HỆ</a></li>
+        </ul>
+    </nav>
+
+    <!-- Lưới các ô liên kết với ảnh -->
+    <section class="grid-container">
+        <a href="https://drive.google.com/file/d/1RKTH4ztcGVTnHBpzJRTfM6pmNeIexzTW/view?usp=drive_linkr" class="grid-box" target="_blank">
+            <img src="img/homework.png" alt="bt lớn">
+            <span>bài tập lớn</span>
+        </a>
+        <a href="https://drive.google.com/file/d/1MBgbAqg9mA_hrkd5wuUzbW-TKUQw7FJ3/view?usp=drive_link" class="grid-box" target="_blank">
+            <img src="img/documentation.png" alt="tong hop">
+            <span>tổng hợp công thức và trắc nghiệm (sưu tập)</span>
+        </a>
+        <a href="https://docs.google.com/presentation/d/1Hqnt0jnXF7gk6fA1zz1r1nS9tLVwilS1/edit?usp=drive_link&ouid=110844248315449692186&rtpof=true&sd=true" class="grid-box" target="_blank">
+            <img src="img/google.png" alt="ôn">
+            <span>ÔN tập dtcb</span>
+        </a>
+        <a href="https://docs.google.com/document/d/1pbNHrk6TMg6JvpPxBdfWXkQyybOKBivF/edit?usp=drive_link&ouid=110844248315449692186&rtpof=true&sd=true" class="grid-box" target="_blank">
+            <img src="img/youtube.png" alt="Vid">
+            <span>VIDEO ÔN</span>
+        </a>
+    </section>
+
+    <script>
+        // Hàm loại bỏ dấu tiếng Việt
+        function removeAccents(str) {
+            return str.normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/đ/g, 'd')
+                .replace(/Đ/g, 'D');
+        }
+
+        function performSearch() {
+            const searchTerm = removeAccents(document.getElementById('searchInput').value.trim().toLowerCase());
+            const gridBoxes = document.querySelectorAll('.grid-box');
+
+            gridBoxes.forEach(box => {
+                const boxText = removeAccents(box.querySelector('span').textContent.toLowerCase());
+                // Kiểm tra xem tất cả ký tự trong searchTerm có xuất hiện trong boxText không
+                let isMatch = true;
+                if (searchTerm !== '') {
+                    for (let char of searchTerm) {
+                        if (!boxText.includes(char)) {
+                            isMatch = false;
+                            break;
+                        }
+                    }
+                }
+                // Hiển thị hoặc ẩn ô dựa trên kết quả khớp
+                if (isMatch) {
+                    box.classList.remove('hidden');
+                } else {
+                    box.classList.add('hidden');
+                }
+            });
+        }
+
+        // Tìm kiếm thời gian thực khi người dùng nhập
+        document.getElementById('searchInput').addEventListener('input', performSearch);
+
+        // Cho phép nhấn Enter để tìm kiếm
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        // Xử lý lỗi tiềm ẩn
+        window.addEventListener('error', function(e) {
+            console.error('Lỗi xảy ra:', e.message, 'tại dòng:', e.lineno);
+        });
+    </script>
+</body>
+</html>

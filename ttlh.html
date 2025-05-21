@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông Tin Liên Hệ - Vovinam</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+          /* Nút Trang chủ (CSS mới từ bạn) */
+        .home-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 101;
+            transition: var(--transition-normal);
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .home-button img {
+            width: 60%; /* Điều chỉnh kích thước hình ảnh bên trong nút */
+            height: 60%;
+        }
+
+        .home-button:hover {
+            transform: scale(1.1); /* Thêm hiệu ứng phóng to khi hover */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        /* Định nghĩa các biến CSS */
+        :root {
+            --space-xl: 40px;
+            --space-lg: 20px;
+            --space-md: 15px;
+            --accent-color: #ffde59;
+            --primary-color: #4a7cd1; /* Định nghĩa màu chính (dựa trên màu nền trang) */
+            --transition-normal: all 0.3s ease; /* Định nghĩa transition */
+            --text-light: #ffffff; /* Định nghĩa màu chữ sáng */
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Arial, sans-serif;
+            color: #333;
+            position: relative;
+            /* Nền lung linh với gradient chuyển động */
+            background: linear-gradient(45deg, #4a7cd1, #ffde59, #4a7cd1);
+            background-size: 200% 200%;
+            animation: gradientShift 10s ease infinite;
+        }
+
+        /* Hiệu ứng gradient chuyển động */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Lớp phủ hạt sáng lung linh */
+        .sparkle-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0; /* Đặt z-index thấp để không che nội dung */
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: sparkleMove 8s infinite ease-in-out, fadeInOut 2s infinite ease-in-out;
+        }
+
+        /* Hiệu ứng di chuyển cho hạt sáng */
+        @keyframes sparkleMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 30px); }
+        }
+
+        /* Hiệu ứng mờ dần cho hạt sáng */
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Đặt vị trí ngẫu nhiên cho hạt sáng */
+        .sparkle:nth-child(1) { top: 10%; left: 15%; animation-delay: 0s; }
+        .sparkle:nth-child(2) { top: 25%; left: 70%; animation-delay: 1s; }
+        .sparkle:nth-child(3) { top: 40%; left: 30%; animation-delay: 2s; }
+        .sparkle:nth-child(4) { top: 60%; left: 85%; animation-delay: 3s; }
+        .sparkle:nth-child(5) { top: 80%; left: 40%; animation-delay: 4s; }
+        .sparkle:nth-child(6) { top: 15%; left: 50%; animation-delay: 5s; }
+        .sparkle:nth-child(7) { top: 70%; left: 20%; animation-delay: 6s; }
+        .sparkle:nth-child(8) { top: 50%; left: 90%; animation-delay: 7s; }
+
+        /* Container chính */
+        .contact-info {
+            width: 100%;
+            max-width: 1280px;
+            padding: var(--space-xl) var(--space-md);
+            text-align: center;
+            z-index: 2; /* Đảm bảo nội dung chính nằm trên nền */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: slideUp 1.2s ease-out;
+            position: relative;
+            background: rgba(255, 255, 255, 0.9); /* Nền trắng mờ để nổi bật trên nền lung linh */
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Tiêu đề */
+        .contact-info h2 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: var(--space-xl);
+            color: #1a355b;
+            position: relative;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            background: linear-gradient(90deg, #4a7cd1, #ffde59);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 5px rgba(74, 124, 209, 0.5);
+        }
+
+        .contact-info h2:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 15px rgba(74, 124, 209, 0.8);
+        }
+
+        .contact-info h2::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 2px;
+            background: var(--accent-color);
+            opacity: 0.3;
+        }
+
+        .contact-info h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 5px;
+            background: linear-gradient(90deg, #4a7cd1, #ffde59);
+            border-radius: 3px;
+            box-shadow: 0 2px 8px rgba(255, 222, 89, 0.3);
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translateX(-50%) scaleX(1);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateX(-50%) scaleX(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-50%) scaleX(1);
+                opacity: 0.8;
+            }
+        }
+
+        /* Ảnh đại diện */
+        .profile-pic {
+            width: 150px;
+            max-width: 100%;
+            max-height: 150px;
+            height: auto;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: var(--space-xl);
+            border: 4px solid transparent;
+            background: linear-gradient(45deg, #4a7cd1, #ffde59);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .profile-pic:hover {
+            transform: scale(1.08);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Menu bên trái */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 60px;
+            background: #1a355b;
+            transition: width 0.3s ease;
+            z-index: 3;
+        }
+
+        .side-menu:hover {
+            width: 200px;
+        }
+
+        .menu-toggle {
+            padding: 20px;
+            color: #ffde59;
+            cursor: pointer;
+        }
+
+        .menu-items {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: #ffffff;
+            text-decoration: none;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item a i {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        .menu-item a span {
+            display: none;
+            font-size: 16px;
+        }
+
+        .side-menu:hover .menu-item a span {
+            display: inline;
+        }
+
+        .menu-item a:hover {
+            background: #ffde59;
+            color: #1a355b;
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(255, 222, 89, 0.5);
+        }
+
+        /* 4 box thông tin liên hệ */
+        .contact-info ul {
+            list-style: none;
+            padding: 0;
+            margin: var(--space-xl) 0;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-xl);
+        }
+
+        .contact-info li {
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            padding: var(--space-lg);
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            animation: fadeInUp 1.5s ease-out forwards;
+            animation-delay: calc(0.1s * var(--i));
+            min-width: 220px;
+            min-height: 180px;
+        }
+
+        .contact-info li:hover {
+            transform: rotate(3deg) translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            background: #f9fafb;
+            border-color: #4a7cd1;
+        }
+
+        .contact-info li .icon {
+            font-size: 28px;
+            color: #4a7cd1;
+            margin-bottom: var(--space-md);
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .contact-info li:hover .icon {
+            transform: scale(1.1);
+            color: #ffde59;
+        }
+
+        .contact-info li .label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #4a7cd1;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-info li .content {
+            font-size: 16px;
+            font-weight: 400;
+            color: #555;
+            word-break: break-word;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        /* Thông tin bổ sung (Facebook, YouTube, Instagram) */
+        .additional-info {
+            margin-top: var(--space-xl);
+            display: flex;
+            gap: var(--space-lg);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .additional-info a {
+            font-size: 16px;
+            color: #4a7cd1;
+            text-decoration: none;
+            padding: 12px 24px;
+            border: 2px solid #4a7cd1;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .additional-info a:hover {
+            background: #4a7cd1;
+            color: #ffffff;
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 0 10px rgba(74, 124, 209, 0.5);
+            animation: shake 0.5s ease;
+        }
+
+        .additional-info a i {
+            font-size: 18px;
+        }
+
+        /* Hiệu ứng lắc */
+        @keyframes shake {
+            0%, 100% { transform: scale(1.05) rotate(0deg); }
+            25% { transform: scale(1.05) rotate(5deg); }
+            75% { transform: scale(1.05) rotate(-5deg); }
+        }
+
+        /* Animation */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+      
+
+        /* Responsive */
+        @media screen and (max-width: 1024px) {
+            .contact-info {
+                max-width: 90%;
+            }
+
+            .contact-info ul {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--space-lg);
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .contact-info {
+                padding: var(--space-lg);
+            }
+
+            .contact-info h2 {
+                font-size: 36px;
+            }
+
+            .contact-info ul {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-info li {
+                font-size: 14px;
+                padding: var(--space-md);
+                min-height: 160px;
+            }
+
+            .contact-info li .icon {
+                font-size: 24px;
+            }
+
+            .profile-pic {
+                width: 120px;
+                max-width: 100%;
+                max-height: 120px;
+                height: auto;
+            }
+
+            .home-button {
+                width: 40px; /* Giảm kích thước nút trên màn hình nhỏ */
+                height: 40px;
+                top: 15px;
+                right: 15px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .contact-info {
+                padding: var(--space-md);
+            }
+
+            .contact-info h2 {
+                font-size: 28px;
+            }
+
+            .contact-info li {
+                font-size: 13px;
+                min-height: 140px;
+            }
+
+            .contact-info li .icon {
+                font-size: 20px;
+            }
+
+            .additional-info a {
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+
+            .profile-pic {
+                width: 100px;
+                max-width: 100%;
+                max-height: 100px;
+                height: auto;
+            }
+
+            .home-button {
+                width: 35px; /* Giảm kích thước nút trên màn hình rất nhỏ */
+                height: 35px;
+                top: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+       <script>
+    // Kiểm tra xác thực
+    function checkAuth() {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        const loginTime = localStorage.getItem('loginTime');
+        
+        // Nếu chưa đăng nhập hoặc phiên đã hết hạn (24 giờ)
+        if (!isAuthenticated || (Date.now() - parseInt(loginTime)) > 24 * 60 * 60 * 1000) {
+            // Xóa dữ liệu xác thực nếu có
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('username');
+            localStorage.removeItem('loginTime');
+            
+            // Chuyển hướng về trang đăng nhập
+            window.location.href = 'index.html';
+        }
+    }
+    
+    // Thực hiện kiểm tra ngay khi trang tải
+    checkAuth();
+</script>
+    <!-- Lớp phủ hạt sáng lung linh -->
+    <div class="sparkle-layer">
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+    </div>
+
+     <!-- Nút quay về trang chủ -->
+    <a href="home.html" class="home-button">
+        <i class="fas fa-home"></i>
+    </a>
+    <!-- Menu bên trái -->
+    <nav class="side-menu">
+        <div class="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="menu-items">
+            <li class="menu-item">
+                <a href="vo-dao.html">
+                    <i class="fas fa-fist-raised"></i>
+                    <span>VÕ ĐẠO</span>
+                </a>
+            </li>
+       <li class="menu-item">
+    <a href="basic-techniques.html">
+        <i class="fas fa-video"></i>
+        <span>VIDEO KỸ THUẬT</span>
+    </a>
+</li>
+            <li class="menu-item">
+                <a href="tlk.html">
+                    <i class="fas fa-book"></i>
+                    <span>CÁC TÀI LIỆU KHÁC</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="xemthem.html">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>XEM THÊM</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="ttlh.html">
+                    <i class="fas fa-envelope"></i>
+                    <span>THÔNG TIN LIÊN HỆ</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Nội dung thông tin liên hệ -->
+    <div class="contact-info">
+        <img class="profile-pic" src="img/anh.jpg" alt="Ảnh đại diện">
+        <h2>Liên Hệ Với Tôi Qua</h2>
+        <ul>
+            <li style="--i: 1">
+                <div class="icon"><i class="fas fa-user"></i></div>
+                <div class="label">Tên tác giả:</div>
+                <div class="content">Phan Văn Võ</div>
+            </li>
+            <li style="--i: 2">
+                <div class="icon"><i class="fas fa-envelope"></i></div>
+                <div class="label">Email:</div>
+                <div class="content">phanvo0001@gmail.com</div>
+            </li>
+            <li style="--i: 3">
+                <div class="icon"><i class="fas fa-phone"></i></div>
+                <div class="label">Điện thoại:</div>
+                <div class="content">0329900194 (zalo)</div>
+            </li>
+            <li style="--i: 4">
+                <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="label">Địa chỉ:</div>
+                <div class="content">THU DUC, TP. Hồ Chí Minh</div>
+            </li>
+        </ul>
+        <div class="additional-info">
+            <a href="https://www.facebook.com/phanvo03/" target="_blank"><i class="fab fa-facebook"></i>Facebook</a>
+            <a href="https://www.youtube.com/@vanvophan3854" target="_blank"><i class="fab fa-youtube"></i>YouTube</a>
+            <a href="https://www.instagram.com/phanvo0004/" target="_blank"><i class="fab fa-instagram"></i>Instagram</a>
+        </div>
+    </div>
+</body>
+</html>
