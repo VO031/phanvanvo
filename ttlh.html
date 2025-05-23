@@ -513,7 +513,7 @@
         const loginTime = localStorage.getItem('loginTime');
         
         // Nếu chưa đăng nhập hoặc phiên đã hết hạn (24 giờ)
-        if (!isAuthenticated || (Date.now() - parseInt(loginTime)) > 24 * 60 * 60 * 1000) {
+        if (!isAuthenticated || (Date.now() - parseInt(loginTime)) >1 * 60 * 60 * 1000) {
             // Xóa dữ liệu xác thực nếu có
             localStorage.removeItem('isAuthenticated');
             localStorage.removeItem('username');

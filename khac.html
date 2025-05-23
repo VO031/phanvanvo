@@ -35,7 +35,7 @@ style="background: linear-gradient(135deg, #1e1e2f 0%, #2a2a4a 100%); margin: 0;
         const loginTime = localStorage.getItem('loginTime');
         
         // Nếu chưa đăng nhập hoặc phiên đã hết hạn (24 giờ)
-        if (!isAuthenticated || (Date.now() - parseInt(loginTime)) > 24 * 60 * 60 * 1000) {
+        if (!isAuthenticated || (Date.now() - parseInt(loginTime)) >1 * 60 * 60 * 1000) {
             // Xóa dữ liệu xác thực nếu có
             localStorage.removeItem('isAuthenticated');
             localStorage.removeItem('username');

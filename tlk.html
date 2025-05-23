@@ -399,7 +399,7 @@
         const loginTime = localStorage.getItem('loginTime');
         
         // Nếu chưa đăng nhập hoặc phiên đã hết hạn (24 giờ)
-        if (!isAuthenticated || (Date.now() - parseInt(loginTime)) > 24 * 60 * 60 * 1000) {
+        if (!isAuthenticated || (Date.now() - parseInt(loginTime)) >1 * 60 * 60 * 1000) {
             // Xóa dữ liệu xác thực nếu có
             localStorage.removeItem('isAuthenticated');
             localStorage.removeItem('username');
@@ -461,6 +461,7 @@
         <a href="pldc.html" class="grid-box"><span>PHÁP LUẬT ĐẠI CƯƠNG</span></a>
          <a href="dtcb.html" class="grid-box"><span>ĐIỆN TỬ CĂN BẢN</span></a>
            <a href="da1.html" class="grid-box"><span>ĐỒ ÁN 1 - MẠCH ĐO CHẤT LƯỢNG KHÔNG KHÍ</span></a>
+           
         
     </section>
 
