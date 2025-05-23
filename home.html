@@ -3,12 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vovinam - Phan Văn Võ</title>
+    <title>Phan Văn Võ</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/menu.css">
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-image: url('img/enhanced_image.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 <body>
     <script>
@@ -40,7 +51,7 @@ function logout() {
     
     // Thực hiện kiểm tra ngay khi trang tải
     checkAuth();
-</script>
+    </script>
 
     <!-- Hạt sáng di chuyển -->
     <div class="particles">
@@ -54,21 +65,16 @@ function logout() {
     <!-- Đường viền phát sáng -->
     <div class="glowing-border"></div>
 
-    <!-- Container cho logo -->
-    <div class="logo-container">
-        <img class="logo-img" src="img/anh-nen-may-tinh-4k-1.jpg" alt="Logo Vovinam">
-    </div>
-
     <!-- Tiêu đề -->
     <div class="title">Phan Văn Võ</div>
 
     <!-- Nút đăng xuất -->
- <div class="logout-container" style="position: absolute; top: 20px; right: 20px; z-index: 1000;">
-    <a href="javascript:void(0)" onclick="logout()" class="logout-button" style="display: inline-flex; align-items: center; padding: 10px 20px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 5px; font-size: 16px; transition: background-color 0.3s;">
-        <i class="fas fa-sign-out-alt" style="margin-right: 8px;"></i>
-        Đăng Xuất
-    </a>
-</div>
+    <div class="logout-container" style="position: absolute; top: 20px; right: 20px; z-index: 1000;">
+        <a href="javascript:void(0)" onclick="logout()" class="logout-button" style="display: inline-flex; align-items: center; padding: 10px 20px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 5px; font-size: 16px; transition: background-color 0.3s;">
+            <i class="fas fa-sign-out-alt" style="margin-right: 8px;"></i>
+            Đăng Xuất
+        </a>
+    </div>
 
     <!-- Menu bên trái -->
     <nav class="side-menu">
