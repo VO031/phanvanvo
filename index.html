@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <style>
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
         body {
             font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             display: flex;
@@ -12,13 +17,12 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            background-image: url('https://scontent.fsgn5-5.fna.fbcdn.net/v/t39.30808-6/475813859_1123089072885723_3077718212392976377_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=qcZnpifsGgYQ7kNvwGWuhap&_nc_oc=Adl8iHNP-dP-00aCaPyJDP4rc8UzilQKOEfCbXhSdHZS14UYTujxxtgtfNeZ7t_XPdu19T77EkhxEjCkKKP2QjSI&_nc_zt=23&_nc_ht=scontent.fsgn5-5.fna&_nc_gid=t3cbHIdi2YtA_vpUN2Z2pQ&oh=00_AfPVhYI01GkmnnO5LC44-A2AyFhVE8XxFupxSw3FRUQvVg&oe=684CC4FB');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            background: linear-gradient(45deg, #a1c4fd, #c2e9fb, #fbc2eb, #a6c1ee);
+            background-size: 400%;
+            animation: gradientShift 15s ease infinite;
         }
         .login-container {
-            background-color: transparent;
+            background-color: rgba(255, 255, 255, 0.95);
             padding: 2.5rem;
             border-radius: 16px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
@@ -30,17 +34,6 @@
             transform: translateY(-8px);
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25), 0 0 20px rgba(163, 112, 237, 0.3);
         }
-        .avatar {
-            display: block;
-            margin: 0 auto 1.5rem;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            background-color: rgba(255, 255, 255, 0.7);
-            padding: 5px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
         .login-container h2 {
             text-align: center;
             margin-bottom: 2rem;
@@ -49,9 +42,6 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            background-color: rgba(255, 255, 255, 0.7);
-            padding: 0.5rem;
-            border-radius: 8px;
         }
         .input-group {
             margin-bottom: 1.5rem;
@@ -63,10 +53,6 @@
             font-size: 0.9rem;
             font-weight: 600;
             text-transform: uppercase;
-            background-color: rgba(255, 255, 255, 0.7);
-            padding: 0.3rem 0.5rem;
-            border-radius: 4px;
-            width: fit-content;
         }
         .input-group input {
             width: 100%;
@@ -75,7 +61,7 @@
             border-radius: 10px;
             font-size: 1rem;
             color: #2d1b5e;
-            background-color: rgba(255, 255, 255, 0.7);
+            background-color: #f0f4ff;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
@@ -112,33 +98,6 @@
             margin-top: 1.25rem;
             font-size: 0.9rem;
             font-weight: 500;
-            background-color: rgba(255, 255, 255, 0.7);
-            padding: 0.5rem;
-            border-radius: 8px;
-        }
-        .contact-info {
-            margin-top: 2rem;
-            text-align: center;
-            color: #2d1b5e;
-            font-size: 0.9rem;
-            font-weight: 500;
-            background-color: rgba(255, 255, 255, 0.7);
-            padding: 1rem;
-            border-radius: 8px;
-        }
-        .contact-info .avatar {
-            margin-bottom: 1rem;
-        }
-        .contact-info p {
-            margin: 0.5rem 0;
-        }
-        .contact-info a {
-            color: #2d1b5e;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .contact-info a:hover {
-            text-decoration: underline;
         }
         @media (max-width: 400px) {
             .login-container {
@@ -148,20 +107,12 @@
             .login-container h2 {
                 font-size: 1.75rem;
             }
-            .contact-info {
-                font-size: 0.85rem;
-            }
-            .avatar {
-                width: 80px;
-                height: 80px;
-            }
         }
     </style>
 </head>
 <body>
     <form class="login-container" onsubmit="event.preventDefault(); login();">
-
-        <h2>Phan Văn Võ WEB</h2>
+        <h2>Đăng Nhập</h2>
         <div class="input-group">
             <label for="username">Tên đăng nhập</label>
             <input type="text" id="username" placeholder="Nhập tên đăng nhập" required>
@@ -172,12 +123,6 @@
         </div>
         <button type="submit">Đăng Nhập</button>
         <p class="error" id="error-message"></p>
-        <div class="contact-info">
-            <img src="https://scontent.fsgn5-10.fna.fbcdn.net/v/t39.30808-6/475695481_1121786246349339_9124921325550904962_n.jpg?stp=dst-jpg_s206x206_tt6&_nc_cat=110&ccb=1-7&_nc_sid=fe5ecc&_nc_ohc=t9DyRXYlEgYQ7kNvwEIWYo8&_nc_oc=Adn9d7Fnz69eI3XhIMVw4a9hjUPSVNQDzUA17Pv_pO1IlFNbUj8X3ZBfePjs6DkQc6RwCf6z7aRISyPvaHkWfrTC&_nc_zt=23&_nc_ht=scontent.fsgn5-10.fna&_nc_gid=Rs5ldgJ6oN25H2YDb-lLzg&oh=00_AfP8nMdkbdh-eIIuYIYy1x0pdw1YkRp5tbd3LiBDOGoYrQ&oe=684B0A61" alt="contact Avatar" class="avatar">
-            <p><strong>Phan Văn Võ</strong></p>
-            <p>Điện thoại: <a href="tel:+84-329-900-194">+84 329 900 194</a></p>
-            <p>Email: <a href="mailto:phanvo0001@gmail.com">phanvo0001@gmail.com</a></p>
-        </div>
     </form>
 
     <!-- Firebase SDK phiên bản 8.x -->
@@ -186,8 +131,8 @@
 
     <script>
         // Cấu hình Firebase
-        const firebaseConfig = {
-     apiKey: "AIzaSyAfC893_8rAt7_QrThVFTH3PFPw3XTlXtI",
+   const firebaseConfig = {
+  apiKey: "AIzaSyAfC893_8rAt7_QrThVFTH3PFPw3XTlXtI",
   authDomain: "myprojects-800da.firebaseapp.com",
   databaseURL: "https://myprojects-800da-default-rtdb.firebaseio.com",
   projectId: "myprojects-800da",
@@ -203,38 +148,37 @@
 
         // Hàm đăng nhập
         function login() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const errorMessage = document.getElementById('error-message');
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const errorMessage = document.getElementById('error-message');
 
-            if (!username || !password) {
-                errorMessage.textContent = 'Vui lòng nhập đầy đủ thông tin!';
-                return;
+    if (!username || !password) {
+        errorMessage.textContent = 'Vui lòng nhập đầy đủ thông tin!';
+        return;
+    }
+
+    // Kiểm tra thông tin đăng nhập trong Realtime Database
+    database.ref('users/' + username).once('value').then((snapshot) => {
+        if (snapshot.exists()) {
+            const userData = snapshot.val();
+            if (userData.password === password) {
+                // Lưu thông tin xác thực vào localStorage
+                localStorage.setItem('isAuthenticated', 'true');
+                localStorage.setItem('username', username);
+                // Thêm timestamp để kiểm soát thời gian phiên
+                localStorage.setItem('loginTime', Date.now());
+                
+                window.location.href = 'home.html';
+            } else {
+                errorMessage.textContent = 'Mật khẩu không đúng!';
             }
-
-            // Kiểm tra thông tin đăng nhập trong Realtime Database
-            database.ref('users/' + username).once('value').then((snapshot) => {
-                if (snapshot.exists()) {
-                    const userData = snapshot.val();
-                    if (userData.password === password) {
-                        // Lưu thông tin xác thực vào localStorage
-                        localStorage.setItem('isAuthenticated', 'true');
-                        localStorage.setItem('username', username);
-                        // Thêm timestamp để kiểm soát thời gian phiên
-                        localStorage.setItem('loginTime', Date.now());
-                        
-                        window.location.href = 'home.html';
-                    } else {
-                        errorMessage.textContent = 'Mật khẩu không đúng!';
-                    }
-                } else {
-                    errorMessage.textContent = 'Tên đăng nhập không tồn tại!';
-                }
-            }).catch((error) => {
-                errorMessage.textContent = 'Lỗi: ' + error.message;
-            });
+        } else {
+            errorMessage.textContent = 'Tên đăng nhập không tồn tại!';
         }
-
+    }).catch((error) => {
+        errorMessage.textContent = 'Lỗi: ' + error.message;
+    });
+}
         // Xử lý nhấn Enter
         document.getElementById('username').addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
