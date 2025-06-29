@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CÁ NHÂN</title>
+    <title>CHIA SẺ HỌC HÀNH</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/menu.css">
     <link rel="stylesheet" href="css/animations.css">
@@ -37,6 +37,7 @@
             font-size: 24px;
         }
 
+        /* Thiết lập nền trang */
        body {
     background: linear-gradient(135deg, #1e1e2f 0%, #2a2a4a 100%);
     color: #fff;
@@ -283,7 +284,7 @@
         const loginTime = localStorage.getItem('loginTime');
         
         // Nếu chưa đăng nhập hoặc phiên đã hết hạn (24 giờ)
-        if (!isAuthenticated || (Date.now() - parseInt(loginTime)) > 24 * 60 * 60 * 1000) {
+        if (!isAuthenticated || (Date.now() - parseInt(loginTime)) >1 * 60 * 60 * 1000) {
             // Xóa dữ liệu xác thực nếu có
             localStorage.removeItem('isAuthenticated');
             localStorage.removeItem('username');
@@ -305,33 +306,13 @@
         <div class="particle"></div>
         <div class="particle"></div>
     </div>
-       <script>
-    // Kiểm tra xác thực
-    function checkAuth() {
-        const isAuthenticated = localStorage.getItem('isAuthenticated');
-        const loginTime = localStorage.getItem('loginTime');
-        
-        // Nếu chưa đăng nhập hoặc phiên đã hết hạn (24 giờ)
-        if (!isAuthenticated || (Date.now() - parseInt(loginTime)) >1 * 60 * 60 * 1000) {
-            // Xóa dữ liệu xác thực nếu có
-            localStorage.removeItem('isAuthenticated');
-            localStorage.removeItem('username');
-            localStorage.removeItem('loginTime');
-            
-            // Chuyển hướng về trang đăng nhập
-            window.location.href = 'index.html';
-        }
-    }
-    
-    // Thực hiện kiểm tra ngay khi trang tải
-    checkAuth();
-</script>
-    <!-- Đường viền phát sáng -->
-    <div class="glowing-border"></div>
  <!-- Nút quay lại -->
-    <a href="xemthem.html" class="back-button">
+    <a href="khac.html" class="back-button">
         <i class="fas fa-arrow-left"></i>
     </a>
+    <!-- Đường viền phát sáng -->
+    <div class="glowing-border"></div>
+
     <!-- Menu bên trái -->
     <nav class="side-menu">
         <div class="menu-toggle">
@@ -350,7 +331,7 @@
                     <span>VIDEO KỸ THUẬT</span>
                 </a>
             </li>
-            <li class="menu-item" style="--index: 3;">
+             <li class="menu-item">
                 <a href="tlk.html">
                     <i class="fas fa-book"></i>
                     <span>CÁC TÀI LIỆU KHÁC</span>
@@ -368,7 +349,7 @@
                     <span>THÔNG TIN LIÊN HỆ</span>
                 </a>
             </li>
-               <li class="menu-item">
+            <li class="menu-item">
                 <a href="mp.html">
                     <i class="fas fa-code"></i>
                     <span>MÔ PHỎNG CODE</span>
@@ -379,45 +360,33 @@
 
     <!-- Phần lưới video -->
     <section class="video-section">
-        <h2>Cá Nhân</h2>
+        <h2>CAD, SOLIC, TT VẼ KỸ THUẬT</h2>
         <!-- Thanh tìm kiếm -->
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Tìm kiếm video...">
         </div>
         <div class="video-grid">
-             <!-- Video 1: MP4 từ máy chủ -->
-         <div class="video-item" style="--index: 1;">
-                <iframe src="https://www.youtube.com/embed/_ixqqtaBeb0?si=tPvxnFh_9GadVaUg" frameborder="0" allowfullscreen></iframe>
-                <h3>NHẠC 1</h3>
+             <div class="video-item" style="--index: 1;">
+                <iframe src="https://www.youtube.com/embed/QwfC7Kd3aLI?si=wo6MQ4rLwmxD7qEM" frameborder="0" allowfullscreen></iframe>
+                <h3>CAD 1 - LÀM QUEN VỚI AUTOCAD</h3>
             </div>
-            <!-- Video 2: MP4 từ máy chủ -->
-            <div class="video-item" style="--index: 2;">
-                <iframe src="https://www.youtube.com/embed/skJPX0Cp5QU?si=TLfEqAHKWH8y-PW4" frameborder="0" allowfullscreen></iframe>
-                <h3>NHẠC 2</h3>
+   
+         <div class="video-item" style="--index: 2;">
+                <iframe src="https://www.youtube.com/embed/r-umnMbEILc?si=anfQZrJRgMnjw25j" frameborder="0" allowfullscreen></iframe>
+                <h3>CAD 2 - THIẾT LẬP HỘP THOẠI OPTION</h3>
             </div>
-            <!-- Video 3: YouTube nhúng -->
-            <div class="video-item" style="--index: 3;">
-                <iframe src="https://www.youtube.com/embed/KhfP7GV16ak?si=sA6mpfI_5zzQeAjb" frameborder="0" allowfullscreen></iframe>
-                <h3>NHẠC 3</h3>
+           
+              <div class="video-item" style="--index: 3;">
+                <iframe src="https://www.youtube.com/embed/JYvccKN81GU?si=6af5G8oLe1lwsI9H" frameborder="0" allowfullscreen></iframe>
+                <h3>THỰC HÀNH VẼ KỸ THUẬT 1</h3>
             </div>
-            <!-- Video 4: YouTube nhúng -->
-            <div class="video-item" style="--index: 4;">
-                <iframe src="https://www.youtube.com/embed/PVdGGWXmuRA?si=DLQ3LIzazPfZn7X0" frameborder="0" allowfullscreen></iframe>
-                <h3>NHẠC 4</h3>
+
+            
+              <div class="video-item" style="--index: 4;">
+                <iframe src="https://www.youtube.com/embed/YuodZ8WXTAo?si=Iq1vV1AFTr1KCHtw" frameborder="0" allowfullscreen></iframe>
+                <h3>THỰC HÀNH VẼ KỸ THUẬT 2 - HÌNH CẮT</h3>
             </div>
-            <!-- Thêm video khác nếu cần -->
-              <!-- Video 4: YouTube nhúng -->
-            <div class="video-item" style="--index: 5;">
-                <iframe src="https://www.youtube.com/embed/FxTSucSET70?si=uaGIU0iZ7pwNgapV" frameborder="0" allowfullscreen></iframe>
-                <h3>NHẠC 5</h3>
-            </div>
-               <!-- Video 1: MP4 từ máy chủ -->
-         <div class="video-item" style="--index: 6;">
-                <iframe src="https://www.youtube.com/embed/BSXF1iECU9E?si=57SIe6fzMoI9wfts" frameborder="0" allowfullscreen></iframe>
-                <h3>NHẠC 6</h3>
-            </div>
-            <!-- Thêm video khác nếu cần -->
-        </div>
+           
     </section>
 
     <script>
@@ -493,6 +462,7 @@
                 }
             }
         })();
+        
     </script>
 </body>
 </html>
