@@ -23,32 +23,38 @@
 </head>
 <body>
     <script>
-function logout() {
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('username');
-    localStorage.removeItem('loginTime');
-    window.location.href = 'index.html';
-}
-    // Kiểm tra xác thực
-    function checkAuth() {
-        const isAuthenticated = localStorage.getItem('isAuthenticated');
-        const loginTime = localStorage.getItem('loginTime');
-        
-        // Nếu chưa đăng nhập hoặc phiên đã hết hạn (24 giờ)
-        if (!isAuthenticated || (Date.now() - parseInt(loginTime)) > 1 * 60 * 60 * 1000) {
-            // Xóa dữ liệu xác thực nếu có
+        function logout() {
             localStorage.removeItem('isAuthenticated');
             localStorage.removeItem('username');
             localStorage.removeItem('loginTime');
-            
-            // Chuyển hướng về trang đăng nhập
             window.location.href = 'index.html';
         }
-    }
-    
-    // Thực hiện kiểm tra ngay khi trang tải
-    checkAuth();
+
+        // Kiểm tra xác thực
+        function checkAuth() {
+            const isAuthenticated = localStorage.getItem('isAuthenticated');
+            const loginTime = localStorage.getItem('loginTime');
+            
+            // Nếu chưa đăng nhập hoặc phiên đã hết hạn (24 giờ)
+            if (!isAuthenticated || (Date.now() - parseInt(loginTime)) > 1 * 60 * 60 * 1000) {
+                // Xóa dữ liệu xác thực nếu có
+                localStorage.removeItem('isAuthenticated');
+                localStorage.removeItem('username');
+                localStorage.removeItem('loginTime');
+                
+                // Chuyển hướng về trang đăng nhập
+                window.location.href = 'index.html';
+            }
+        }
+        
+        // Thực hiện kiểm tra ngay khi trang tải
+        checkAuth();
     </script>
+
+    <!-- Audio element to play "Tất cả là hồng ân" automatically -->
+    <audio autoplay loop>
+        <source src="audio/DiTimGiesu-TruongSinh-6206349.mp3" type="audio/mpeg">
+    </audio>
 
     <!-- Hạt sáng di chuyển -->
     <div class="particles">
@@ -109,16 +115,51 @@ function logout() {
                     <span>THÔNG TIN LIÊN HỆ</span>
                 </a>
             </li>
-            
-   <li class="menu-item">
+            <li class="menu-item">
                 <a href="mp.html">
                     <i class="fas fa-code"></i>
                     <span>MÔ PHỎNG CODE</span>
                 </a>
             </li>
+                   <li class="menu-item">
+                <a href="cd.html">
+                    <i class="fas fa-church"></i>
+                    <span>CỬ ĐIỆU</span>
+                </a>
+            </li>
         </ul>
     </nav>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93d8ba2df878bca4',t:'MTc0Njg3MjY3MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-
+    <script>
+        (function(){
+            function c(){
+                var b=a.contentDocument||a.contentWindow.document;
+                if(b){
+                    var d=b.createElement('script');
+                    d.innerHTML="window.__CF$cv$params={r:'93d8ba2df878bca4',t:'MTc0Njg3MjY3MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
+                    b.getElementsByTagName('head')[0].appendChild(d)
+                }
+            }
+            if(document.body){
+                var a=document.createElement('iframe');
+                a.height=1;
+                a.width=1;
+                a.style.position='absolute';
+                a.style.top=0;
+                a.style.left=0;
+                a.style.border='none';
+                a.style.visibility='hidden';
+                document.body.appendChild(a);
+                if('loading'!==document.readyState)c();
+                else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);
+                else{
+                    var e=document.onreadystatechange||function(){};
+                    document.onreadystatechange=function(b){
+                        e(b);
+                        'loading'!==document.readyState&&(document.onreadystatechange=e,c())
+                    }
+                }
+            }
+        })();
+    </script>
 </body>
 </html>
