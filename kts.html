@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TNVL2</title>
+    <title>KY THUAT SO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .back-button {
@@ -278,7 +278,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            height: 260px;
+            height: 260px; /* Increased height */
             border: 1px solid rgba(0, 212, 255, 0.2);
             position: relative;
             overflow: hidden;
@@ -303,7 +303,7 @@
 
         .grid-box img {
             width: 100%;
-            height: 140px;
+            height: 140px; /* Increased image height */
             object-fit: cover;
             border-radius: 10px;
             margin-bottom: 12px;
@@ -316,7 +316,7 @@
         }
 
         .grid-box span {
-            font-size: 1.2rem;
+            font-size: 1.2rem; /* Adjusted font size */
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.8px;
@@ -334,66 +334,6 @@
 
         .grid-box.hidden {
             display: none;
-        }
-
-        .nav-buttons {
-            display: none; /* Ẩn nút điều hướng vì hiển thị tất cả */
-        }
-
-        /* Full-screen image styles */
-        .full-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            overflow: auto;
-        }
-
-        .full-screen img {
-            max-width: 90%;
-            max-height: 90%;
-            object-fit: contain;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-
-        .full-screen .nav-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            color: var(--text-light);
-            font-size: 1.5rem;
-            transition: var(--transition-normal);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .full-screen .nav-arrow:hover {
-            transform: translateY(-50%) scale(1.1);
-            background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .full-screen .nav-arrow.left {
-            left: 20px;
-        }
-
-        .full-screen .nav-arrow.right {
-            right: 20px;
         }
 
         @media (max-width: 1200px) {
@@ -504,22 +444,27 @@
     </style>
 </head>
 <body>
-    <script>
-        // Kiểm tra xác thực
-        function checkAuth() {
-            const isAuthenticated = localStorage.getItem('isAuthenticated');
-            const loginTime = localStorage.getItem('loginTime');
-            
-            if (!isAuthenticated || (Date.now() - parseInt(loginTime)) > 1 * 60 * 60 * 1000) {
-                localStorage.removeItem('isAuthenticated');
-                localStorage.removeItem('username');
-                localStorage.removeItem('loginTime');
-                window.location.href = 'index.html';
-            }
-        }
+       <script>
+    // Kiểm tra xác thực
+    function checkAuth() {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        const loginTime = localStorage.getItem('loginTime');
         
-        checkAuth();
-    </script>
+        // Nếu chưa đăng nhập hoặc phiên đã hết hạn (1 giờ)
+        if (!isAuthenticated || (Date.now() - parseInt(loginTime)) >1 * 60 * 60 * 1000) {
+            // Xóa dữ liệu xác thực nếu có
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('username');
+            localStorage.removeItem('loginTime');
+            
+            // Chuyển hướng về trang đăng nhập
+            window.location.href = 'index.html';
+        }
+    }
+    
+    // Thực hiện kiểm tra ngay khi trang tải
+    checkAuth();
+</script>
     <!-- Hạt sáng di chuyển -->
     <div class="particles">
         <div class="particle"></div>
@@ -538,7 +483,7 @@
     </a>
 
     <!-- Nút quay lại -->
-    <a href="tlk.html" class="back-button">
+    <a href="machdien.html" class="back-button">
         <i class="fas fa-arrow-left"></i>
     </a>
 
@@ -563,14 +508,76 @@
             <li class="menu-item"><a href="tlk.html"><i class="fas fa-book"></i> CÁC TÀI LIỆU KHÁC</a></li>
             <li class="menu-item"><a href="xemthem.html"><i class="fas fa-plus-circle"></i> XEM THÊM</a></li>
             <li class="menu-item"><a href="ttlh.html"><i class="fas fa-envelope"></i> THÔNG TIN LIÊN HỆ</a></li>
-            <li class="menu-item"><a href="mp.html"><i class="fas fa-code"></i> MÔ PHỎNG CODE</a></li>
-            <li class="menu-item"><a href="cudieu.html"><i class="fas fa-church"></i> CỬ ĐIỆU</a></li>
+             <li class="menu-item"><a href="mp.html"><i class="fas fa-code"></i> MÔ PHỎNG CODE</a></li>
+             <li class="menu-item"><a href="cudieu.html"><i class="fas fa-church"></i> CỬ ĐIỆU</a></li>
         </ul>
     </nav>
 
     <!-- Lưới các ô liên kết với ảnh -->
-    <section class="grid-container" id="gridContainer">
-        <!-- Images will be dynamically generated via JavaScript -->
+    <section class="grid-container">
+        <a href="https://docs.google.com/presentation/d/1ZprUd6xK6v-_Ac9_KqG2lgNU7ekglPif/edit?usp=drive_link&ouid=110844248315449692186&rtpof=true&sd=true" class="grid-box" target="_blank">
+            <img src="img/kts/chương 1.png" alt="">
+            <span>Chương 1</span>
+        </a>
+        <a href="https://docs.google.com/document/d/10KVchT4f4lItp06nvVdtAFdLJYtWL3A5/edit?usp=drive_link&ouid=110844248315449692186&rtpof=true&sd=true" class="grid-box" target="_blank">
+            <img src="img/kts/chương 2.png" alt="">
+            <span>Chương 2</span>
+        </a>
+        <a href="https://docs.google.com/presentation/d/1GoP6E7JnTio88G-EMKYckk4LTPxeHrMN/edit?usp=drive_link&ouid=110844248315449692186&rtpof=true&sd=true" class="grid-box" target="_blank">
+            <img src="img/kts/chương 3.png" alt="">
+            <span>Chương 3</span>
+        </a>
+        <a href="https://docs.google.com/presentation/d/19w9-RVIqShLNPOQvvU-5ySlCiEEXEDXb/edit?usp=drive_link&ouid=110844248315449692186&rtpof=true&sd=true" class="grid-box" target="_blank">
+            <img src="img/kts/chương 4.png" alt="">
+            <span>Chương 4</span>
+        </a>
+             <a href="https://docs.google.com/presentation/d/13hB42bGAwuG-_jySCvvTJaq34JkeurMX/edit?usp=drive_link&ouid=110844248315449692186&rtpof=true&sd=true" class="grid-box" target="_blank">
+            <img src="img/kts/chương 42.png" alt="">
+            <span>Chương 4 (TT)</span>
+        </a>
+
+             <a href="https://docs.google.com/presentation/d/1eshyx-Nzw-a85Q4aA8TtMUxNysG2ZBpG/edit?usp=drive_link&ouid=110844248315449692186&rtpof=true&sd=true" class="grid-box" target="_blank">
+            <img src="img/kts/chương 5.png" alt="">
+            <span>Chương 5</span>
+        </a>
+        
+               <a href="https://docs.google.com/presentation/d/1V-Vp5qiAwUq8SS0Sat-986t66ebh7Y3N/edit?usp=drive_link&ouid=110844248315449692186&rtpof=true&sd=true" class="grid-box" target="_blank">
+            <img src="img/kts/chương 6.png" alt="">
+            <span>Chương 6</span>
+        </a>
+        
+            <a href="https://docs.google.com/presentation/d/1vjE8bkfec6PIFuYVUxRZm8cBvCz1miEK/edit?usp=drive_link&ouid=110844248315449692186&rtpof=true&sd=true" class="grid-box" target="_blank">
+            <img src="img/kts/chương 7.png" alt="">
+            <span>Chương 7</span>
+        </a>
+
+            <a href="https://docs.google.com/presentation/d/1Zjkk75zIhcoURBL2sWaAEYVfEeuVPL9e/edit?usp=drive_link&ouid=110844248315449692186&rtpof=true&sd=true" class="grid-box" target="_blank">
+            <img src="img/kts/chương 8.png" alt="">
+            <span>Chương 8</span>
+        </a>
+
+
+            <a href="https://docs.google.com/presentation/d/1FplmV2-bqkMuiBdzhuQUvl_mufui8_kl/edit?usp=drive_link&ouid=110844248315449692186&rtpof=true&sd=true" class="grid-box" target="_blank">
+            <img src="img/kts/ghep.png" alt="">
+            <span>Ghép mạch logic và sóng ngõ ra</span>
+        </a>
+
+         <a href="https://docs.google.com/presentation/d/1AB7h-21raGAKc70W04Cl4SqqznWRM1iX/edit?usp=drive_link&ouid=110844248315449692186&rtpof=true&sd=true" class="grid-box" target="_blank">
+            <img src="img/kts/dem.png" alt="">
+            <span>Mạch đếm</span>
+        </a>
+
+        
+         <a href="https://drive.google.com/file/d/1MZmSpeB4iBF9Af7O5vcOLM7EFWKoObml/view?usp=drive_link" class="grid-box" target="_blank">
+            <img src="img/kts/mp.png" alt="">
+            <span>Phần mềm mô phỏng proteus (Đã add cả thư viện mô phỏng arduino,....)</span>
+        </a>
+
+          
+         <a href="https://docs.google.com/document/d/1Ml5j-0DAheP_4Zf1acPSvM9gi0EttxaV/edit?usp=drive_link&ouid=110844248315449692186&rtpof=true&sd=true" class="grid-box" target="_blank">
+            <img src="img/kts/bc.png" alt="">
+            <span>Báo cáo cuối kỳ</span>
+        </a>
     </section>
 
     <script>
@@ -585,8 +592,10 @@
         function performSearch() {
             const searchTerm = removeAccents(document.getElementById('searchInput').value.trim().toLowerCase());
             const gridBoxes = document.querySelectorAll('.grid-box');
+
             gridBoxes.forEach(box => {
                 const boxText = removeAccents(box.querySelector('span').textContent.toLowerCase());
+                // Kiểm tra xem tất cả ký tự trong searchTerm có xuất hiện trong boxText không
                 let isMatch = true;
                 if (searchTerm !== '') {
                     for (let char of searchTerm) {
@@ -596,6 +605,7 @@
                         }
                     }
                 }
+                // Hiển thị hoặc ẩn ô dựa trên kết quả khớp
                 if (isMatch) {
                     box.classList.remove('hidden');
                 } else {
@@ -604,147 +614,15 @@
             });
         }
 
+        // Tìm kiếm thời gian thực khi người dùng nhập
         document.getElementById('searchInput').addEventListener('input', performSearch);
+
+        // Cho phép nhấn Enter để tìm kiếm
         document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') performSearch();
+            if (e.key === 'Enter') {
+                performSearch();
+            }
         });
-
-        // Dynamically generate grid boxes for images 1 to 42
-        const gridContainer = document.getElementById('gridContainer');
-        for (let i = 1; i <= 42; i++) {
-            const box = document.createElement('div');
-            box.classList.add('grid-box');
-            const imgSrc = `img/tnvl2/${i}.jpg`;
-            box.setAttribute('data-image', imgSrc);
-            box.innerHTML = `<img src="${imgSrc}" alt="Hình ${i}"><span>Hình ${i}</span>`;
-            gridContainer.appendChild(box);
-        }
-
-        // Xử lý full-screen với điều hướng và zoom
-        let currentFullScreenIndex = 0;
-        let zoomLevel = 1;
-
-        document.querySelectorAll('.grid-box').forEach((box, index) => {
-            box.addEventListener('click', function() {
-                currentFullScreenIndex = index;
-                zoomLevel = 1; // Reset zoom level
-                showFullScreenImage(index);
-            });
-        });
-
-        function showFullScreenImage(index) {
-            const gridBoxes = document.querySelectorAll('.grid-box');
-            const imgSrc = gridBoxes[index].getAttribute('data-image');
-            const fullScreen = document.createElement('div');
-            fullScreen.classList.add('full-screen');
-
-            const img = document.createElement('img');
-            img.src = imgSrc;
-            img.style.transform = `scale(${zoomLevel})`;
-            img.style.transformOrigin = 'center';
-
-            const prevArrow = document.createElement('button');
-            prevArrow.classList.add('nav-arrow', 'left');
-            prevArrow.innerHTML = '<i class="fas fa-chevron-left"></i>';
-            prevArrow.onclick = (e) => {
-                e.stopPropagation();
-                if (currentFullScreenIndex > 0) {
-                    currentFullScreenIndex--;
-                    zoomLevel = 1; // Reset zoom when changing images
-                    showFullScreenImage(currentFullScreenIndex);
-                }
-            };
-
-            const nextArrow = document.createElement('button');
-            nextArrow.classList.add('nav-arrow', 'right');
-            nextArrow.innerHTML = '<i class="fas fa-chevron-right"></i>';
-            nextArrow.onclick = (e) => {
-                e.stopPropagation();
-                if (currentFullScreenIndex < gridBoxes.length - 1) {
-                    currentFullScreenIndex++;
-                    zoomLevel = 1; // Reset zoom when changing images
-                    showFullScreenImage(currentFullScreenIndex);
-                }
-            };
-
-            fullScreen.appendChild(prevArrow);
-            fullScreen.appendChild(img);
-            fullScreen.appendChild(nextArrow);
-            document.body.appendChild(fullScreen);
-
-            // Handle zoom
-            let isDragging = false;
-            let startX, startY, initialX, initialY;
-
-            img.addEventListener('wheel', (e) => {
-                e.preventDefault();
-                const delta = e.deltaY * -0.001;
-                zoomLevel = Math.min(Math.max(0.1, zoomLevel + delta), 10); // Limit zoom between 0.1x and 10x
-                img.style.transform = `scale(${zoomLevel})`;
-            });
-
-            img.addEventListener('mousedown', (e) => {
-                if (zoomLevel > 1) {
-                    isDragging = true;
-                    startX = e.clientX;
-                    startY = e.clientY;
-                    initialX = img.offsetLeft;
-                    initialY = img.offsetTop;
-                    e.preventDefault();
-                }
-            });
-
-            document.addEventListener('mousemove', (e) => {
-                if (isDragging && zoomLevel > 1) {
-                    const dx = e.clientX - startX;
-                    const dy = e.clientY - startY;
-                    img.style.left = `${initialX + dx}px`;
-                    img.style.top = `${initialY + dy}px`;
-                    img.style.position = 'absolute';
-                }
-            });
-
-            document.addEventListener('mouseup', () => {
-                isDragging = false;
-            });
-
-            // Handle touch events for pinch zoom
-            let lastDistance = null;
-            img.addEventListener('touchstart', (e) => {
-                if (e.touches.length === 2) {
-                    const dx = e.touches[0].clientX - e.touches[1].clientX;
-                    const dy = e.touches[0].clientY - e.touches[1].clientY;
-                    lastDistance = Math.sqrt(dx * dx + dy * dy);
-                }
-            });
-
-            img.addEventListener('touchmove', (e) => {
-                if (e.touches.length === 2) {
-                    const dx = e.touches[0].clientX - e.touches[1].clientX;
-                    const dy = e.touches[0].clientY - e.touches[1].clientY;
-                    const currentDistance = Math.sqrt(dx * dx + dy * dy);
-                    if (lastDistance) {
-                        const delta = (currentDistance - lastDistance) * 0.01;
-                        zoomLevel = Math.min(Math.max(0.1, zoomLevel + delta), 10);
-                        img.style.transform = `scale(${zoomLevel})`;
-                    }
-                    lastDistance = currentDistance;
-                    e.preventDefault();
-                }
-            });
-
-            // Close full-screen
-            document.body.style.overflow = 'hidden';
-            fullScreen.onclick = (e) => {
-                if (e.target === fullScreen) {
-                    fullScreen.remove();
-                    document.body.style.overflow = 'auto';
-                }
-            };
-
-            // Prevent default touch behavior
-            fullScreen.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
-        }
 
         // Xử lý lỗi tiềm ẩn
         window.addEventListener('error', function(e) {
