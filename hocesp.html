@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Khóa học ESP32 - hocesp (Offline)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #00796b;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      font-size: 22px;
+      font-weight: bold;
+      position: relative;
+    }
+    #logoutBtn {
+      position: absolute;
+      right: 20px;
+      top: 12px;
+      background: #e53935;
+      border: none;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      display: none;
+    }
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 30px;
+      margin: 20px;
+    }
+    #videoContainer {
+      width: 720px;
+      height: 405px;
+      background: black;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    #videoPlayer {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: black;
+    }
+    #courseList {
+      width: 320px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+      padding: 10px;
+    }
+    .chapter { border-bottom: 1px solid #ddd; padding: 10px 0; }
+    .chapter h3 { font-size: 16px; margin: 0; color: #00695c; }
+    .subvideo {
+      padding-left: 15px;
+      font-size: 14px;
+      color: #00796b;
+      cursor: pointer;
+    }
+    .subvideo.locked { color: #aaa; cursor: not-allowed; }
+    .subvideo.active { font-weight: bold; color: #009688; }
+    .subvideo.completed::after { content: " ✔"; color: #009688; }
+    #progressContainer {
+      width: 720px;
+      background: #e0e0e0;
+      border-radius: 10px;
+      height: 14px;
+      margin-top: 15px;
+      overflow: hidden;
+    }
+    #progressBar {
+      height: 100%;
+      width: 0%;
+      background-color: #009688;
+      transition: width 0.4s;
+    }
+    #progressText {
+      text-align: center;
+      margin-top: 5px;
+      color: #333;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    #loginBox { text-align: center; margin-top: 100px; }
+    #usernameInput {
+      padding: 8px 12px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #aaa;
+    }
+    #loginBtn, #backBtn {
+      padding: 8px 18px;
+      font-size: 16px;
+      background-color: #009688;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-left: 8px;
+    }
+    #backBtn { background-color: #607d8b; }
+
+    /* form kiểm tra */
+    #quizBox {
+      display: none;
+      margin-top: 20px;
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.2);
+    }
+    #quizBox h3 { color: #00695c; margin-top: 0; }
+    #quizInput {
+      width: 95%;
+      padding: 8px;
+      font-size: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-family: monospace;
+    }
+    #submitQuiz, #showAnswer {
+      margin-top: 10px;
+      background: #00796b;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    #showAnswer {
+      background: #9e9e9e;
+      display: none;
+      margin-left: 10px;
+    }
+    #answerBox {
+      display: none;
+      margin-top: 10px;
+      padding: 10px;
+      background: #f0f0f0;
+      border-radius: 6px;
+      font-family: monospace;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    Khóa học ESP32
+    <button id="logoutBtn">Đăng xuất</button>
+  </header>
+
+  <div id="loginBox">
+    <h2>Nhập tên người học:</h2>
+    <input id="usernameInput" type="text" placeholder="VD: Danh, Hoang, Thuy..." />
+    <button id="loginBtn">Bắt đầu học</button>
+    <br><br>
+    <button id="backBtn">⬅ Quay về</button>
+  </div>
+
+  <main id="mainContent" style="display:none;">
+    <div>
+      <div id="videoContainer">
+        <video id="videoPlayer" controls></video>
+      </div>
+      <div id="progressContainer"><div id="progressBar"></div></div>
+      <div id="progressText">Tiến độ: 0%</div>
+
+      <!-- Form bài kiểm tra -->
+      <div id="quizBox">
+        <h3>Bài kiểm tra cuối chương 1</h3>
+        <p>Viết đoạn code để bật LED ở chân GPIO 2 nháy 3 lần, mỗi lần sáng 500ms và tắt 500ms.</p>
+        <input id="quizInput" type="text" placeholder="Nhập code của bạn..." />
+        <br>
+        <button id="submitQuiz">Nộp bài</button>
+        <button id="showAnswer">Hiện đáp án gợi ý</button>
+        <div id="answerBox"></div>
+      </div>
+    </div>
+    <div id="courseList"></div>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAfC893_8rAt7_QrThVFTH3PFPw3XTlXtI",
+      authDomain: "myprojects-800da.firebaseapp.com",
+      databaseURL: "https://myprojects-800da-default-rtdb.firebaseio.com",
+      projectId: "myprojects-800da",
+      storageBucket: "myprojects-800da.firebasestorage.app",
+      messagingSenderId: "768414247867",
+      appId: "1:768414247867:web:202a7e5982c5195f31329e"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const chapters = [
+      { title: "Chương 1: Giới thiệu ESP32", videos: [
+        { title: "1.1 Tổng quan ESP32", file: "videos/1-1.mp4" },
+        { title: "1.2 Cấu trúc phần cứng", file: "videos/1-1.mp4" },
+        { title: "1.3 Giới thiệu lập trình", file: "videos/1-1.mp4" }
+      ]},
+      { title: "Chương 2: GPIO cơ bản", videos: [
+        { title: "2.1 GPIO", file: "videos/2-1.mp4" }
+      ]}
+    ];
+
+    let userName = "";
+    let currentChapter = 0, currentVideo = 0;
+    let maxChapter = 0, maxVideo = -1;
+    let wrongCount = 0;
+
+    const video = document.getElementById("videoPlayer");
+    const quizBox = document.getElementById("quizBox");
+    const showAnswerBtn = document.getElementById("showAnswer");
+    const answerBox = document.getElementById("answerBox");
+
+    async function loadProgress() {
+      const snap = await get(ref(db, "users/" + sanitizeKey(userName)));
+      if (snap.exists()) {
+        const data = snap.val();
+        maxChapter = data.chapter ?? 0;
+        maxVideo = data.video ?? -1;
+      }
+      renderCourseList();
+      updateProgressBar();
+      loadVideo(maxChapter, maxVideo + 1 || 0);
+    }
+
+    function sanitizeKey(s) { return s.replace(/[.#$/\[\]]/g, "_"); }
+
+    function renderCourseList() {
+      const list = document.getElementById("courseList");
+      list.innerHTML = "";
+      chapters.forEach((ch, ci) => {
+        const div = document.createElement("div");
+        div.classList.add("chapter");
+        const h3 = document.createElement("h3");
+        h3.textContent = ch.title;
+        div.appendChild(h3);
+
+        ch.videos.forEach((v, vi) => {
+          const sv = document.createElement("div");
+          sv.textContent = "• " + v.title;
+          sv.classList.add("subvideo");
+
+          const locked = ci > maxChapter || (ci === maxChapter && vi > maxVideo + 1);
+          if (locked) sv.classList.add("locked");
+          if (ci === currentChapter && vi === currentVideo) sv.classList.add("active");
+          if (ci < maxChapter || (ci === maxChapter && vi <= maxVideo)) sv.classList.add("completed");
+
+          sv.onclick = () => {
+            if (!locked) loadVideo(ci, vi);
+            else alert("⛔ Hãy hoàn thành video trước!");
+          };
+          div.appendChild(sv);
+        });
+        list.appendChild(div);
+      });
+    }
+
+    function loadVideo(ci, vi) {
+      currentChapter = ci;
+      currentVideo = vi;
+      video.src = chapters[ci].videos[vi].file;
+      video.currentTime = 0;
+      video.play();
+      renderCourseList();
+      quizBox.style.display = "none";
+    }
+
+    video.addEventListener("ended", () => {
+      advanceProgress();
+    });
+
+    function advanceProgress() {
+      let totalVideos = chapters.reduce((s, c) => s + c.videos.length, 0);
+      let currentIndex = flatIndex(currentChapter, currentVideo);
+
+      if (currentChapter === 0 && currentVideo === chapters[0].videos.length - 1) {
+        quizBox.style.display = "block";
+        wrongCount = 0;
+        showAnswerBtn.style.display = "none";
+        answerBox.style.display = "none";
+        return;
+      }
+
+      if (currentVideo > maxVideo || currentChapter > maxChapter) {
+        maxChapter = currentChapter;
+        maxVideo = currentVideo;
+        saveProgress();
+      }
+
+      alert("✅ Bạn đã hoàn thành video này!");
+      updateProgressBar();
+      renderCourseList();
+
+      if (currentIndex + 1 < totalVideos) {
+        if (confirm("👉 Mở video kế tiếp?")) {
+          const next = fromFlatIndex(currentIndex + 1);
+          loadVideo(next.c, next.v);
+        }
+      } else {
+        alert("🎉 Chúc mừng! Bạn đã hoàn thành toàn bộ khóa học!");
+      }
+    }
+
+    // === Bài kiểm tra khó hơn ===
+    document.getElementById("submitQuiz").onclick = () => {
+      const ans = document.getElementById("quizInput").value.trim().toLowerCase();
+      const validPatterns = [
+        "for", "digitalwrite", "gpio_set_level", "delay", "500"
+      ];
+
+      const correct = validPatterns.every(p => ans.includes(p));
+
+      if (correct) {
+        alert("🎉 Chính xác! Bạn đã vượt qua bài kiểm tra Chương 1!");
+        quizBox.style.display = "none";
+        maxChapter = 1;
+        maxVideo = -1;
+        saveProgress();
+        updateProgressBar();
+        renderCourseList();
+        loadVideo(1, 0);
+      } else {
+        wrongCount++;
+        alert("❌ Sai rồi! (" + wrongCount + "/3)");
+        if (wrongCount >= 3) {
+          showAnswerBtn.style.display = "inline-block";
+        }
+      }
+    };
+
+    showAnswerBtn.onclick = () => {
+      answerBox.style.display = "block";
+      answerBox.innerText =
+`for (int i = 0; i < 3; i++) {
+  digitalWrite(2, HIGH);
+  delay(500);
+  digitalWrite(2, LOW);
+  delay(500);
+}`;
+    };
+
+    function flatIndex(c, v) {
+      let idx = 0;
+      for (let i = 0; i < c; i++) idx += chapters[i].videos.length;
+      return idx + v;
+    }
+    function fromFlatIndex(i) {
+      let sum = 0;
+      for (let c = 0; c < chapters.length; c++) {
+        if (i < sum + chapters[c].videos.length) return { c, v: i - sum };
+        sum += chapters[c].videos.length;
+      }
+      return { c: chapters.length - 1, v: 0 };
+    }
+
+    function saveProgress() {
+      set(ref(db, "users/" + sanitizeKey(userName)), { chapter: maxChapter, video: maxVideo });
+    }
+
+    function updateProgressBar() {
+      const total = chapters.reduce((s, c) => s + c.videos.length, 0);
+      const done = maxVideo < 0 ? 0 : flatIndex(maxChapter, maxVideo) + 1;
+      const percent = Math.min(100, Math.round((done / total) * 100));
+      document.getElementById("progressBar").style.width = percent + "%";
+      document.getElementById("progressText").textContent = `Tiến độ: ${percent}%`;
+    }
+
+    // === Login / Logout ===
+    const loginBox = document.getElementById("loginBox");
+    const mainContent = document.getElementById("mainContent");
+    const usernameInput = document.getElementById("usernameInput");
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const backBtn = document.getElementById("backBtn");
+
+    loginBtn.onclick = () => {
+      const name = usernameInput.value.trim();
+      if (!name) return alert("Nhập tên người học!");
+      userName = name;
+      loginBox.style.display = "none";
+      mainContent.style.display = "flex";
+      logoutBtn.style.display = "block";
+      loadProgress();
+    };
+
+    logoutBtn.onclick = () => { location.reload(); };
+    backBtn.onclick = () => { window.location.href = "khoahoc.html"; };
+  </script>
+</body>
+</html>

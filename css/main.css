@@ -1,0 +1,365 @@
+/* =========================================
+   VOVINAM MAIN STYLESHEET
+   Author: Phan Văn Võ
+   Version: 1.1
+   ========================================= */
+
+/* ----------------------------------------
+   1. GLOBAL RESET & VARIABLES
+   ---------------------------------------- */
+
+/* Modern CSS Reset */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* CSS Custom Properties */
+:root {
+    /* Main Colors */
+    --primary-color: #4a7cd1;       /* Xanh Vovinam nhạt hơn */
+    --primary-light: #3a78d4;       /* Xanh sáng */
+    --primary-dark: #2f5ba6;        /* Xanh đậm nhạt hơn */
+    --secondary-color: #c71815;     /* Đỏ Vovinam */
+    --accent-color: #ffde59;        /* Vàng Vovinam */
+    
+    /* Text Colors */
+    --text-light: #ffffff;
+    --text-dark: #1a1a1a;
+    --text-muted: #9ba3af;
+    
+    /* Neutral Colors */
+    --neutral-100: #f3f4f6;
+    --neutral-200: #e5e7eb;
+    --neutral-300: #d1d5db;
+    
+    /* Effect Colors */
+    --shadow-color: rgba(0, 0, 0, 0.25);
+    --glow-color: rgba(255, 222, 89, 0.15);
+    
+    /* Spacing */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 2rem;
+    --space-xl: 4rem;
+    
+    /* Border Radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 1rem;
+    --radius-full: 9999px;
+    
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* ----------------------------------------
+   2. BASE ELEMENTS
+   ---------------------------------------- */
+
+body, html {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+/* ----------------------------------------
+   3. LAYOUT & STRUCTURE
+   ---------------------------------------- */
+
+.logo-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.title {
+    position: fixed;
+    bottom: 30px;
+    right: 40px;
+    color: var(--text-light);
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    padding: 10px 20px;
+    border-radius: var(--radius-full);
+    background-color: rgba(30, 90, 187, 0.2);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all var(--transition-normal);
+}
+
+.glowing-border {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    border: 2px solid var(--glow-color);
+    border-radius: var(--radius-md);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Xem Thêm Content */
+.xem-them-content {
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 0;
+    z-index: 2;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content-boxes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    gap: 2rem;
+}
+
+.content-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: transform var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    padding: 1rem;
+    max-height: 80vh;
+    overflow-y: auto;
+    background: linear-gradient(135deg, rgba(26, 77, 140, 0.8), rgba(15, 46, 90, 0.8));
+}
+
+.content-box h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    margin-bottom: 1rem;
+    color: var(--accent-color);
+}
+
+.content-box:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+}
+
+.content-box .content {
+    padding: 1rem;
+    text-align: left;
+    width: 100%;
+    overflow-y: auto;
+    max-height: 70vh;
+}
+
+.content-box .content p {
+    margin-bottom: 1rem;
+}
+
+/* Thông Tin Cá Nhân Content */
+.cnt-content {
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 0;
+    z-index: 2;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Accordion Styles */
+.accordion .accordion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.accordion .accordion-header h2 {
+    margin: 0;
+}
+
+.accordion .accordion-icon {
+    font-size: 1.2rem;
+    color: var(--accent-color);
+    transition: transform var(--transition-normal);
+}
+
+.accordion .accordion-icon.rotate {
+    transform: rotate(180deg);
+}
+
+.accordion .accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    width: 100%;
+    transition: max-height var(--transition-normal);
+}
+
+.accordion .accordion-content.active {
+    max-height: 300px; /* Điều chỉnh tùy theo nội dung */
+}
+
+.accordion .accordion-menu {
+    list-style: none;
+    padding: 1rem;
+}
+
+.accordion .accordion-menu li {
+    margin-bottom: 0.5rem;
+}
+
+.accordion .accordion-menu li a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: var(--transition-fast);
+}
+
+.accordion .accordion-menu li a:hover {
+    color: var(--accent-color);
+    transform: translateX(5px);
+    display: inline-block;
+}
+
+/* Responsive Design for Content Boxes */
+@media (max-width: 992px) {
+    .content-boxes {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        gap: 1.5rem;
+    }
+
+    .content-box {
+        max-height: 60vh;
+    }
+
+    .content-box .content {
+        max-height: 55vh;
+    }
+
+    .cnt-content .content-box {
+        max-height: 60vh;
+    }
+
+    .cnt-content .accordion-content.active {
+        max-height: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .xem-them-content, .cnt-content {
+        padding: 5rem 0;
+    }
+
+    .content-box h2 {
+        font-size: 1.5rem;
+    }
+
+    .content-box {
+        max-height: 50vh;
+    }
+
+    .content-box .content {
+        max-height: 45vh;
+    }
+
+    .cnt-content .accordion-content.active {
+        max-height: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    .xem-them-content, .cnt-content {
+        padding: 4rem 0;
+    }
+
+    .content-box h2 {
+        font-size: 1.3rem;
+    }
+
+    .content-box {
+        max-height: 40vh;
+    }
+
+    .content-box .content {
+        max-height: 35vh;
+    }
+
+    .cnt-content .accordion-content.active {
+        max-height: 100px;
+    }
+
+    .accordion .accordion-icon {
+        font-size: 1rem;
+    }
+}
+
+/* ----------------------------------------
+   4. COMPONENTS
+   ---------------------------------------- */
+
+/* Logo Image */
+.logo-img {
+    max-width: 65%;
+    max-height: 65%;
+    filter: drop-shadow(0 10px 20px var(--shadow-color));
+    transition: transform var(--transition-slow);
+}
+
+/* Logo Container Halo Effect */
+.logo-container::before {
+    content: "";
+    position: absolute;
+    width: 70%;
+    height: 70%;
+    background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.08) 0%,
+        rgba(30, 90, 187, 0) 70%
+    );
+    z-index: -1;
+}
+
+/* ----------------------------------------
+   5. HOVER & INTERACTIVE STATES
+   ---------------------------------------- */
+
+.logo-img:hover {
+    transform: scale(1.02);
+}
+
+.title:hover {
+    background-color: rgba(30, 90, 187, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}

@@ -1,0 +1,415 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 - Mô phỏng</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --text-light: #ffffff;
+            --background-dark: #1a1a2e;
+            --accent-color: #00d4ff;
+            --transition-normal: all 0.3s ease-in-out;
+        }
+        body {
+            background: linear-gradient(135deg, #f0f2f5, #dfe6e9);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+        .back-button {
+            position: fixed; bottom: 30px; left: 30px; width: 50px; height: 50px; background-color: red; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); z-index: 101; transition: var(--transition-normal);
+        }
+        .back-button:hover { transform: scale(1.1); background-color: #e61c18; }
+        .back-button i { color: var(--text-light); font-size: 24px; }
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .particle { position: absolute; background: radial-gradient(circle, rgba(0, 212, 255, 0.8), transparent); border-radius: 50%; opacity: 0.6; animation: float 15s infinite ease-in-out; }
+        .particle:nth-child(1) { width: 20px; height: 20px; top: 10%; left: 15%; animation-duration: 12s; }
+        .particle:nth-child(2) { width: 15px; height: 15px; top: 30%; left: 40%; animation-duration: 18s; }
+        .particle:nth-child(3) { width: 25px; height: 25px; top: 50%; left: 60%; animation-duration: 14s; }
+        .particle:nth-child(4) { width: 18px; height: 18px; top: 70%; left: 25%; animation-duration: 16s; }
+        .particle:nth-child(5) { width: 22px; height: 22px; top: 20%; left: 80%; animation-duration: 20s; }
+        @keyframes float { 0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; } 50% { transform: translateY(-50px) scale(1.2); opacity: 0.9; } }
+        .glowing-border { position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: 4px solid transparent; box-shadow: 0 0 20px rgba(0, 212, 255, 0.5), inset 0 0 20px rgba(0, 212, 255, 0.5); pointer-events: none; z-index: 2; animation: glow 3s infinite ease-in-out; }
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.5), inset 0 0 20px rgba(0, 212, 255, 0.5); } 50% { box-shadow: 0 0 30px rgba(0, 212, 255, 0.8), inset 0 0 30px rgba(0, 212, 255, 0.8); } }
+        .home-button { position: fixed; top: 20px; right: 20px; width: 60px; height: 60px; background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); z-index: 101; transition: var(--transition-normal); color: var(--text-light); text-decoration: none; }
+        .home-button i { font-size: 1.8rem; }
+        .home-button:hover { transform: scale(1.15) rotate(10deg); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); background: linear-gradient(135deg, var(--accent-color), var(--primary-color)); }
+        .side-menu { position: fixed; top: 0; left: -300px; width: 300px; height: 100%; background: linear-gradient(180deg, var(--background-dark), #2d3436); box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3); transition: var(--transition-normal); z-index: 100; }
+        .menu-toggle:hover + .side-menu, .side-menu:hover { left: 0; }
+        .menu-toggle { position: fixed; top: 20px; left: 20px; width: 40px; height: 40px; background: var(--primary-color); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; color: var(--text-light); z-index: 101; }
+        .menu-toggle i { font-size: 1.5rem; }
+        .menu-items { list-style: none; padding: 60px 20px; margin: 0; }
+        .menu-item { margin: 15px 0; }
+        .menu-item a { display: flex; align-items: center; padding: 12px; color: var(--text-light); text-decoration: none; font-size: 1.1rem; font-weight: 500; border-radius: 8px; transition: var(--transition-normal); }
+        .menu-item a i { margin-right: 10px; font-size: 1.3rem; }
+        .menu-item a:hover { background: var(--primary-color); transform: translateX(10px); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); }
+        
+        .top-navbar {
+            background-color: var(--background-dark);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            padding: 0 10px;
+            position: relative;
+            z-index: 99;
+        }
+        .top-navbar .dropdown {
+            position: relative;
+        }
+        .top-navbar .dropbtn {
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            border: none;
+            outline: none;
+            color: var(--text-light);
+            padding: 15px 20px;
+            background-color: transparent;
+            margin: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: var(--transition-normal);
+        }
+        .top-navbar .dropbtn:hover {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: var(--text-light);
+        }
+        .top-navbar .arrow {
+            border: solid var(--text-light);
+            border-width: 0 2px 2px 0;
+            display: inline-block;
+            padding: 3px;
+            margin-left: 8px;
+            transform: rotate(45deg);
+            transition: transform 0.3s ease;
+        }
+        .top-navbar .dropdown .dropbtn.open .arrow {
+            transform: rotate(-135deg);
+        }
+        .top-navbar .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #2d3436;
+            min-width: 240px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+            border-radius: 8px;
+            z-index: 99;
+            margin-top: 5px;
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+        }
+        .top-navbar .dropdown-content.show {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .top-navbar .dropdown-content a {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-light);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: var(--transition-normal);
+        }
+        .top-navbar .dropdown-content a:hover {
+            background-color: var(--primary-color);
+            transform: translateX(5px);
+        }
+        .top-navbar .dropdown-content.scrollable {
+            padding: 0;
+        }
+        .scrollable-wrapper {
+            position: relative;
+        }
+        .scroll-btn {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            color: var(--text-light);
+            text-align: center;
+            cursor: pointer;
+            z-index: 100;
+            padding: 4px 0;
+            user-select: none;
+            transition: background-color 0.2s ease, opacity 0.3s ease, visibility 0.3s ease;
+            opacity: 1;
+            visibility: visible;
+        }
+        .scroll-btn.hidden {
+            opacity: 0;
+            visibility: hidden;
+            cursor: default;
+        }
+        .scroll-btn:hover:not(.hidden) {
+            background: var(--primary-color);
+        }
+        .scroll-btn.up {
+            top: 0;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .scroll-btn.down {
+            bottom: 0;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        .scrollable-content {
+            max-height: 141px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            padding: 5px 0;
+        }
+        .scrollable-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .scrollable-content::-webkit-scrollbar-track {
+            background: #2d3436;
+            border-radius: 8px;
+        }
+        .scrollable-content::-webkit-scrollbar-thumb {
+            background: #636e72;
+            border-radius: 8px;
+        }
+        .scrollable-content::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-color);
+        }
+        #wokwi-container {
+            width: 100%;
+            margin-top: 20px;
+        }
+        #wokwi-container iframe {
+            display: block;
+            width: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+           <script>
+    // Kiểm tra xác thực
+    function checkAuth() {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        const loginTime = localStorage.getItem('loginTime');
+        
+        // Nếu chưa đăng nhập hoặc phiên đã hết hạn (1 giờ)
+        if (!isAuthenticated || (Date.now() - parseInt(loginTime)) >1 * 60 * 60 * 1000) {
+            // Xóa dữ liệu xác thực nếu có
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('username');
+            localStorage.removeItem('loginTime');
+            
+            // Chuyển hướng về trang đăng nhập
+            window.location.href = 'index.html';
+        }
+    }
+    
+    // Thực hiện kiểm tra ngay khi trang tải
+    checkAuth();
+</script>
+    <script>
+        function checkAuth() {
+            const isAuthenticated = localStorage.getItem('isAuthenticated');
+            const loginTime = localStorage.getItem('loginTime');
+            if (!isAuthenticated || (Date.now() - parseInt(loginTime)) > 1 * 60 * 60 * 1000) {
+                localStorage.removeItem('isAuthenticated');
+                localStorage.removeItem('username');
+                localStorage.removeItem('loginTime');
+                window.location.href = 'index.html';
+            }
+        }
+        checkAuth();
+    </script>
+    
+    <nav class="side-menu">
+        <div class="menu-toggle" aria-label="Bật/Tắt Menu"><i class="fas fa-bars"></i></div>
+        <ul class="menu-items">
+            <li class="menu-item"><a href="vo-dao.html"><i class="fas fa-fist-raised"></i> VÕ ĐẠO</a></li>
+            <li class="menu-item"><a href="basic-techniques.html"><i class="fas fa-video"></i> VIDEO KỸ THUẬT</a></li>
+            <li class="menu-item"><a href="tlk.html"><i class="fas fa-book"></i> CÁC TÀI LIỆU KHÁC</a></li>
+            <li class="menu-item"><a href="xemthem.html"><i class="fas fa-plus-circle"></i> XEM THÊM</a></li>
+            <li class="menu-item"><a href="ttlh.html"><i class="fas fa-envelope"></i> THÔNG TIN LIÊN HỆ</a></li>
+            <li class="menu-item"><a href="mp.html"><i class="fas fa-code"></i> MÔ PHỎNG CODE</a></li>
+            <li class="menu-item"><a href="khoahoc.html"><i class="fas fa-church"></i> KHÓA HỌC</a></li>
+        </ul>
+    </nav>
+    
+    <nav class="top-navbar">
+        <div class="dropdown" data-scroll-initialized="false">
+            <button class="dropbtn" onclick="toggleDropdown('basicDropdown')">Basic <span class="arrow"></span></button>
+            <div class="dropdown-content scrollable" id="basicDropdown">
+                <div class="scrollable-wrapper">
+                    <div class="scroll-btn up hidden"><i class="fas fa-chevron-up"></i></div>
+                    <div class="scrollable-content">
+                        <a href="javascript:void(0)" onclick="showWokwi('https://wokwi.com/projects/434973781302010881')">Blink Led</a>
+                        <a href="javascript:void(0)" onclick="showWokwi('https://wokwi.com/projects/435088119144706049')">LED Sáng hiệu ứng</a>
+                        <a href="javascript:void(0)" onclick="showWokwi('https://wokwi.com/projects/436737156499146753')">LED + nút nhấn</a>
+                        <a href="javascript:void(0)" onclick="showWokwi('https://wokwi.com/projects/435143334748240897')">MÀN HÌNH OLED</a>
+                        <a href="javascript:void(0)" onclick="showWokwi('https://wokwi.com/projects/435464456501493761')">QUÉT LED</a>
+                        <a href="javascript:void(0)" onclick="showWokwi('https://wokwi.com/projects/435108582836896769')">LCD I2C</a>
+                        <a href="javascript:void(0)" onclick="showWokwi('https://wokwi.com/projects/435108878479775745')">4 LED 7 ĐOẠN</a>
+                        <a href="javascript:void(0)" onclick="showWokwi('https://wokwi.com/projects/435468032591800321')">Quét 4 led 7 đoạn</a>
+                        <a href="javascript:void(0)" onclick="showWokwi('https://wokwi.com/projects/435110594974769153')">Còi Buzzer</a>
+                        <a href="javascript:void(0)" onclick="showWokwi('https://wokwi.com/projects/435112049110777857')">Analog - CHiết áp - PWM</a>
+                        <a href="javascript:void(0)" onclick="showWokwi('https://wokwi.com/projects/435111012623689729')">LED RGB</a>
+                     
+                    </div>
+                    <div class="scroll-btn down"><i class="fas fa-chevron-down"></i></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="dropdown" data-scroll-initialized="false">
+            <button class="dropbtn" onclick="toggleDropdown('sensorsDropdown')">Sensors <span class="arrow"></span></button>
+            <div class="dropdown-content scrollable" id="sensorsDropdown">
+                 <div class="scrollable-wrapper">
+                    <div class="scroll-btn up hidden"><i class="fas fa-chevron-up"></i></div>
+                    <div class="scrollable-content">
+                        <a href="javascript:void(0)" onclick="showWokwi('https://wokwi.com/projects/436736364810584065')">Cảm biến nhiệt độ (DHT11 - DHT22)</a>
+                        <a href="javascript:void(0)" onclick="showWokwi('https://wokwi.com/projects/347685369982419539/embed')">Cảm biến khoảng cách (HC-SR04)</a>
+                        <a href="javascript:void(0)" onclick="showWokwi('https://wokwi.com/projects/347684069818499667/embed')">Cảm biến ánh sáng (LDR)</a>
+                        <a href="javascript:void(0)" onclick="showWokwi('https://wokwi.com/projects/323395999324701267/embed')">Cảm biến gia tốc (MPU6050)</a>
+                        <a href="javascript:void(0)" onclick="showWokwi('https://wokwi.com/projects/435463320004301825')">Cảm biến khí Gas (MQ-2)</a>
+                        <a href="javascript:void(0)" onclick="showWokwi('https://wokwi.com/projects/348911048807940691/embed')">Cảm biến hồng ngoại (PIR)</a>
+                        <a href="javascript:void(0)" onclick="showWokwi('https://wokwi.com/projects/350375939218637395/embed')">Cảm biến mưa</a>
+                    </div>
+                    <div class="scroll-btn down"><i class="fas fa-chevron-down"></i></div>
+                </div>
+            </div>
+        </div>
+
+           <div class="dropdown" data-scroll-initialized="false">
+            <button class="dropbtn" onclick="toggleDropdown('sensorsDropdown')">ĐỒ ÁN 1 THAM KHẢO <span class="arrow"></span></button>
+            <div class="dropdown-content scrollable" id="sensorsDropdown">
+                 <div class="scrollable-wrapper">
+                    <div class="scroll-btn up hidden"><i class="fas fa-chevron-up"></i></div>
+                    <div class="scrollable-content">
+                
+                    </div>
+                    <div class="scroll-btn down"><i class="fas fa-chevron-down"></i></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="wokwi-container"></div>
+    <div class="back-button" onclick="hideWokwiAndShowGrid()" style="display: none;"><i class="fas fa-arrow-left"></i></div>
+
+
+    <script>
+        let scrollInterval;
+
+        function toggleDropdown(dropdownId) {
+            const targetDropdown = document.getElementById(dropdownId);
+            const parentDropdown = targetDropdown.closest('.dropdown');
+            const targetButton = targetDropdown.previousElementSibling;
+            const isScrollable = targetDropdown.classList.contains('scrollable');
+
+            const isShown = targetDropdown.classList.contains('show');
+            closeAllDropdowns();
+
+            if (!isShown) {
+                targetDropdown.classList.add('show');
+                targetButton.classList.add('open');
+                
+                if (isScrollable) {
+                    const contentElement = targetDropdown.querySelector('.scrollable-content');
+                    if (parentDropdown.dataset.scrollInitialized === 'false') {
+                        initializeScrollableMenu(targetDropdown);
+                        parentDropdown.dataset.scrollInitialized = 'true';
+                    }
+                    updateScrollButtonVisibility(contentElement);
+                }
+            }
+        }
+
+        function closeAllDropdowns() {
+            document.querySelectorAll('.top-navbar .dropdown-content').forEach(dropdown => dropdown.classList.remove('show'));
+            document.querySelectorAll('.top-navbar .dropbtn').forEach(btn => btn.classList.remove('open'));
+        }
+
+        // HÀM CHUNG ĐỂ KHỞI TẠO MENU CUỘN
+        function initializeScrollableMenu(dropdownElement) {
+            const scrollUpBtn = dropdownElement.querySelector('.scroll-btn.up');
+            const scrollDownBtn = dropdownElement.querySelector('.scroll-btn.down');
+            const content = dropdownElement.querySelector('.scrollable-content');
+            
+            if (!scrollUpBtn || !scrollDownBtn || !content) return;
+
+            const itemHeight = content.querySelector('a')?.offsetHeight || 47;
+
+            const startScrolling = (direction) => {
+                clearInterval(scrollInterval);
+                scrollInterval = setInterval(() => {
+                    content.scrollTop += direction * itemHeight / 2;
+                }, 50);
+            };
+
+            const stopScrolling = () => clearInterval(scrollInterval);
+
+            scrollUpBtn.addEventListener('mousedown', () => startScrolling(-1));
+            scrollUpBtn.addEventListener('mouseup', stopScrolling);
+            scrollUpBtn.addEventListener('mouseleave', stopScrolling);
+
+            scrollDownBtn.addEventListener('mousedown', () => startScrolling(1));
+            scrollDownBtn.addEventListener('mouseup', stopScrolling);
+            scrollDownBtn.addEventListener('mouseleave', stopScrolling);
+
+            content.addEventListener('scroll', () => updateScrollButtonVisibility(content));
+        }
+
+        // HÀM CHUNG ĐỂ CẬP NHẬT NÚT CUỘN
+        function updateScrollButtonVisibility(contentElement) {
+            const wrapper = contentElement.parentElement;
+            const scrollUpBtn = wrapper.querySelector('.scroll-btn.up');
+            const scrollDownBtn = wrapper.querySelector('.scroll-btn.down');
+            
+            if (!scrollUpBtn || !scrollDownBtn) return;
+
+            scrollUpBtn.classList.toggle('hidden', contentElement.scrollTop <= 0);
+            scrollDownBtn.classList.toggle('hidden', contentElement.scrollHeight - contentElement.scrollTop <= contentElement.clientHeight + 1);
+        }
+        
+        function showWokwi(url) {
+            const wokwiContainer = document.getElementById("wokwi-container");
+            const backButton = document.querySelector(".back-button");
+
+            wokwiContainer.innerHTML = `<iframe src="${url}" style="height: 80vh;" width="100%" frameborder="0"></iframe>`;
+            backButton.style.display = 'flex';
+            
+            closeAllDropdowns();
+        }
+        
+        function hideWokwiAndShowGrid() {
+            const wokwiContainer = document.getElementById("wokwi-container");
+            const backButton = document.querySelector(".back-button");
+
+            wokwiContainer.innerHTML = '';
+            backButton.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+          if (!event.target.closest('.top-navbar .dropdown')) {
+            closeAllDropdowns();
+          }
+        }
+
+        window.addEventListener('error', function(e) {
+            console.error('Lỗi xảy ra:', e.message, 'tại dòng:', e.lineno);
+        });
+    </script>
+</body>
+</html>
