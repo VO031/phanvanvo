@@ -1,165 +1,346 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phan Văn Võ</title>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/menu.css">
-    <link rel="stylesheet" href="css/animations.css">
-    <link rel="stylesheet" href="css/responsive.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body {
-            background-image: url('img/enhanced_image.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            margin: 0;
-            padding: 0;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thời tiết & Võ đạo</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+    --primary-color: #007bff;
+    --text-light: #ffffff;
+    --background-dark: #1a1a2e;
+    --accent-color: #00d4ff;
+    --transition-normal: all 0.3s ease-in-out;
+}
+
+body {
+    background: linear-gradient(135deg, #f0f2f5, #dfe6e9);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Hiệu ứng nền */
+.particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+.particle {
+    position: absolute;
+    background: radial-gradient(circle, rgba(0, 212, 255, 0.8), transparent);
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: float 15s infinite ease-in-out;
+}
+.particle:nth-child(1){width:20px;height:20px;top:10%;left:15%;animation-duration:12s;}
+.particle:nth-child(2){width:15px;height:15px;top:30%;left:40%;animation-duration:18s;}
+.particle:nth-child(3){width:25px;height:25px;top:50%;left:60%;animation-duration:14s;}
+.particle:nth-child(4){width:18px;height:18px;top:70%;left:25%;animation-duration:16s;}
+.particle:nth-child(5){width:22px;height:22px;top:20%;left:80%;animation-duration:20s;}
+@keyframes float {
+  0%,100%{transform:translateY(0) scale(1);opacity:0.6;}
+  50%{transform:translateY(-50px) scale(1.2);opacity:0.9;}
+}
+
+/* Viền phát sáng */
+.glowing-border {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: 4px solid transparent;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5), inset 0 0 20px rgba(0, 212, 255, 0.5);
+    pointer-events: none;
+    z-index: 2;
+    animation: glow 3s infinite ease-in-out;
+}
+@keyframes glow {
+    0%,100%{box-shadow:0 0 20px rgba(0,212,255,0.5),inset 0 0 20px rgba(0,212,255,0.5);}
+    50%{box-shadow:0 0 30px rgba(0,212,255,0.8),inset 0 0 30px rgba(0,212,255,0.8);}
+}
+
+/* Menu bên trái */
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -300px;
+    width: 300px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--background-dark), #2d3436);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    transition: var(--transition-normal);
+    z-index: 100;
+}
+.menu-toggle:hover + .side-menu, .side-menu:hover { left: 0; }
+.menu-toggle {
+    position: fixed;
+    top: 20px; left: 20px;
+    width: 40px; height: 40px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    cursor: pointer; color: var(--text-light);
+    z-index: 101;
+}
+.menu-toggle i { font-size: 1.5rem; }
+
+.menu-items { list-style: none; padding: 60px 20px; margin: 0; }
+.menu-item { margin: 15px 0; }
+.menu-item a {
+    display: flex; align-items: center;
+    padding: 12px;
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 1.1rem; font-weight: 500;
+    border-radius: 8px;
+    transition: var(--transition-normal);
+}
+.menu-item a i { margin-right: 10px; font-size: 1.3rem; }
+.menu-item a:hover {
+    background: var(--primary-color);
+    transform: translateX(10px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Box thời tiết */
+.weather-box {
+    position: fixed;
+    left: 320px; top: 50px; right: 40px; bottom: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 25px;
+    backdrop-filter: blur(20px);
+    padding: 30px;
+    color: #000;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    overflow-y: auto;
+}
+.weather-header {
+    text-align: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+    padding-bottom: 10px;
+}
+.weather-header h1 { font-size: 56px; margin: 10px 0; }
+.weather-header h2 { margin: 5px 0; }
+
+.city-select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 15px;
+    border: none;
+    text-align: center;
+    background: rgba(255,255,255,0.25);
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* Tabs */
+.weather-tabs { display: flex; margin-bottom: 10px; }
+.tab-button {
+    flex: 1;
+    background: rgba(255,255,255,0.15);
+    border: none; border-radius: 10px;
+    padding: 10px; margin: 3px; cursor: pointer;
+}
+.tab-button.active { background: rgba(0, 150, 255, 0.6); }
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeIn 0.5s ease; }
+@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+
+/* Dự báo 12 giờ */
+.hourly-forecast {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    margin-top: 10px;
+    padding-bottom: 10px;
+}
+.hour-item {
+    min-width: 90px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    text-align: center;
+    padding: 8px;
+}
+.hour-item img { width: 40px; height: 40px; }
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 6px 0;
+}
+.info-item i { color: #007bff; }
+
+/* Biểu đồ thời tiết */
+#tempChart {
+    width: 90% !important;
+    height: 180px !important;
+    display: block;
+    margin: 20px auto 0 auto;
+}
+</style>
 </head>
 <body>
-    <script>
-        function logout() {
-            localStorage.removeItem('isAuthenticated');
-            localStorage.removeItem('username');
-            localStorage.removeItem('loginTime');
-            window.location.href = 'index.html';
-        }
 
-        // Kiểm tra xác thực
-        function checkAuth() {
-            const isAuthenticated = localStorage.getItem('isAuthenticated');
-            const loginTime = localStorage.getItem('loginTime');
-            
-            // Nếu chưa đăng nhập hoặc phiên đã hết hạn (24 giờ)
-            if (!isAuthenticated || (Date.now() - parseInt(loginTime)) > 1 * 60 * 60 * 1000) {
-                // Xóa dữ liệu xác thực nếu có
-                localStorage.removeItem('isAuthenticated');
-                localStorage.removeItem('username');
-                localStorage.removeItem('loginTime');
-                
-                // Chuyển hướng về trang đăng nhập
-                window.location.href = 'index.html';
-            }
-        }
-        
-        // Thực hiện kiểm tra ngay khi trang tải
-        checkAuth();
-    </script>
+<!-- Hiệu ứng nền -->
+<div class="particles">
+  <div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div>
+</div>
+<div class="glowing-border"></div>
 
-    <!-- Audio element to play "Tất cả là hồng ân" automatically -->
-    <audio autoplay loop>
-        <source src="audio/DiTimGiesu-TruongSinh-6206349.mp3" type="audio/mpeg">
-    </audio>
+<!-- Menu trái -->
+<div class="menu-toggle"><i class="fas fa-bars"></i></div>
+<nav class="side-menu">
+  <ul class="menu-items">
+    <li class="menu-item"><a href="vo-dao.html"><i class="fas fa-fist-raised"></i> VÕ ĐẠO</a></li>
+    <li class="menu-item"><a href="basic-techniques.html"><i class="fas fa-video"></i> VIDEO KỸ THUẬT</a></li>
+    <li class="menu-item"><a href="tlk.html"><i class="fas fa-book"></i> CÁC TÀI LIỆU KHÁC</a></li>
+    <li class="menu-item"><a href="xemthem.html"><i class="fas fa-plus-circle"></i> XEM THÊM</a></li>
+    <li class="menu-item"><a href="ttlh.html"><i class="fas fa-envelope"></i> THÔNG TIN LIÊN HỆ</a></li>
+    <li class="menu-item"><a href="mp.html"><i class="fas fa-code"></i> MÔ PHỎNG CODE</a></li>
+    <li class="menu-item"><a href="khoahoc.html"><i class="fas fa-church"></i> KHÓA HỌC</a></li>
+  </ul>
+</nav>
 
-    <!-- Hạt sáng di chuyển -->
-    <div class="particles">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-    </div>
+<!-- Box thời tiết -->
+<div class="weather-box">
+  <div class="weather-header">
+    <select id="citySelect" class="city-select" onchange="getWeather(this.value)">
+      <option value="current">📍 Vị trí của bạn</option>
+      <option value="Ho Chi Minh">TP. Hồ Chí Minh</option>
+      <option value="Ha Noi">Hà Nội</option>
+      <option value="Da Nang">Đà Nẵng</option>
+      <option value="Hue">Huế</option>
+    </select>
+    <h2 id="cityName">--</h2>
+    <p id="weatherDesc">--</p>
+    <h1 id="temp">--°C</h1>
+  </div>
 
-    <!-- Đường viền phát sáng -->
-    <div class="glowing-border"></div>
+  <div class="weather-tabs">
+    <button class="tab-button active" onclick="showTab(0)">Tổng quan</button>
+    <button class="tab-button" onclick="showTab(1)">Chỉ số</button>
+    <button class="tab-button" onclick="showTab(2)">Mặt trời & Trăng</button>
+  </div>
 
-    <!-- Tiêu đề -->
-    <div class="title">Phan Văn Võ</div>
+  <div class="tab-content active">
+    <div class="info-item"><i class="fas fa-tint"></i> Độ ẩm: <b id="humidity">--%</b></div>
+    <div class="info-item"><i class="fas fa-wind"></i> Gió: <b id="wind">-- m/s</b></div>
+    <div class="info-item"><i class="fas fa-thermometer-half"></i> Cảm nhận: <b id="feels">--°C</b></div>
+    <h3>Dự báo 12 giờ tới:</h3>
+    <div id="hourlyForecast" class="hourly-forecast"></div>
+    <canvas id="tempChart"></canvas>
+  </div>
 
-    <!-- Nút đăng xuất -->
-    <div class="logout-container" style="position: absolute; top: 20px; right: 20px; z-index: 1000;">
-        <a href="javascript:void(0)" onclick="logout()" class="logout-button" style="display: inline-flex; align-items: center; padding: 10px 20px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 5px; font-size: 16px; transition: background-color 0.3s;">
-            <i class="fas fa-sign-out-alt" style="margin-right: 8px;"></i>
-            Đăng Xuất
-        </a>
-    </div>
+  <div class="tab-content">
+    <div class="info-item"><i class="fas fa-tachometer-alt"></i> Áp suất: <b id="pressure">-- mb</b></div>
+    <div class="info-item"><i class="fas fa-eye"></i> Tầm nhìn: <b id="visibility">-- km</b></div>
+  </div>
 
-    <!-- Menu bên trái -->
-    <nav class="side-menu">
-        <div class="menu-toggle">
-            <i class="fas fa-bars"></i>
-        </div>
-        <ul class="menu-items">
-            <li class="menu-item">
-                <a href="vo-dao.html">
-                    <i class="fas fa-fist-raised"></i>
-                    <span>VÕ ĐẠO</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="basic-techniques.html">
-                    <i class="fas fa-video"></i>
-                    <span>VIDEO KỸ THUẬT</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="tlk.html">
-                    <i class="fas fa-book"></i>
-                    <span>CÁC TÀI LIỆU KHÁC</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="xemthem.html">
-                    <i class="fas fa-plus-circle"></i>
-                    <span>XEM THÊM</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="ttlh.html">
-                    <i class="fas fa-envelope"></i>
-                    <span>THÔNG TIN LIÊN HỆ</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="mp.html">
-                    <i class="fas fa-code"></i>
-                    <span>MÔ PHỎNG CODE</span>
-                </a>
-            </li>
-                   <li class="menu-item">
-                <a href="khoahoc.html">
-                    <i class="fas fa-church"></i>
-                    <span>KHÓA HỌC</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-    <script>
-        (function(){
-            function c(){
-                var b=a.contentDocument||a.contentWindow.document;
-                if(b){
-                    var d=b.createElement('script');
-                    d.innerHTML="window.__CF$cv$params={r:'93d8ba2df878bca4',t:'MTc0Njg3MjY3MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
-                    b.getElementsByTagName('head')[0].appendChild(d)
-                }
-            }
-            if(document.body){
-                var a=document.createElement('iframe');
-                a.height=1;
-                a.width=1;
-                a.style.position='absolute';
-                a.style.top=0;
-                a.style.left=0;
-                a.style.border='none';
-                a.style.visibility='hidden';
-                document.body.appendChild(a);
-                if('loading'!==document.readyState)c();
-                else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);
-                else{
-                    var e=document.onreadystatechange||function(){};
-                    document.onreadystatechange=function(b){
-                        e(b);
-                        'loading'!==document.readyState&&(document.onreadystatechange=e,c())
-                    }
-                }
-            }
-        })();
-    </script>
+  <div class="tab-content">
+    <div class="info-item"><i class="fas fa-sun"></i> Bình minh: <b id="sunrise">--</b></div>
+    <div class="info-item"><i class="fas fa-moon"></i> Hoàng hôn: <b id="sunset">--</b></div>
+    <div class="info-item"><i class="fas fa-circle-half-stroke"></i> Pha Mặt Trăng: <b id="moonPhase">--</b></div>
+  </div>
+</div>
+
+<script>
+const apiKey = "3be4efb527a7c1e6fce941a0a8a7f541";
+
+function showTab(index){
+  document.querySelectorAll('.tab-button').forEach((btn,i)=>btn.classList.toggle('active',i===index));
+  document.querySelectorAll('.tab-content').forEach((tab,i)=>tab.classList.toggle('active',i===index));
+}
+function formatTime(unix){return new Date(unix*1000).toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'});}
+
+async function getWeather(city="current"){
+  if(city==="current" && navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(async pos=>{
+      const {latitude,longitude}=pos.coords;
+      const res=await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&lang=vi&appid=${apiKey}`);
+      const data=await res.json();
+      showWeather(data);
+      getForecast(latitude,longitude);
+    });
+  } else {
+    const res=await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city},VN&units=metric&lang=vi&appid=${apiKey}`);
+    const data=await res.json();
+    showWeather(data);
+    getForecast(data.coord.lat,data.coord.lon);
+  }
+}
+
+async function getForecast(lat,lon){
+  const res=await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&lang=vi&appid=${apiKey}`);
+  const data=await res.json();
+  const hourly=document.getElementById("hourlyForecast");
+  hourly.innerHTML="";
+  data.list.slice(0,12).forEach(item=>{
+    hourly.innerHTML+=`
+      <div class="hour-item">
+        <span>${formatTime(item.dt)}</span>
+        <img src="https://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png">
+        <span>${Math.round(item.main.temp)}°C</span>
+      </div>`;
+  });
+
+  // Biểu đồ Chart.js nhỏ gọn
+  const hours=data.list.slice(0,12).map(item=>formatTime(item.dt));
+  const temps=data.list.slice(0,12).map(item=>item.main.temp);
+  const ctx=document.getElementById('tempChart').getContext('2d');
+  if(window.tempChartInstance) window.tempChartInstance.destroy();
+  window.tempChartInstance=new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:hours,
+      datasets:[{
+        label:'Nhiệt độ (°C)',
+        data:temps,
+        fill:true,
+        borderColor:'#007bff',
+        backgroundColor:'rgba(0,123,255,0.15)',
+        tension:0.4,
+        pointBackgroundColor:'#007bff',
+        pointRadius:4
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      scales:{
+        y:{beginAtZero:false,title:{display:true,text:'°C'}},
+        x:{title:{display:true,text:'Thời gian'}}
+      },
+      plugins:{
+        legend:{display:false},
+        tooltip:{mode:'index',intersect:false}
+      }
+    }
+  });
+}
+
+function showWeather(d){
+  document.getElementById("cityName").textContent=d.name;
+  document.getElementById("weatherDesc").textContent=d.weather[0].description;
+  document.getElementById("temp").textContent=Math.round(d.main.temp)+"°C";
+  document.getElementById("humidity").textContent=d.main.humidity+"%";
+  document.getElementById("wind").textContent=d.wind.speed+" m/s";
+  document.getElementById("feels").textContent=Math.round(d.main.feels_like)+"°C";
+  document.getElementById("pressure").textContent=d.main.pressure+" mb";
+  document.getElementById("visibility").textContent=(d.visibility/1000).toFixed(1)+" km";
+  document.getElementById("sunrise").textContent=formatTime(d.sys.sunrise);
+  document.getElementById("sunset").textContent=formatTime(d.sys.sunset);
+}
+
+getWeather("current");
+</script>
+
 </body>
 </html>
