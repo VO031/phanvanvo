@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Khóa học ESP32</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: #00796b;
+      color: white;
+      text-align: center;
+      padding: 12px;
+      font-size: 22px;
+      font-weight: bold;
+      position: relative;
+    }
+
+    #logoutBtn {
+      position: absolute;
+      right: 20px;
+      top: 10px;
+      background: #e53935;
+      border: none;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      display: none;
+    }
+
+    /* LOGIN BOX */
+    #loginBox {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #e0f2f1;
+      text-align: center;
+    }
+
+    #usernameInput {
+      padding: 10px 14px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #aaa;
+      width: 250px;
+      margin-top: 8px;
+    }
+
+    #loginBtn, #backBtn {
+      padding: 8px 18px;
+      font-size: 16px;
+      background-color: #009688;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 10px 5px 0 5px;
+    }
+
+    #backBtn { background-color: #607d8b; }
+
+    #errorMsg {
+      color: #d32f2f;
+      margin-top: 8px;
+      font-size: 15px;
+      font-weight: bold;
+      display: none;
+    }
+
+    /* MAIN LAYOUT */
+    main {
+      flex: 1;
+      display: none;
+      flex-direction: row;
+      height: calc(100vh - 60px);
+      width: 100vw;
+    }
+
+    #courseList {
+      width: 320px;
+      background: #ffffff;
+      overflow-y: auto;
+      border-right: 2px solid #ccc;
+      height: 100%;
+      padding: 10px;
+    }
+
+    .chapter {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+
+    .chapter h3 {
+      font-size: 16px;
+      margin: 0 0 5px 0;
+      color: #00695c;
+    }
+
+    .subvideo {
+      padding-left: 15px;
+      font-size: 14px;
+      color: #00796b;
+      cursor: pointer;
+    }
+
+    .subvideo.locked {
+      color: #aaa;
+      cursor: not-allowed;
+    }
+
+    .subvideo.active {
+      font-weight: bold;
+      color: #009688;
+    }
+
+    .subvideo.completed::after {
+      content: " ✔";
+      color: #009688;
+    }
+
+    #rightPane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #000;
+    }
+
+    #videoContainer {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #000;
+    }
+
+    #player {
+      width: 90%;
+      height: 90%;
+      max-width: 1280px;
+      aspect-ratio: 16 / 9;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    #progressWrapper {
+      background: #004d40;
+      padding: 10px;
+      text-align: center;
+      color: white;
+      font-size: 15px;
+    }
+
+    #progressContainer {
+      width: 90%;
+      height: 10px;
+      background: #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 6px auto;
+    }
+
+    #progressBar {
+      height: 100%;
+      width: 0%;
+      background-color: #00bfa5;
+      transition: width 0.4s;
+    }
+
+    @media (max-width: 900px) {
+      main { flex-direction: column; }
+      #courseList { width: 100%; height: 250px; border-right: none; border-top: 2px solid #ccc; }
+      #rightPane { height: calc(100vh - 310px); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    Khóa học ESP32
+    <button id="logoutBtn">Đăng xuất</button>
+  </header>
+
+  <div id="loginBox">
+    <h2>Nhập tên người học:</h2>
+    <input id="usernameInput" type="text" placeholder="VD: Danh, Hoang, Thuy..." />
+    <button id="loginBtn">Bắt đầu học</button>
+    <div id="errorMsg">⚠️ Tên chưa được cấp quyền học! Vui lòng liên hệ quản trị viên.</div>
+    <button id="backBtn">⬅ Quay về</button>
+  </div>
+
+  <main id="mainContent">
+    <div id="courseList"></div>
+
+    <div id="rightPane">
+      <div id="videoContainer"><div id="player"></div></div>
+      <div id="progressWrapper">
+        <div id="progressContainer"><div id="progressBar"></div></div>
+        <div id="progressText">Tiến độ: 0%</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- YouTube API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+
+  <!-- FIREBASE + LOGIC -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCZpG2kMhOmeDXCYIbAS7lL6povsTYmajg",
+      authDomain: "tailieu-5c566.firebaseapp.com",
+      databaseURL: "https://tailieu-5c566-default-rtdb.firebaseio.com",
+      projectId: "tailieu-5c566",
+      storageBucket: "tailieu-5c566.firebasestorage.app",
+      messagingSenderId: "370391321402",
+      appId: "1:370391321402:web:2785abacdccdce7af85e03",
+      measurementId: "G-ED3QYWMZFG"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const chapters = [
+      { title: "Chương 1: Giới thiệu ESP32", videos: [
+        { title: "1.1 Tổng quan ESP32", id: "wirc5PFn2KU" },
+        { title: "1.2 Cấu trúc phần cứng", id: "DH6MMu0TH5s" },
+        { title: "1.3 Cài đặt Arduino IDE", id: "ZB6rblZlC1w" }
+      ]},
+      { title: "Chương 2: GPIO cơ bản", videos: [
+        { title: "2.1 GPIO Input/Output", id: "CMhCv4Tm9yE" },
+        { title: "2.2 Thực hành LED & nút nhấn", id: "V5tY9Al7ItI" },
+        { title: "2.3 Bài tập ứng dụng GPIO", id: "KQ9yV0DFJkE" }
+      ]},
+      { title: "Chương 3: PWM và Servo", videos: [
+        { title: "3.1 Giới thiệu PWM", id: "MAvtD0sL8Kk" },
+        { title: "3.2 Điều khiển Servo bằng ESP32", id: "7DkHsYBrhc0" }
+      ]},
+      { title: "Chương 4: WiFi & Web Server", videos: [
+        { title: "4.1 Kết nối WiFi", id: "2VYHWVhTV60" },
+        { title: "4.2 Tạo Web Server điều khiển LED", id: "vQzn6w4s2CM" }
+      ]}
+    ];
+
+    let userName = "";
+    let currentChapter = 0, currentVideo = 0;
+    let maxChapter = 0, maxVideo = -1;
+    let player, lastTime = 0, checkInterval, canSeek = false;
+
+    const usernameInput = document.getElementById("usernameInput");
+    const errorMsg = document.getElementById("errorMsg");
+
+    function sanitizeKey(s) {
+      return s.replace(/[.#$/\[\]]/g, "_");
+    }
+
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const backBtn = document.getElementById("backBtn");
+
+    usernameInput.oninput = () => errorMsg.style.display = "none";
+
+    loginBtn.onclick = async () => {
+      const name = usernameInput.value.trim();
+      if (!name) return;
+      userName = name;
+      const snap = await get(ref(db, "users/" + sanitizeKey(name)));
+      if (!snap.exists()) {
+        errorMsg.style.display = "block";
+        return;
+      }
+      const data = snap.val();
+      maxChapter = data.chapter ?? 0;
+      maxVideo = data.video ?? -1;
+      document.getElementById("loginBox").style.display = "none";
+      document.getElementById("mainContent").style.display = "flex";
+      document.getElementById("logoutBtn").style.display = "block";
+      renderCourseList();
+      updateProgressBar();
+      loadVideo(maxChapter, maxVideo + 1 || 0);
+    };
+
+    logoutBtn.onclick = () => location.reload();
+    backBtn.onclick = () => window.location.href = "khoahoc.html";
+
+    function renderCourseList() {
+      const list = document.getElementById("courseList");
+      list.innerHTML = "";
+      chapters.forEach((ch, ci) => {
+        const div = document.createElement("div");
+        div.classList.add("chapter");
+        div.innerHTML = `<h3>${ch.title}</h3>`;
+        ch.videos.forEach((v, vi) => {
+          const sv = document.createElement("div");
+          sv.textContent = "• " + v.title;
+          sv.classList.add("subvideo");
+          const locked = ci > maxChapter || (ci === maxChapter && vi > maxVideo + 1);
+          if (locked) sv.classList.add("locked");
+          if (ci === currentChapter && vi === currentVideo) sv.classList.add("active");
+          if (ci < maxChapter || (ci === maxChapter && vi <= maxVideo)) sv.classList.add("completed");
+          sv.onclick = () => { if (!locked) loadVideo(ci, vi); };
+          div.appendChild(sv);
+        });
+        list.appendChild(div);
+      });
+    }
+
+    function loadVideo(ci, vi) {
+      currentChapter = ci; currentVideo = vi;
+      const videoId = chapters[ci].videos[vi].id;
+      canSeek = (ci < maxChapter) || (ci === maxChapter && vi <= maxVideo);
+
+      if (player) player.destroy();
+      player = new YT.Player('player', {
+        width: '100%', height: '100%', videoId,
+        playerVars: { rel: 0, controls: 1, disablekb: 0 },
+        events: { 'onReady': onPlayerReady, 'onStateChange': onStateChange }
+      });
+      renderCourseList();
+    }
+
+    function onPlayerReady() {
+      lastTime = 0;
+      clearInterval(checkInterval);
+      if (!canSeek) {
+        checkInterval = setInterval(() => {
+          const t = player.getCurrentTime();
+          if (t - lastTime > 2) player.seekTo(lastTime);
+          else lastTime = t;
+        }, 1000);
+      }
+    }
+
+    function onStateChange(e) {
+      if (e.data === YT.PlayerState.ENDED) unlockNext();
+    }
+
+    function unlockNext() {
+      if (currentVideo + 1 < chapters[currentChapter].videos.length) {
+        if (currentVideo > maxVideo) maxVideo = currentVideo;
+      } else if (currentChapter + 1 < chapters.length) {
+        maxChapter++;
+        maxVideo = -1;
+      }
+      saveProgress();
+      renderCourseList();
+      updateProgressBar();
+    }
+
+    function saveProgress() {
+      set(ref(db, "users/" + sanitizeKey(userName)), {
+        chapter: maxChapter,
+        video: maxVideo
+      });
+    }
+
+    function updateProgressBar() {
+      const totalVideos = chapters.reduce((s, c) => s + c.videos.length, 0);
+      let completed = 0;
+      for (let i = 0; i < maxChapter; i++) completed += chapters[i].videos.length;
+      completed += (maxVideo + 1 > 0 ? maxVideo + 1 : 0);
+
+      const percent = Math.min(100, Math.round((completed / totalVideos) * 100));
+      document.getElementById("progressBar").style.width = percent + "%";
+      document.getElementById("progressText").textContent = `Tiến độ: ${percent}% (${completed}/${totalVideos} video)`;
+    }
+  </script>
+</body>
+</html>

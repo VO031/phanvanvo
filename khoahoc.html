@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khóa học ESP32</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --text-light: #ffffff;
+            --background-dark: #1a1a2e;
+            --accent-color: #00d4ff;
+            --transition-normal: all 0.3s ease-in-out;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f2f5, #dfe6e9);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* --- MENU BÊN TRÁI --- */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--background-dark), #2d3436);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+            transition: var(--transition-normal);
+            z-index: 100;
+        }
+
+        .menu-toggle:hover + .side-menu, 
+        .side-menu:hover {
+            left: 0;
+        }
+
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: var(--text-light);
+            z-index: 101;
+            transition: var(--transition-normal);
+        }
+
+        .menu-toggle:hover {
+            transform: scale(1.1);
+            background: var(--accent-color);
+        }
+
+        .menu-toggle i {
+            font-size: 1.5rem;
+        }
+
+        .menu-items {
+            list-style: none;
+            padding: 60px 20px;
+            margin: 0;
+        }
+
+        .menu-item {
+            margin: 15px 0;
+        }
+
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: var(--transition-normal);
+        }
+
+        .menu-item a i {
+            margin-right: 10px;
+            font-size: 1.3rem;
+        }
+
+        .menu-item a:hover {
+            background: var(--primary-color);
+            transform: translateX(10px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* --- PHẦN KHÓA HỌC --- */
+        .course-container {
+            margin-left: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .course-card {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 320px;
+            padding: 20px;
+            text-align: center;
+            transition: var(--transition-normal);
+            cursor: pointer;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .course-card img {
+            width: 100%;
+            border-radius: 12px;
+        }
+
+        .course-card h2 {
+            margin-top: 15px;
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .course-card p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .side-menu {
+                width: 250px;
+                left: -250px;
+            }
+            .menu-toggle {
+                left: 20px;
+            }
+            .menu-item a {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .side-menu {
+                width: 220px;
+                left: -220px;
+            }
+            .menu-toggle {
+                width: 35px;
+                height: 35px;
+            }
+            .menu-toggle i {
+                font-size: 1.2rem;
+            }
+            .menu-item a {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+      <script>
+    // Kiểm tra xác thực
+    function checkAuth() {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        const loginTime = localStorage.getItem('loginTime');
+        
+        // Nếu chưa đăng nhập hoặc phiên đã hết hạn (24 giờ)
+        if (!isAuthenticated || (Date.now() - parseInt(loginTime)) >1 * 60 * 60 * 1000) {
+            // Xóa dữ liệu xác thực nếu có
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('username');
+            localStorage.removeItem('loginTime');
+            
+            // Chuyển hướng về trang đăng nhập
+            window.location.href = 'index.html';
+        }
+    }
+    
+    // Thực hiện kiểm tra ngay khi trang tải
+    checkAuth();
+</script>
+    <!-- Nút mở menu -->
+    <div class="menu-toggle" aria-label="Bật/Tắt Menu">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- Menu bên trái -->
+    <nav class="side-menu">
+        <ul class="menu-items">
+            <li class="menu-item"><a href="vo-dao.html"><i class="fas fa-fist-raised"></i> VÕ ĐẠO</a></li>
+            <li class="menu-item"><a href="basic-techniques.html"><i class="fas fa-video"></i> VIDEO KỸ THUẬT</a></li>
+            <li class="menu-item"><a href="tlk.html"><i class="fas fa-book"></i> CÁC TÀI LIỆU KHÁC</a></li>
+            <li class="menu-item"><a href="xemthem.html"><i class="fas fa-plus-circle"></i> XEM THÊM</a></li>
+            <li class="menu-item"><a href="ttlh.html"><i class="fas fa-envelope"></i> THÔNG TIN LIÊN HỆ</a></li>
+            <li class="menu-item"><a href="mp.html"><i class="fas fa-code"></i> MÔ PHỎNG CODE</a></li>
+            <li class="menu-item"><a href="khoahoc.html"><i class="fas fa-cube"></i> KHÓA HỌC</a></li>
+        </ul>
+    </nav>
+
+    <!-- Khóa học -->
+    <div class="course-container">
+        <div class="course-card" onclick="window.location.href='hocesp.html'">
+            <img src="" alt="ESP32 Cơ bản">
+            <h2>Khóa học ESP32 cơ bản</h2>
+            <p>Học cách lập trình và điều khiển ESP32 từ cơ bản đến nâng cao.</p>
+        </div>
+    </div>
+</body>
+</html>

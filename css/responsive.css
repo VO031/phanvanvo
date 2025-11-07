@@ -1,0 +1,92 @@
+/* VOVINAM RESPONSIVE STYLESHEET */
+@media screen and (max-width: 992px) {
+    .logo-img {
+        max-width: 75%;
+        max-height: 75%;
+    }
+
+    .menu-items {
+        width: 250px;
+        left: -250px;
+    }
+
+    .side-menu:hover .menu-items {
+        transform: translateX(250px);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .logo-img {
+        max-width: 85%;
+        max-height: 85%;
+    }
+
+    .title {
+        bottom: 20px;
+        right: 20px;
+        font-size: 16px;
+        padding: 8px 16px;
+    }
+
+    .glowing-border {
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+    }
+
+    .menu-toggle {
+        width: 45px;
+        height: 45px;
+        top: 15px;
+        left: 15px;
+    }
+
+    .menu-toggle i {
+        font-size: 20px;
+    }
+
+    .menu-items {
+        width: 220px;
+        left: -220px;
+        padding-top: 80px;
+    }
+
+    .side-menu:hover .menu-items {
+        transform: translateX(220px);
+    }
+
+    .menu-item a {
+        padding: 10px 12px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .logo-img {
+        max-width: 95%;
+        max-height: 95%;
+    }
+
+    .title {
+        font-size: 14px;
+        padding: 6px 12px;
+        right: 15px;
+        bottom: 15px;
+    }
+
+    .menu-toggle {
+        width: 40px;
+        height: 40px;
+        top: 12px;
+        left: 12px;
+    }
+
+    .menu-items {
+        width: 100%;
+        left: -100%;
+    }
+
+    .side-menu:hover .menu-items {
+        transform: translateX(100%);
+    }
+}

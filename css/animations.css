@@ -1,0 +1,84 @@
+/* VOVINAM ANIMATIONS STYLESHEET */
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -2;
+}
+
+.particle {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    animation: float 15s infinite linear;
+}
+
+.particle:nth-child(1) {
+    width: 5px;
+    height: 5px;
+    top: 10%;
+    left: 20%;
+    animation-duration: 25s;
+    opacity: 0.3;
+}
+
+.particle:nth-child(2) {
+    width: 8px;
+    height: 8px;
+    top: 40%;
+    left: 75%;
+    animation-duration: 30s;
+    animation-delay: 2s;
+    opacity: 0.2;
+}
+
+.particle:nth-child(3) {
+    width: 4px;
+    height: 4px;
+    top: 30%;
+    left: 45%;
+    animation-duration: 20s;
+    animation-delay: 5s;
+    opacity: 0.4;
+}
+
+.particle:nth-child(4) {
+    width: 6px;
+    height: 6px;
+    top: 70%;
+    left: 30%;
+    animation-duration: 35s;
+    animation-delay: 1s;
+    opacity: 0.3;
+}
+
+.particle:nth-child(5) {
+    width: 5px;
+    height: 5px;
+    top: 60%;
+    left: 60%;
+    animation-duration: 28s;
+    animation-delay: 3s;
+    opacity: 0.2;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0) translateX(0);
+    }
+    25% {
+        transform: translateY(-100px) translateX(50px);
+    }
+    50% {
+        transform: translateY(-50px) translateX(100px);
+    }
+    75% {
+        transform: translateY(-150px) translateX(50px);
+    }
+    100% {
+        transform: translateY(0) translateX(0);
+    }
+}
