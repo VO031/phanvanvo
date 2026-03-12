@@ -137,9 +137,10 @@
     </div>
   </div>
 
+<!-- Firebase init trong module, sau đó expose db ra window -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDYd5jO14_dVM_VTG0-P0m4uCzYRBqheYg",
@@ -152,16 +153,19 @@ const firebaseConfig = {
   measurementId: "G-EDQR1Q6543"
 };
 
-
-let app, db;
-
 try {
-  app = initializeApp(firebaseConfig);
-  db = getDatabase(app);
+  const app = initializeApp(firebaseConfig);
+  window._db = getDatabase(app);
+  window._dbRef = ref;
+  window._dbGet = get;
 } catch(e) {
   console.error("Firebase init error:", e);
 }
+</script>
 
+<!-- handleCredentialResponse PHẢI là plain script, KHÔNG phải module -->
+<!-- Lý do: Google GSI gọi callback qua window["tên_hàm"], chỉ hoạt động với global scope -->
+<script>
 const ADMIN = "phanvo0001@gmail.com";
 
 window.handleCredentialResponse = async (res) => {
@@ -186,14 +190,17 @@ window.handleCredentialResponse = async (res) => {
       return;
     }
 
-    // FIX: Kiểm tra Firebase đã init chưa trước khi query
-    if (!db) {
+    // Chờ Firebase module init xong (module chạy async)
+    if (!window._db) {
+      await new Promise(r => setTimeout(r, 800));
+    }
+    if (!window._db) {
       showError("Lỗi kết nối Firebase. Vui lòng thử lại!");
       reset();
       return;
     }
 
-   const snap = await get(ref(db, 'nhansu'));
+    const snap = await window._dbGet(window._dbRef(window._db, 'nhansu'));
 let ok = false;
 
 if (snap.exists()) {
