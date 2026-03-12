@@ -942,9 +942,10 @@ let homeCurrentIndex = 0;
       },
       events: {
         onReady: function(event) {
-          try { event.target.playVideo(); } catch(e) {}
-          showUnmuteOverlayIfMuted();
-        }
+  try { 
+    event.target.playVideo(); 
+  } catch(e) {}
+}
         ,onStateChange: function(event) {
           try {
             if(typeof YT !== 'undefined' && event.data === YT.PlayerState.ENDED) {
@@ -956,16 +957,6 @@ let homeCurrentIndex = 0;
       }
     });
   };
-
-  function showUnmuteOverlayIfMuted() {
-    const overlay = document.getElementById('unmute-overlay');
-    if(!overlay || !window.ytHomePlayer) return;
-    try {
-      if(window.ytHomePlayer.isMuted()) overlay.style.display = 'flex';
-      else overlay.style.display = 'none';
-    } catch(e) { overlay.style.display = 'none'; }
-  }
-
   // (removed indirect click wiring) — the unmute button is wired on DOMContentLoaded
   
   // Try to unmute/play on the first user gesture (best-effort).
@@ -1041,8 +1032,6 @@ window.homePlayPrevious = homePlayPrevious;
 document.addEventListener('DOMContentLoaded', () => {
   homeInitPlaylist();
   // Show unmute overlay immediately and wire button to unmute when pressed
-  const overlay = document.getElementById('unmute-overlay');
-  const btn = document.getElementById('unmute-btn');
   if(overlay) overlay.style.display = 'flex';
   if(btn) {
     btn.addEventListener('click', function(){
