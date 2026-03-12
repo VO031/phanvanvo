@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- FIX 3: Cho phép Google Sign-In popup hoạt động đúng với COOP -->
+  <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups">
+  <title>Đăng nhập hệ thống</title>
+
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary:#6366f1;
+      --secondary:#22d3ee;
+      --bg:#020617;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+    }
+
+    body{
+      margin:0;
+      height:100vh;
+      font-family:Inter,sans-serif;
+      background:radial-gradient(circle at top,#1e293b,var(--bg));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--text);
+      overflow:hidden;
+    }
+
+    .glow{
+      position:absolute;
+      width:450px;height:450px;
+      background:radial-gradient(circle,rgba(99,102,241,.4),transparent 70%);
+      filter:blur(70px);
+      top:-120px;left:-120px;
+    }
+    .glow.r{
+      background:radial-gradient(circle,rgba(34,211,238,.35),transparent 70%);
+      top:auto;left:auto;bottom:-120px;right:-120px;
+    }
+
+    .card{
+      width:380px;
+      padding:42px 36px;
+      border-radius:28px;
+      background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.12);
+      backdrop-filter:blur(16px);
+      box-shadow:0 30px 80px rgba(0,0,0,.55);
+      text-align:center;
+      z-index:2;
+    }
+
+    .logo{
+      width:64px;height:64px;
+      margin:0 auto 16px;
+      border-radius:18px;
+      background:linear-gradient(135deg,var(--primary),var(--secondary));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:26px;
+      box-shadow:0 12px 30px rgba(99,102,241,.5);
+    }
+
+    h1{margin:6px 0;font-size:26px}
+    p{margin:0 0 28px;color:var(--muted);font-size:14px}
+
+    /* ===== MOBILE FIX ===== */
+    @media (max-width:768px){
+      header{ padding:14px 16px; }
+      .brand{ font-size:18px; }
+      .logo{ width:38px; height:38px; border-radius:14px; }
+      .user{ gap:8px; }
+      .user-info{ display:none; }
+      main{ padding:30px 16px 60px; }
+      h1{ font-size:26px; }
+      .grid{ gap:18px; }
+      .card{ padding:22px; }
+      .icon{ width:48px; height:48px; }
+      .dashboard{ margin-top:60px; }
+      .dash-grid{ gap:16px; }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* FIX: Căn giữa nút Google Sign-In */
+    #google-signin {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="glow"></div>
+  <div class="glow r"></div>
+
+  <div class="card">
+    <div class="logo">PVV</div>
+    <h1>Đăng nhập hệ thống</h1>
+    <p>Sử dụng tài khoản Google được cấp quyền</p>
+
+    <div id="error-message" style="display:none; background:rgba(239,68,68,.2); border:1px solid #ef4444; color:#ef4444; padding:12px; border-radius:8px; margin-bottom:15px; font-size:14px;"></div>
+
+    <div id="loading" style="display:none; text-align:center; padding:20px;">
+      <div style="width:20px; height:20px; border:3px solid var(--text); border-top-color:var(--primary); border-radius:50%; animation:spin 1s linear infinite; margin:0 auto 10px;"></div>
+      <p>Đang xác nhận...</p>
+    </div>
+
+    <div id="google-signin">
+      <!-- FIX 1: Thêm data-ux_mode="popup" để tránh lỗi COOP với redirect -->
+      <div id="g_id_onload"
+        data-client_id="342595955640-k6qg5h3q60n04jr9t1h546ob28q9s094.apps.googleusercontent.com"
+        data-callback="handleCredentialResponse"
+        data-auto_prompt="false"
+        data-ux_mode="popup">
+      </div>
+
+      <div class="g_id_signin"
+        data-type="standard"
+        data-shape="pill"
+        data-theme="filled_blue"
+        data-size="large"
+        data-width="280">
+      </div>
+    </div>
+  </div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDYd5jO14_dVM_VTG0-P0m4uCzYRBqheYg",
+  authDomain: "iot1-5dea0.firebaseapp.com",
+  databaseURL: "https://iot1-5dea0-default-rtdb.firebaseio.com",
+  projectId: "iot1-5dea0",
+  storageBucket: "iot1-5dea0.firebasestorage.app",
+  messagingSenderId: "1092996136822",
+  appId: "1:1092996136822:web:127ffa014f0be36225c457",
+  measurementId: "G-EDQR1Q6543"
+};
+
+
+let app, db;
+
+try {
+  app = initializeApp(firebaseConfig);
+  db = getDatabase(app);
+} catch(e) {
+  console.error("Firebase init error:", e);
+}
+
+const ADMIN = "phanvo0001@gmail.com";
+
+window.handleCredentialResponse = async (res) => {
+  try {
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('google-signin').style.display = 'none';
+    document.getElementById('error-message').style.display = 'none';
+
+    // FIX: Decode JWT an toàn hơn (xử lý base64url)
+    const base64Url = res.credential.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const payload = JSON.parse(decodeURIComponent(
+      atob(base64).split('').map(c =>
+        '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+      ).join('')
+    ));
+
+    const email = payload.email.toLowerCase();
+
+    if (email === ADMIN) {
+      save(payload);
+      return;
+    }
+
+    // FIX: Kiểm tra Firebase đã init chưa trước khi query
+    if (!db) {
+      showError("Lỗi kết nối Firebase. Vui lòng thử lại!");
+      reset();
+      return;
+    }
+
+   const snap = await get(ref(db, 'nhansu'));
+let ok = false;
+
+if (snap.exists()) {
+  const data = snap.val();
+
+  for (let key in data) {
+    if (data[key].email && data[key].email.toLowerCase() === email) {
+      ok = true;
+      break;
+    }
+  }
+}
+
+    if (ok) {
+      save(payload);
+    } else {
+      showError("Email của bạn không có quyền truy cập hệ thống. Liên hệ quản trị viên để được cấp quyền!");
+      reset();
+    }
+
+  } catch(error) {
+    console.error('Auth Error:', error);
+    showError("Lỗi xác thực: " + error.message);
+    reset();
+  }
+};
+
+function showError(msg) {
+  const errorEl = document.getElementById('error-message');
+  errorEl.textContent = msg;
+  errorEl.style.display = 'block';
+}
+
+function reset() {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('google-signin').style.display = 'flex';
+}
+
+function save(p) {
+  localStorage.setItem("user_name", p.name);
+  localStorage.setItem("user_email", p.email.toLowerCase());
+  localStorage.setItem("user_picture", p.picture || "");
+  localStorage.setItem("login_time", new Date().toISOString());
+
+  setTimeout(() => {
+    location.href = "home.html";
+  }, 500);
+}
+</script>
+</body>
+</html>

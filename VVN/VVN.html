@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Hệ thống cấp đai Vovinam - Việt Võ Đạo" />
+  <meta name="theme-color" content="#6366f1" />
+  <title>VOVINAM - Hệ Thống Cấp Đai</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --secondary: #22d3ee;
+      --bg: #060b14;
+      --bg-card: #0d1525;
+      --bg-card2: #111c30;
+      --text: #f1f5fb;
+      --text-secondary: #bccde0;
+      --muted: #637d99;
+      --border: rgba(255,255,255,.09);
+      --blue: #2a8fff;
+      --blue-glow: rgba(42,143,255,.18);
+      --yellow: #ffc62e;
+      --yellow-glow: rgba(255,198,46,.18);
+      --pink: #ff1a82;
+      --pink-glow: rgba(255,26,130,.18);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    body {
+      font-family: 'Noto Sans', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Animated noise/grid background ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(99,102,241,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,102,241,.03) 1px, transparent 1px);
+      background-size: 44px 44px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Header ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: rgba(6,11,20,.85);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+      padding: 0 36px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+    }
+
+    .header-container {
+      max-width: 1320px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-left { display: flex; align-items: center; gap: 20px; }
+
+    .back-btn {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      transition: all .25s;
+      letter-spacing: .3px;
+    }
+    .back-btn:hover { background: rgba(99,102,241,.12); color: var(--text); border-color: rgba(99,102,241,.35); }
+
+    h1 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      background: linear-gradient(120deg, #a5b4fc 0%, #38bdf8 60%, #67e8f9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .version {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 5px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: rgba(255,255,255,.04);
+    }
+
+    /* ── Main ── */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 52px 36px 80px;
+    }
+
+    .page-header { margin-bottom: 52px; }
+
+    .page-eyebrow {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .page-eyebrow::after {
+      content: '';
+      display: block;
+      height: 1px;
+      width: 60px;
+      background: linear-gradient(90deg, var(--primary), transparent);
+    }
+
+    .page-title-main {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+
+    .page-description {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 640px;
+    }
+
+    /* ── Grid ── */
+    .levels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 28px;
+    }
+
+    /* ── Level Card ── */
+    .level-card {
+      background: linear-gradient(160deg, var(--bg-card2) 0%, var(--bg-card) 100%);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 30px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .35s cubic-bezier(.4,0,.2,1), box-shadow .35s;
+    }
+
+    /* top shimmer line */
+    .level-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.15) 50%, transparent 100%);
+    }
+
+    /* colored side accent */
+    .level-card::after {
+      content: '';
+      position: absolute;
+      top: 24px; left: 0;
+      width: 3px;
+      height: calc(100% - 48px);
+      border-radius: 0 3px 3px 0;
+      background: var(--accent, var(--primary));
+      opacity: .7;
+    }
+
+    .level-card.sodang  { --accent: var(--blue); }
+    .level-card.trungdang { --accent: var(--yellow); }
+    .level-card.caodang  { --accent: var(--pink); }
+
+    .level-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 28px 72px var(--glow, rgba(99,102,241,.15));
+    }
+    .level-card.sodang:hover   { --glow: var(--blue-glow); border-color: rgba(42,143,255,.25); }
+    .level-card.trungdang:hover { --glow: var(--yellow-glow); border-color: rgba(255,198,46,.25); }
+    .level-card.caodang:hover  { --glow: var(--pink-glow); border-color: rgba(255,26,130,.25); }
+
+    /* ── Level Header ── */
+    .level-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+
+    .level-icon {
+      width: 52px; height: 52px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+      flex-shrink: 0;
+    }
+
+    .level-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: .5px;
+    }
+    .level-badge-count {
+      margin-left: auto;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      background: rgba(255,255,255,.05);
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      letter-spacing: .5px;
+    }
+
+    /* ── Belt List ── */
+    .belt-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+    /* Each row = main item + optional sublinks stacked below */
+    .belt-row { display: flex; flex-direction: column; gap: 6px; }
+
+    /* Main belt item — NOT a link, just visual */
+    .belt-item {
+      width: 100%;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.07);
+      padding: 13px 16px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 14.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: background .25s, border-color .25s;
+    }
+
+    /* clickable variant */
+    a.belt-item {
+      text-decoration: none;
+      cursor: pointer;
+    }
+    a.belt-item:hover {
+      background: rgba(255,255,255,.08);
+      border-color: rgba(255,255,255,.15);
+      color: var(--text);
+    }
+
+    /* disabled (coming soon) */
+    button.belt-item {
+      border: none;
+      cursor: not-allowed;
+      opacity: .55;
+      font-family: inherit;
+    }
+
+    /* badge circle */
+    .belt-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 14px rgba(0,0,0,.4);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .badge-blue   { background: linear-gradient(135deg, #2a8fff, #1060cc); color: #fff; }
+    .badge-yellow { background: linear-gradient(135deg, #ffc62e, #e09500); color: #111; }
+    .badge-pink   { background: linear-gradient(135deg, #ff1a82, #c20055); color: #fff; }
+
+    .belt-name { flex: 1; }
+
+    .belt-status {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .5px;
+      padding: 3px 9px;
+      border-radius: 6px;
+    }
+    .status-available {
+      color: #34d399;
+      background: rgba(52,211,153,.1);
+      border: 1px solid rgba(52,211,153,.2);
+    }
+    .status-soon {
+      color: var(--yellow);
+      background: rgba(255,198,46,.1);
+      border: 1px solid rgba(255,198,46,.2);
+    }
+
+    /* ── Sub-links ── */
+    .belt-sublinks {
+      display: flex;
+      gap: 8px;
+      padding-left: 14px;
+    }
+
+    .sublink {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: .3px;
+      transition: all .22s;
+      border: 1px solid transparent;
+    }
+
+    .sublink-vodao {
+      background: rgba(99,102,241,.12);
+      color: #a5b4fc;
+      border-color: rgba(99,102,241,.2);
+    }
+    .sublink-vodao:hover {
+      background: rgba(99,102,241,.22);
+      border-color: rgba(99,102,241,.4);
+      color: #c7d2fe;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(99,102,241,.2);
+    }
+
+    .sublink-video {
+      background: rgba(34,211,238,.1);
+      color: #67e8f9;
+      border-color: rgba(34,211,238,.2);
+    }
+    .sublink-video:hover {
+      background: rgba(34,211,238,.2);
+      border-color: rgba(34,211,238,.4);
+      color: #a5f3fc;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(34,211,238,.15);
+    }
+
+    /* ── Coming Soon block ── */
+    .coming-soon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+      text-align: center;
+      background: rgba(255,26,130,.05);
+      border: 1px dashed rgba(255,26,130,.2);
+      border-radius: 14px;
+    }
+
+    .coming-soon-icon { font-size: 42px; margin-bottom: 14px; opacity: .75; }
+    .coming-soon-text { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .coming-soon-subtext { font-size: 13px; color: var(--muted); }
+
+    /* ── Footer ── */
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 40px 36px;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.85;
+    }
+    footer p + p { margin-top: 10px; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      header { padding: 0 20px; }
+      main { padding: 36px 20px 60px; }
+      .levels-grid { grid-template-columns: 1fr; gap: 18px; }
+      .page-title-main { font-size: 30px; }
+      h1 { font-size: 22px; }
+      .level-card { padding: 22px 20px; }
+      .belt-sublinks { padding-left: 6px; }
+    }
+
+    @media (max-width: 480px) {
+      .sublink span { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-container">
+      <div class="header-left">
+        <a class="back-btn" href="../home.html">← Quay về</a>
+        <h1>⚔️ VOVINAM</h1>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <div class="page-eyebrow">Việt Võ Đạo</div>
+      <h2 class="page-title-main">Võ đạo và video kỹ thuật tham khảo</h2>
+      <p class="page-description">Mỗi cấp đai đại diện cho sự cố gắng, kỷ luật và tinh thần chiến đấu của một võ sĩ Vovinam.</p>
+    </div>
+
+    <div class="levels-grid">
+
+      <!-- ═══ Sơ Đẳng ═══ -->
+      <div class="level-card sodang">
+        <div class="level-header">
+          <div class="level-icon">🟦</div>
+          <h2 class="level-title">Sơ Đẳng</h2>
+          <span class="level-badge-count">4 cấp</span>
+        </div>
+        <ul class="belt-list">
+
+          <!-- Lam Đai -->
+          <li class="belt-row">
+            <div class="belt-item">
+              <span class="belt-badge badge-blue">L</span>
+              <span class="belt-name">Lam Đai</span>
+              <span class="belt-status status-available">Có sẵn</span>
+            </div>
+            <div class="belt-sublinks">
+              <a href="http://vodao-lamdai" target="_blank" class="sublink sublink-vodao">
+                📖 <span>Võ Đạo</span>
+              </a>
+              <a href="http://video-lamdai" target="_blank" class="sublink sublink-video">
+                🎬 <span>Video kỹ thuật</span>
+              </a>
+            </div>
+          </li>
+
+          <!-- Lam Đai 1 -->
+          <li class="belt-row">
+            <div class="belt-item">
+              <span class="belt-badge badge-blue">L¹</span>
+              <span class="belt-name">Lam Đai 1</span>
+              <span class="belt-status status-available">Có sẵn</span>
+            </div>
+            <div class="belt-sublinks">
+              <a href="http://vodao-lamdai1" target="_blank" class="sublink sublink-vodao">
+                📖 <span>Võ Đạo</span>
+              </a>
+              <a href="http://video-lamdai1" target="_blank" class="sublink sublink-video">
+                🎬 <span>Video kỹ thuật</span>
+              </a>
+            </div>
+          </li>
+
+          <!-- Lam Đai 2 -->
+          <li class="belt-row">
+            <div class="belt-item">
+              <span class="belt-badge badge-blue">L²</span>
+              <span class="belt-name">Lam Đai 2</span>
+              <span class="belt-status status-available">Có sẵn</span>
+            </div>
+            <div class="belt-sublinks">
+              <a href="http://vodao-lamdai2" target="_blank" class="sublink sublink-vodao">
+                📖 <span>Võ Đạo</span>
+              </a>
+              <a href="http://video-lamdai2" target="_blank" class="sublink sublink-video">
+                🎬 <span>Video kỹ thuật</span>
+              </a>
+            </div>
+          </li>
+
+          <!-- Lam Đai 3 -->
+          <li class="belt-row">
+            <div class="belt-item">
+              <span class="belt-badge badge-blue">L³</span>
+              <span class="belt-name">Lam Đai 3</span>
+              <span class="belt-status status-available">Có sẵn</span>
+            </div>
+            <div class="belt-sublinks">
+              <a href="http://vodao-lamdai3" target="_blank" class="sublink sublink-vodao">
+                📖 <span>Võ Đạo</span>
+              </a>
+              <a href="http://video-lamdai3" target="_blank" class="sublink sublink-video">
+                🎬 <span>Video kỹ thuật</span>
+              </a>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+
+      <!-- ═══ Trung Đẳng ═══ -->
+      <div class="level-card trungdang">
+        <div class="level-header">
+          <div class="level-icon">🟨</div>
+          <h2 class="level-title">Trung Đẳng</h2>
+          <span class="level-badge-count">4 cấp</span>
+        </div>
+        <ul class="belt-list">
+
+          <!-- Hoàng Đai -->
+          <li class="belt-row">
+            <div class="belt-item">
+              <span class="belt-badge badge-yellow">H</span>
+              <span class="belt-name">Hoàng Đai</span>
+              <span class="belt-status status-soon">Sắp ra</span>
+            </div>
+            <div class="belt-sublinks">
+              <a href="http://vodao-hoangdai" target="_blank" class="sublink sublink-vodao">
+                📖 <span>Võ Đạo</span>
+              </a>
+              <a href="http://video-hoangdai" target="_blank" class="sublink sublink-video">
+                🎬 <span>Video kỹ thuật</span>
+              </a>
+            </div>
+          </li>
+
+          <!-- Hoàng Đai 1 -->
+          <li class="belt-row">
+            <div class="belt-item">
+              <span class="belt-badge badge-yellow">H¹</span>
+              <span class="belt-name">Hoàng Đai 1</span>
+              <span class="belt-status status-soon">Sắp ra</span>
+            </div>
+            <div class="belt-sublinks">
+              <a href="http://vodao-hoangdai1" target="_blank" class="sublink sublink-vodao">
+                📖 <span>Võ Đạo</span>
+              </a>
+              <a href="http://video-hoangdai1" target="_blank" class="sublink sublink-video">
+                🎬 <span>Video kỹ thuật</span>
+              </a>
+            </div>
+          </li>
+
+          <!-- Hoàng Đai 2 -->
+          <li class="belt-row">
+            <div class="belt-item">
+              <span class="belt-badge badge-yellow">H²</span>
+              <span class="belt-name">Hoàng Đai 2</span>
+              <span class="belt-status status-soon">Sắp ra</span>
+            </div>
+            <div class="belt-sublinks">
+              <a href="http://vodao-hoangdai2" target="_blank" class="sublink sublink-vodao">
+                📖 <span>Võ Đạo</span>
+              </a>
+              <a href="http://video-hoangdai2" target="_blank" class="sublink sublink-video">
+                🎬 <span>Video kỹ thuật</span>
+              </a>
+            </div>
+          </li>
+
+          <!-- Hoàng Đai 3 -->
+          <li class="belt-row">
+            <div class="belt-item">
+              <span class="belt-badge badge-yellow">H³</span>
+              <span class="belt-name">Hoàng Đai 3</span>
+              <span class="belt-status status-soon">Sắp ra</span>
+            </div>
+            <div class="belt-sublinks">
+              <a href="http://vodao-hoangdai3" target="_blank" class="sublink sublink-vodao">
+                📖 <span>Võ Đạo</span>
+              </a>
+              <a href="http://video-hoangdai3" target="_blank" class="sublink sublink-video">
+                🎬 <span>Video kỹ thuật</span>
+              </a>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+
+      <!-- ═══ Cao Đẳng ═══ -->
+      <div class="level-card caodang">
+        <div class="level-header">
+          <div class="level-icon">🎗️</div>
+          <h2 class="level-title">Cao Đẳng</h2>
+        </div>
+        <div class="coming-soon">
+          <div class="coming-soon-icon">⏳</div>
+          <div class="coming-soon-text">Đang phát triển</div>
+          <div class="coming-soon-subtext">Nội dung sẽ được cập nhật sớm</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <p>Vovinam là một phong cách võ thuật Việt Nam truyền thống, kết hợp giữa sức mạnh, linh hoạt và tinh thần chiến đấu.<br>
+    Hành trình chinh phục mỗi cấp đai là sự khẩn trương, tập luyện và hoàn thiện bản thân.</p>
+    <p>© 2024 VOVINAM – Việt Võ Đạo. Tất cả quyền được bảo vệ.</p>
+  </footer>
+
+</body>
+</html>

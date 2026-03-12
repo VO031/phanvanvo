@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Thư viện học code</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#020617,#0f172a);
+color:white;
+}
+
+/* HEADER */
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 50px;
+background:#020617;
+border-bottom:1px solid #1e293b;
+}
+
+.logo{
+font-size:22px;
+font-weight:600;
+}
+
+button{
+padding:10px 16px;
+border:none;
+border-radius:10px;
+background:linear-gradient(135deg,#6366f1,#4f46e5);
+color:white;
+cursor:pointer;
+}
+
+/* CONTAINER */
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:35px;
+}
+
+/* TOOLBAR */
+
+.toolbar{
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+margin-bottom:25px;
+}
+
+input,select{
+padding:12px;
+border-radius:10px;
+border:none;
+background:#1e293b;
+color:white;
+}
+
+/* GRID */
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+gap:20px;
+}
+
+/* CARD */
+
+.card{
+background:#1e293b;
+border-radius:14px;
+overflow:hidden;
+box-shadow:0 10px 25px rgba(0,0,0,.4);
+cursor:pointer;
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-6px);
+}
+
+.card img{
+width:100%;
+height:180px;
+object-fit:cover;
+}
+
+.card-body{
+padding:15px;
+}
+
+.title{
+font-size:17px;
+font-weight:600;
+margin-bottom:6px;
+}
+
+.cat{
+font-size:12px;
+color:#38bdf8;
+margin-bottom:8px;
+}
+
+.deleteBtn{
+background:#ef4444;
+margin-top:10px;
+}
+
+/* MODAL */
+
+.modal{
+position:fixed;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:rgba(0,0,0,.8);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:999;
+}
+
+.modal-box{
+background:#020617;
+padding:25px;
+border-radius:12px;
+width:450px;
+max-height:90vh;
+overflow:auto;
+}
+
+.modal-box input,
+.modal-box textarea,
+.modal-box select{
+width:100%;
+margin-bottom:12px;
+padding:10px;
+border-radius:8px;
+border:none;
+background:#1e293b;
+color:white;
+}
+
+textarea{
+height:120px;
+}
+
+/* VIEWER */
+
+.viewer{
+position:fixed;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:#020617;
+overflow:auto;
+padding:40px;
+display:none;
+z-index:999;
+}
+
+.viewer-header{
+max-width:1300px;
+margin:auto;
+margin-bottom:25px;
+}
+
+.viewer-header img{
+width:100%;
+max-height:320px;
+object-fit:cover;
+border-radius:12px;
+margin-top:10px;
+}
+
+.viewer-layout{
+display:grid;
+grid-template-columns:1.4fr 1fr;
+gap:30px;
+max-width:1300px;
+margin:auto;
+}
+
+/* CODE */
+
+.code-box{
+background:#020617;
+border:1px solid #1e293b;
+border-radius:12px;
+padding:20px;
+}
+
+pre{
+background:#000;
+padding:20px;
+border-radius:10px;
+overflow:auto;
+max-height:600px;
+}
+
+/* VIDEO */
+
+.video-box{
+display:flex;
+flex-direction:column;
+gap:20px;
+}
+
+.video-card{
+background:#020617;
+border:1px solid #1e293b;
+border-radius:12px;
+padding:15px;
+}
+
+.video-card iframe{
+width:100%;
+height:220px;
+border:none;
+border-radius:10px;
+}
+
+.video-card a{
+color:#38bdf8;
+}
+
+/* CLOSE */
+
+.close{
+position:absolute;
+top:20px;
+right:40px;
+font-size:30px;
+cursor:pointer;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+.viewer-layout{
+grid-template-columns:1fr;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">💻 Thư viện học code</div>
+
+<button onclick="logout()">Quay lại</button>
+
+</header>
+
+<div class="container">
+
+<div class="toolbar">
+
+<input id="search" placeholder="Tìm bài..." oninput="render()">
+
+<select id="filter" onchange="render()">
+<option value="">Tất cả danh mục</option>
+</select>
+
+<button id="addBtn" onclick="openModal()" style="display:none">
++ Thêm bài
+</button>
+
+<button id="addCatBtn" onclick="openCatModal()" style="display:none">
++ Thêm danh mục
+</button>
+
+</div>
+
+<div class="grid" id="grid"></div>
+
+</div>
+
+
+<!-- MODAL ADD -->
+
+<div class="modal" id="modal">
+
+<div class="modal-box">
+
+<h3>Thêm bài học</h3>
+
+<input id="title" placeholder="Tên bài">
+
+<select id="cat"></select>
+
+<input id="image" placeholder="Link ảnh minh họa">
+
+<textarea id="code" placeholder="Code (nếu có)"></textarea>
+
+<input id="codeLink" placeholder="Link code dài (Github / Drive)">
+
+<input id="wokwi" placeholder="Link Wokwi">
+
+<input id="videoTheory" placeholder="Video lý thuyết">
+
+<input id="videoDemo" placeholder="Video mô phỏng">
+
+<input id="videoReal" placeholder="Video thực tế">
+
+<button onclick="add()">Lưu</button>
+
+<button onclick="closeModal()">Huỷ</button>
+
+</div>
+
+</div>
+
+
+<!-- CATEGORY -->
+
+<div class="modal" id="catModal">
+
+<div class="modal-box">
+
+<h3>Thêm danh mục</h3>
+
+<input id="catName" placeholder="Tên danh mục">
+
+<button onclick="addCat()">Lưu</button>
+
+<button onclick="closeCatModal()">Huỷ</button>
+
+</div>
+
+</div>
+
+
+<!-- VIEWER -->
+
+<div class="viewer" id="viewer">
+
+<div class="close" onclick="closeView()">✕</div>
+
+<div class="viewer-header">
+
+<h2 id="vTitle"></h2>
+
+<img id="vImage">
+
+</div>
+
+<div class="viewer-layout">
+
+<div class="code-box">
+
+<h3>💻 Code</h3>
+
+<pre id="vCode"></pre>
+
+<div id="codeLinkBox"></div>
+
+</div>
+
+<div class="video-box" id="videoBox"></div>
+
+</div>
+
+</div>
+
+
+<script type="module">
+
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getDatabase,ref,push,onValue,remove} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+const firebaseConfig={
+apiKey:"AIzaSyDYd5jO14_dVM_VTG0-P0m4uCzYRBqheYg",
+authDomain:"iot1-5dea0.firebaseapp.com",
+databaseURL:"https://iot1-5dea0-default-rtdb.firebaseio.com",
+projectId:"iot1-5dea0",
+storageBucket:"iot1-5dea0.appspot.com",
+messagingSenderId:"1092996136822",
+appId:"1:1092996136822:web:127ffa014f0be36225c457"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+let data=[];
+let cats=[];
+let isAdmin=false;
+
+const ADMIN="phanvo0001@gmail.com";
+
+window.onload=()=>{
+
+const email=localStorage.getItem("user_email");
+
+if(!email){
+location.href="index.html";
+return;
+}
+
+isAdmin=email===ADMIN;
+
+if(isAdmin){
+addBtn.style.display="block";
+addCatBtn.style.display="block";
+}
+
+loadCats();
+loadData();
+
+};
+
+/* CATEGORY */
+
+function loadCats(){
+
+onValue(ref(db,"categories_code"),snap=>{
+
+cats=[];
+
+snap.forEach(c=>{
+cats.push(c.val());
+});
+
+renderCats();
+
+});
+
+}
+
+function renderCats(){
+
+filter.innerHTML='<option value="">Tất cả danh mục</option>';
+cat.innerHTML="";
+
+cats.forEach(c=>{
+
+filter.innerHTML+=`<option>${c}</option>`;
+cat.innerHTML+=`<option>${c}</option>`;
+
+});
+
+}
+
+/* LOAD DATA */
+
+function loadData(){
+
+onValue(ref(db,"codes"),snap=>{
+
+data=[];
+
+snap.forEach(v=>{
+data.push({key:v.key,...v.val()});
+});
+
+render();
+
+});
+
+}
+
+/* RENDER */
+
+window.render=function(){
+
+const q=search.value.toLowerCase();
+const f=filter.value;
+
+grid.innerHTML="";
+
+data
+.filter(v=>{
+return(!q||v.title.toLowerCase().includes(q))
+&&(!f||v.category===f);
+})
+.forEach(v=>{
+
+grid.innerHTML+=`
+
+<div class="card" onclick='view(${JSON.stringify(v)})'>
+
+<img src="${v.image||"https://picsum.photos/400/200"}">
+
+<div class="card-body">
+
+<div class="cat">${v.category}</div>
+
+<div class="title">${v.title}</div>
+
+${isAdmin?`<button class="deleteBtn" onclick="del('${v.key}')">Xoá</button>`:""}
+
+</div>
+
+</div>
+
+`;
+
+});
+
+};
+
+/* VIEW */
+
+window.view=function(v){
+
+vTitle.innerText=v.title;
+
+vImage.src=v.image||"https://picsum.photos/1200/400";
+
+vCode.innerText=v.code||"Không có code";
+
+if(v.codeLink){
+
+codeLinkBox.innerHTML=`<a href="${v.codeLink}" target="_blank">🔗 Xem code đầy đủ</a>`;
+
+}else{
+codeLinkBox.innerHTML="";
+}
+
+let html="";
+
+if(v.videoTheory){
+
+html+=`
+<div class="video-card">
+
+<h4>🎓 Video lý thuyết</h4>
+
+<iframe src="https://www.youtube.com/embed/${getID(v.videoTheory)}"></iframe>
+
+</div>
+`;
+
+}
+
+if(v.videoDemo){
+
+html+=`
+<div class="video-card">
+
+<h4>🧪 Video mô phỏng</h4>
+
+<iframe src="https://www.youtube.com/embed/${getID(v.videoDemo)}"></iframe>
+
+</div>
+`;
+
+}
+
+if(v.videoReal){
+
+html+=`
+<div class="video-card">
+
+<h4>📹 Video thực tế</h4>
+
+<iframe src="https://www.youtube.com/embed/${getID(v.videoReal)}"></iframe>
+
+</div>
+`;
+
+}
+
+if(v.wokwi){
+
+html+=`
+<div class="video-card">
+
+<h4>🤖 Mô phỏng Wokwi</h4>
+
+<iframe src="${v.wokwi}"></iframe>
+
+</div>
+`;
+
+}
+
+videoBox.innerHTML=html;
+
+viewer.style.display="block";
+
+};
+
+function getID(url){
+
+const reg=/[?&]v=([^&#]*)/;
+const match=url.match(reg);
+
+if(match) return match[1];
+
+return url.split("/").pop();
+
+}
+
+window.closeView=()=>viewer.style.display="none";
+
+/* ADD */
+
+window.add=async function(){
+
+await push(ref(db,"codes"),{
+
+title:title.value,
+category:cat.value,
+image:image.value||"",
+code:code.value||"",
+codeLink:codeLink.value||"",
+wokwi:wokwi.value||"",
+videoTheory:videoTheory.value||"",
+videoDemo:videoDemo.value||"",
+videoReal:videoReal.value||""
+
+});
+
+closeModal();
+
+};
+
+/* DELETE */
+
+window.del=async function(k){
+
+event.stopPropagation();
+
+if(confirm("Xoá bài?")){
+await remove(ref(db,"codes/"+k));
+}
+
+};
+
+/* CATEGORY */
+
+window.addCat=async function(){
+
+if(!catName.value)return;
+
+await push(ref(db,"categories_code"),catName.value);
+
+closeCatModal();
+
+};
+
+/* MODAL */
+
+window.openModal=()=>modal.style.display="flex";
+window.closeModal=()=>modal.style.display="none";
+
+window.openCatModal=()=>catModal.style.display="flex";
+window.closeCatModal=()=>catModal.style.display="none";
+
+/* LOGOUT */
+
+window.logout=()=>{
+
+localStorage.clear();
+location.href="home.html";
+
+};
+
+</script>
+
+</body>
+</html>

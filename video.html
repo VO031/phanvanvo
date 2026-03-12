@@ -1,0 +1,489 @@
+```html
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Thư Viện Video</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#020617,#0f172a);
+color:white;
+}
+
+/* HEADER */
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:22px 50px;
+background:#020617;
+border-bottom:1px solid #1e293b;
+}
+
+.logo{
+font-size:22px;
+font-weight:700;
+}
+
+/* BUTTON */
+
+button{
+padding:10px 18px;
+border:none;
+border-radius:10px;
+background:linear-gradient(135deg,#6366f1,#4f46e5);
+color:white;
+cursor:pointer;
+}
+
+/* CONTAINER */
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:35px;
+}
+
+/* TOOLBAR */
+
+.toolbar{
+display:flex;
+gap:12px;
+margin-bottom:30px;
+flex-wrap:wrap;
+}
+
+input,select{
+padding:12px;
+border-radius:10px;
+border:none;
+background:#1e293b;
+color:white;
+}
+
+/* GRID */
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(350px,1fr));
+gap:25px;
+}
+
+/* CARD */
+
+.card{
+background:#1e293b;
+border-radius:14px;
+overflow:hidden;
+box-shadow:0 15px 30px rgba(0,0,0,.4);
+transition:.3s;
+cursor:pointer;
+}
+
+.card:hover{
+transform:translateY(-6px);
+}
+
+iframe{
+width:100%;
+height:200px;
+border:none;
+pointer-events:none;
+}
+
+.card-body{
+padding:15px;
+}
+
+.cat{
+color:#38bdf8;
+font-size:12px;
+margin-bottom:5px;
+}
+
+.title{
+font-weight:600;
+margin-bottom:10px;
+}
+
+/* MODAL */
+
+.modal{
+position:fixed;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:rgba(0,0,0,.7);
+display:none;
+align-items:center;
+justify-content:center;
+}
+
+.modal-box{
+background:#020617;
+padding:25px;
+border-radius:12px;
+width:400px;
+}
+
+.modal-box input,
+.modal-box select{
+width:100%;
+margin-bottom:12px;
+}
+
+.modal-box button{
+width:100%;
+margin-top:6px;
+}
+
+/* VIDEO PLAYER */
+
+.videoModal{
+position:fixed;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:rgba(0,0,0,.9);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:999;
+}
+
+.videoBox{
+width:90%;
+max-width:1000px;
+}
+
+.videoBox iframe{
+width:100%;
+height:550px;
+border-radius:12px;
+}
+
+.closeVideo{
+position:absolute;
+top:25px;
+right:40px;
+font-size:30px;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<div class="logo">🎬 Thư Viện Video</div>
+<button onclick="logout()">Quay lại</button>
+</header>
+
+<div class="container">
+
+<div class="toolbar">
+
+<input id="search" placeholder="Tìm video..." oninput="renderVideos()">
+
+<input list="catList" id="filter" placeholder="Tìm danh mục..." oninput="renderVideos()">
+<datalist id="catList"></datalist>
+
+<button id="addVideoBtn" onclick="openModal()" style="display:none">
++ Thêm video
+</button>
+
+<button id="addCatBtn" onclick="openCatModal()" style="display:none">
++ Thêm danh mục
+</button>
+
+</div>
+
+<div class="grid" id="videos"></div>
+
+</div>
+
+<!-- MODAL THÊM VIDEO -->
+
+<div class="modal" id="modal">
+<div class="modal-box">
+
+<h3>Thêm Video</h3>
+
+<input id="videoTitle" placeholder="Tên video">
+
+<select id="videoCat"></select>
+
+<input id="videoLink" placeholder="Link YouTube">
+
+<button onclick="addVideo()">Lưu</button>
+<button onclick="closeModal()">Huỷ</button>
+
+</div>
+</div>
+
+<!-- MODAL DANH MỤC -->
+
+<div class="modal" id="catModal">
+<div class="modal-box">
+
+<h3>Thêm danh mục</h3>
+
+<input id="catName" placeholder="Tên danh mục">
+
+<button onclick="addCategory()">Lưu</button>
+<button onclick="closeCatModal()">Huỷ</button>
+
+</div>
+</div>
+
+<!-- VIDEO PLAYER LỚN -->
+
+<div class="videoModal" id="videoModal">
+
+<div class="closeVideo" onclick="closeVideo()">✕</div>
+
+<div class="videoBox">
+<iframe id="bigVideo" allowfullscreen></iframe>
+</div>
+
+</div>
+
+<script type="module">
+
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getDatabase,ref,push,onValue,remove} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyDYd5jO14_dVM_VTG0-P0m4uCzYRBqheYg",
+authDomain:"iot1-5dea0.firebaseapp.com",
+databaseURL:"https://iot1-5dea0-default-rtdb.firebaseio.com",
+projectId:"iot1-5dea0",
+storageBucket:"iot1-5dea0.appspot.com",
+messagingSenderId:"1092996136822",
+appId:"1:1092996136822:web:127ffa014f0be36225c457"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+let videosData=[];
+let cats=[];
+let isAdmin=false;
+
+const ADMIN="phanvo0001@gmail.com";
+
+window.onload=()=>{
+
+const email=localStorage.getItem("user_email");
+
+if(!email){
+location.href="index.html";
+return;
+}
+
+isAdmin=email===ADMIN;
+
+if(isAdmin){
+addVideoBtn.style.display="block";
+addCatBtn.style.display="block";
+}
+
+loadCats();
+loadVideos();
+
+};
+
+/* CATEGORY */
+
+function loadCats(){
+
+onValue(ref(db,"categories_video"),snap=>{
+
+cats=[];
+
+snap.forEach(c=>{
+cats.push({key:c.key,name:c.val()});
+});
+
+renderCatDropdown();
+
+});
+
+}
+
+function renderCatDropdown(){
+
+catList.innerHTML="";
+videoCat.innerHTML="";
+
+cats.forEach(c=>{
+catList.innerHTML+=`<option value="${c.name}">`;
+videoCat.innerHTML+=`<option>${c.name}</option>`;
+});
+
+}
+
+/* LOAD VIDEOS */
+
+function loadVideos(){
+
+onValue(ref(db,"videos"),snap=>{
+
+videosData=[];
+
+snap.forEach(v=>{
+videosData.push({key:v.key,...v.val()});
+});
+
+renderVideos();
+
+});
+
+}
+
+/* RENDER */
+
+window.renderVideos=function(){
+
+const q=search.value.toLowerCase();
+const cat=filter.value;
+
+videos.innerHTML="";
+
+videosData
+.filter(v=>{
+return(!q||v.title.toLowerCase().includes(q))
+&&(!cat||v.category===cat);
+})
+.forEach(v=>{
+
+const id=getYoutubeId(v.link);
+
+videos.innerHTML+=`
+
+<div class="card" onclick="openVideo('${id}')">
+
+<iframe src="https://www.youtube.com/embed/${id}"></iframe>
+
+<div class="card-body">
+
+<div class="cat">${v.category}</div>
+<div class="title">${v.title}</div>
+
+${isAdmin?`<button onclick="deleteVideo('${v.key}')">Xoá</button>`:""}
+
+</div>
+
+</div>
+
+`;
+
+});
+
+};
+
+/* LẤY ID VIDEO */
+
+function getYoutubeId(url){
+
+const reg=/[?&]v=([^&#]*)/;
+const match=url.match(reg);
+
+if(match) return match[1];
+
+return url.split("/").pop();
+
+}
+
+/* VIDEO PLAYER */
+
+window.openVideo=function(id){
+
+bigVideo.src="https://www.youtube.com/embed/"+id+"?autoplay=1";
+videoModal.style.display="flex";
+
+}
+
+window.closeVideo=function(){
+
+videoModal.style.display="none";
+bigVideo.src="";
+
+}
+
+/* ADD VIDEO */
+
+window.addVideo=async function(){
+
+await push(ref(db,"videos"),{
+title:videoTitle.value,
+link:videoLink.value,
+category:videoCat.value
+});
+
+closeModal();
+
+}
+
+/* ADD CATEGORY */
+
+window.addCategory=async function(){
+
+if(!catName.value)return;
+
+await push(ref(db,"categories_video"),catName.value);
+
+closeCatModal();
+
+}
+
+/* DELETE */
+
+window.deleteVideo=async function(key){
+
+if(confirm("Xoá video?")){
+await remove(ref(db,"videos/"+key));
+}
+
+}
+
+/* MODAL */
+
+window.openModal=()=>modal.style.display="flex";
+window.closeModal=()=>modal.style.display="none";
+
+window.openCatModal=()=>catModal.style.display="flex";
+window.closeCatModal=()=>catModal.style.display="none";
+
+/* LOGOUT */
+
+window.logout=()=>{
+
+localStorage.clear();
+location.href="home.html";
+
+}
+
+</script>
+
+</body>
+</html>
+```

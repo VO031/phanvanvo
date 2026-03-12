@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản Lý Tài Khoản</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366f1; --secondary: #22d3ee; --danger: #ef4444;
+      --success: #10b981; --bg: #020617; --text: #e5e7eb;
+      --muted: #94a3b8; --border: rgba(255,255,255,.12);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:Inter,sans-serif; background:radial-gradient(circle at top,#1e293b,var(--bg)); color:var(--text); min-height:100vh; }
+    header { background:linear-gradient(180deg,rgba(99,102,241,.1),transparent); border-bottom:1px solid var(--border); padding:20px 30px; display:flex; justify-content:space-between; align-items:center; }
+    .header-left { display:flex; align-items:center; gap:15px; }
+    .logo { width:50px; height:50px; background:linear-gradient(135deg,var(--primary),var(--secondary)); border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:20px; box-shadow:0 8px 20px rgba(99,102,241,.4); }
+    .brand { font-size:18px; font-weight:600; }
+    .header-right { display:flex; align-items:center; gap:20px; }
+    .user-info { display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.08); padding:10px 15px; border-radius:10px; border:1px solid var(--border); }
+    .user-avatar { width:32px; height:32px; border-radius:50%; }
+    .logout-btn { background:var(--danger); border:none; color:white; padding:10px 20px; border-radius:8px; cursor:pointer; font-weight:500; }
+    .logout-btn:hover { background:#dc2626; }
+    main { padding:30px; max-width:1400px; margin:0 auto; }
+    .page-title { font-size:32px; margin-bottom:30px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:30px; }
+    .card { background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02)); border:1px solid var(--border); border-radius:16px; padding:30px; backdrop-filter:blur(16px); box-shadow:0 20px 60px rgba(0,0,0,.3); }
+    .card h2 { margin-bottom:20px; font-size:20px; display:flex; align-items:center; gap:10px; }
+    .form-group { margin-bottom:15px; }
+    label { display:block; margin-bottom:8px; font-size:14px; font-weight:500; color:var(--muted); }
+    input[type="text"], input[type="email"], select { width:100%; padding:12px; background:rgba(255,255,255,.08); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:Inter,sans-serif; }
+    input:focus, select:focus { outline:none; border-color:var(--primary); box-shadow:0 0 10px rgba(99,102,241,.3); }
+    select option { background:#1e293b; }
+    .form-buttons { display:flex; gap:10px; margin-top:20px; }
+    .btn { flex:1; padding:12px; border:none; border-radius:8px; font-weight:600; cursor:pointer; font-size:14px; transition:all 0.3s; }
+    .btn-primary { background:linear-gradient(135deg,var(--primary),var(--secondary)); color:white; }
+    .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(99,102,241,.4); }
+    .btn-secondary { background:rgba(99,102,241,.2); color:var(--secondary); border:1px solid var(--secondary); }
+    .btn-danger { background:rgba(239,68,68,.2); color:var(--danger); border:1px solid var(--danger); padding:8px 12px; flex:initial; }
+    .btn-danger:hover { background:rgba(239,68,68,.3); }
+    .users-table { width:100%; border-collapse:collapse; margin-top:20px; }
+    .users-table thead { border-bottom:2px solid var(--border); }
+    .users-table th { text-align:left; padding:15px; font-weight:600; color:var(--muted); font-size:13px; text-transform:uppercase; }
+    .users-table td { padding:15px; border-bottom:1px solid var(--border); font-size:14px; }
+    .users-table tr:hover { background:rgba(99,102,241,.05); }
+    .email-cell { color:var(--secondary); }
+    .role-badge { display:inline-block; padding:6px 12px; border-radius:6px; font-size:12px; font-weight:600; text-transform:uppercase; }
+    .role-admin { background:rgba(239,68,68,.2); color:var(--danger); }
+    .role-user { background:rgba(16,185,129,.2); color:var(--success); }
+    .loading { text-align:center; padding:30px; color:var(--muted); }
+    .spinner { display:inline-block; width:20px; height:20px; border:3px solid var(--border); border-top-color:var(--primary); border-radius:50%; animation:spin 1s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .message { padding:15px; border-radius:8px; margin-bottom:20px; display:none; }
+    .message.success { background:rgba(16,185,129,.2); border:1px solid var(--success); color:var(--success); display:block; }
+    .message.error { background:rgba(239,68,68,.2); border:1px solid var(--danger); color:var(--danger); display:block; }
+    .modal { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.7); backdrop-filter:blur(4px); z-index:1000; align-items:center; justify-content:center; }
+    .modal.active { display:flex; }
+    .modal-content { background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02)); border:1px solid var(--border); border-radius:16px; padding:30px; max-width:400px; width:90%; }
+    @media (max-width:1024px) { .grid { grid-template-columns:1fr; } }
+    @media (max-width:768px) { main { padding:20px; } header { flex-direction:column; gap:15px; } .page-title { font-size:24px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <div class="logo">PVVS</div>
+      <div class="brand">Quản Lý Tài Khoản</div>
+    </div>
+    <div class="header-right">
+      <div class="user-info">
+        <img class="user-avatar" id="user-avatar" src="" alt="">
+        <span id="user-email-display">--</span>
+      </div>
+      <button class="logout-btn" onclick="logout()">Đăng Xuất</button>
+    </div>
+  </header>
+
+  <main>
+    <h1 class="page-title">📊 Quản Lý Tài Khoản</h1>
+    <div id="message" class="message"></div>
+    <div class="grid">
+      <div class="card">
+        <h2>➕ Thêm Tài Khoản Mới</h2>
+        <div class="form-group">
+          <label>Tên Người Dùng</label>
+          <input type="text" id="new-name" placeholder="VD: Nguyễn Văn A">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="new-email" placeholder="user@example.com">
+        </div>
+        <div class="form-group">
+          <label>Vai Trò</label>
+          <select id="new-role">
+            <option value="">Chọn vai trò</option>
+            <option value="user">Nhân Viên</option>
+            <option value="admin">Quản Trị Viên</option>
+          </select>
+        </div>
+        <div class="form-buttons">
+          <button class="btn btn-primary" onclick="addUser()">Thêm Tài Khoản</button>
+          <button class="btn btn-secondary" onclick="clearForm()">Xóa</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2>👥 Danh Sách Tài Khoản</h2>
+        <div id="users-container">
+          <div class="loading"><div class="spinner"></div><p>Đang tải dữ liệu...</p></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <h2 style="margin-bottom:15px">⚠️ Xác Nhận Xóa</h2>
+      <p style="margin-bottom:20px;color:var(--muted)" id="delete-message">Bạn có chắc chắn muốn xóa tài khoản này?</p>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-secondary" onclick="closeDeleteModal()" style="flex:1">Hủy</button>
+        <button class="btn btn-danger" onclick="confirmDelete()" style="flex:1">Xóa</button>
+      </div>
+    </div>
+  </div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, remove, get, child } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDYd5jO14_dVM_VTG0-P0m4uCzYRBqheYg",
+  authDomain: "iot1-5dea0.firebaseapp.com",
+  databaseURL: "https://iot1-5dea0-default-rtdb.firebaseio.com",
+  projectId: "iot1-5dea0",
+  storageBucket: "iot1-5dea0.firebasestorage.app",
+  messagingSenderId: "1092996136822",
+  appId: "1:1092996136822:web:127ffa014f0be36225c457",
+  measurementId: "G-EDQR1Q6543"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const ADMIN_EMAIL = "phanvo0001@gmail.com";
+let deleteTarget = null;
+
+window.addEventListener('load', async () => {
+  const userEmail = localStorage.getItem('user_email') || '';
+  const userPicture = localStorage.getItem('user_picture') || '';
+
+  if (!userEmail) { alert('Vui lòng đăng nhập trước!'); location.href = 'index.html'; return; }
+
+  document.getElementById('user-email-display').textContent = userEmail;
+  if (userPicture) document.getElementById('user-avatar').src = userPicture;
+
+  if (userEmail.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+    showMessage('Chỉ quản trị viên mới có thể truy cập trang này!', 'error');
+    setTimeout(() => location.href = 'home.html', 2000);
+    return;
+  }
+  loadUsers();
+});
+
+async function loadUsers() {
+  try {
+    const snap = await get(child(ref(db), 'nhansu'));
+    let rows = '';
+    if (snap.exists()) {
+      const users = snap.val();
+      for (const key in users) {
+        const u = users[key];
+        const isAdmin = u.email && u.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+        rows += `<tr>
+          <td><strong>${u.name || 'N/A'}</strong></td>
+          <td class="email-cell">${u.email || ''}</td>
+          <td><span class="role-badge ${isAdmin ? 'role-admin' : 'role-user'}">${isAdmin ? 'Admin' : 'Nhân Viên'}</span></td>
+          <td>${!isAdmin
+            ? `<button class="btn btn-danger" onclick="openDeleteModal('${key}','${u.email}')">🗑️ Xóa</button>`
+            : '<span style="color:var(--muted);font-size:12px">Không thể xóa</span>'
+          }</td></tr>`;
+      }
+    }
+    document.getElementById('users-container').innerHTML = `
+      <table class="users-table">
+        <thead><tr><th>Tên</th><th>Email</th><th>Vai Trò</th><th>Thao Tác</th></tr></thead>
+        <tbody>${rows || '<tr><td colspan="4" style="text-align:center;color:var(--muted)">Chưa có tài khoản nào</td></tr>'}</tbody>
+      </table>`;
+  } catch(err) {
+    showMessage('Lỗi tải dữ liệu: ' + err.message, 'error');
+  }
+}
+
+window.addUser = async () => {
+  const name  = document.getElementById('new-name').value.trim();
+  const email = document.getElementById('new-email').value.trim().toLowerCase();
+  const role  = document.getElementById('new-role').value;
+  if (!name || !email || !role) { showMessage('Vui lòng điền đầy đủ thông tin!', 'error'); return; }
+  try {
+    const snap = await get(child(ref(db), 'nhansu'));
+    if (snap.exists()) {
+      let exists = false;
+      snap.forEach(c => { if (c.val().email === email) exists = true; });
+      if (exists) { showMessage('Email này đã được sử dụng!', 'error'); return; }
+    }
+    const userId = email.replace(/[@.]/g, '_');
+    await set(ref(db, `nhansu/${userId}`), { name, email, role, createdAt: new Date().toISOString() });
+    showMessage('Thêm tài khoản thành công!', 'success');
+    clearForm();
+    loadUsers();
+  } catch(err) {
+    showMessage('Lỗi: ' + err.message, 'error');
+  }
+};
+
+window.clearForm = () => {
+  document.getElementById('new-name').value = '';
+  document.getElementById('new-email').value = '';
+  document.getElementById('new-role').value = '';
+};
+
+window.openDeleteModal = (userId, email) => {
+  if (email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) { showMessage('Không thể xóa tài khoản admin!', 'error'); return; }
+  deleteTarget = userId;
+  document.getElementById('delete-message').textContent = `Bạn có chắc chắn muốn xóa tài khoản ${email}?`;
+  document.getElementById('deleteModal').classList.add('active');
+};
+
+window.closeDeleteModal = () => {
+  document.getElementById('deleteModal').classList.remove('active');
+  deleteTarget = null;
+};
+
+window.confirmDelete = async () => {
+  if (!deleteTarget) return;
+  try {
+    await remove(ref(db, `nhansu/${deleteTarget}`));
+    showMessage('Xóa tài khoản thành công!', 'success');
+    closeDeleteModal();
+    loadUsers();
+  } catch(err) {
+    showMessage('Lỗi: ' + err.message, 'error');
+  }
+};
+
+window.logout = () => {
+  if (confirm('Bạn chắc chắn muốn đăng xuất?')) {
+    ['user_name','user_email','user_picture','login_time'].forEach(k => localStorage.removeItem(k));
+    location.href = 'index.html';
+  }
+};
+
+function showMessage(text, type) {
+  const el = document.getElementById('message');
+  el.textContent = text;
+  el.className = 'message ' + type;
+  setTimeout(() => { el.className = 'message'; }, 4000);
+}
+</script>
+</body>
+</html>

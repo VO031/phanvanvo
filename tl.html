@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Thư Viện Tài Liệu</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#020617,#0f172a);
+color:white;
+min-height:100vh;
+}
+
+/* HEADER */
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:22px 50px;
+background:rgba(2,6,23,0.9);
+border-bottom:1px solid #1e293b;
+}
+
+.logo{
+font-size:22px;
+font-weight:700;
+}
+
+/* BUTTON */
+
+button{
+padding:11px 18px;
+border:none;
+border-radius:10px;
+background:linear-gradient(135deg,#6366f1,#4f46e5);
+color:white;
+cursor:pointer;
+font-weight:500;
+transition:.25s;
+}
+
+button:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 20px rgba(99,102,241,.4);
+}
+
+/* CONTAINER */
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:35px;
+}
+
+/* TOOLBAR */
+
+.toolbar{
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+margin-bottom:35px;
+}
+
+input{
+padding:12px 15px;
+border-radius:10px;
+border:none;
+background:#1e293b;
+color:white;
+min-width:230px;
+outline:none;
+}
+
+input:focus{
+box-shadow:0 0 0 2px #6366f1;
+}
+
+/* GRID */
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+gap:25px;
+}
+
+/* CARD */
+
+.card{
+background:#1e293b;
+border-radius:16px;
+overflow:hidden;
+box-shadow:0 15px 35px rgba(0,0,0,.4);
+transition:.35s;
+}
+
+.card:hover{
+transform:translateY(-8px);
+box-shadow:0 25px 50px rgba(0,0,0,.6);
+}
+
+/* IMAGE */
+
+.card img{
+width:100%;
+height:170px;
+object-fit:cover;
+background:#0f172a;
+}
+
+/* BODY */
+
+.card-body{
+padding:18px;
+}
+
+.cat{
+color:#38bdf8;
+font-size:13px;
+margin-bottom:6px;
+}
+
+.title{
+font-size:17px;
+font-weight:600;
+margin-bottom:16px;
+}
+
+/* ACTION */
+
+.actions{
+display:flex;
+gap:10px;
+}
+
+.actions a{
+flex:1;
+text-align:center;
+padding:10px;
+border-radius:8px;
+background:#6366f1;
+color:white;
+text-decoration:none;
+}
+
+.delete{
+background:#ef4444;
+border:none;
+padding:10px;
+border-radius:8px;
+cursor:pointer;
+}
+
+/* MODAL */
+
+.modal{
+position:fixed;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:rgba(0,0,0,.75);
+display:none;
+align-items:center;
+justify-content:center;
+}
+
+.modal-box{
+background:#020617;
+padding:30px;
+border-radius:16px;
+width:420px;
+box-shadow:0 25px 60px rgba(0,0,0,.7);
+}
+
+.modal-box h3{
+margin-bottom:18px;
+}
+
+.modal-box input,
+.modal-box select{
+width:100%;
+margin-bottom:14px;
+padding:12px;
+border-radius:10px;
+border:none;
+background:#1e293b;
+color:white;
+}
+
+.modal-box button{
+width:100%;
+margin-top:8px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<div class="logo">📚 Thư Viện Tài Liệu</div>
+<button onclick="logout()">Quay lại</button>
+</header>
+
+<div class="container">
+
+<div class="toolbar">
+
+<input id="search" placeholder="Tìm tài liệu..." oninput="renderDocs()">
+
+<input list="catList" id="filter" placeholder="Tìm danh mục..." oninput="renderDocs()">
+<datalist id="catList"></datalist>
+
+<button id="addDocBtn" onclick="openModal()" style="display:none">
++ Thêm tài liệu
+</button>
+
+<button id="addCatBtn" onclick="openCatModal()" style="display:none">
++ Thêm danh mục
+</button>
+
+</div>
+
+<div class="grid" id="docs"></div>
+
+</div>
+
+<!-- MODAL ADD DOC -->
+
+<div class="modal" id="modal">
+<div class="modal-box">
+
+<h3>Thêm tài liệu</h3>
+
+<input id="docName" placeholder="Tên tài liệu">
+
+<select id="docCat"></select>
+
+<input id="docLink" placeholder="Link tài liệu">
+
+<input id="docImg" placeholder="Link ảnh minh họa">
+
+<button onclick="addDoc()">Lưu</button> <button onclick="closeModal()">Huỷ</button>
+
+</div>
+</div>
+
+<!-- MODAL ADD CATEGORY -->
+
+<div class="modal" id="catModal">
+<div class="modal-box">
+
+<h3>Thêm danh mục</h3>
+
+<input id="catName" placeholder="Tên danh mục">
+
+<button onclick="addCategory()">Lưu</button> <button onclick="closeCatModal()">Huỷ</button>
+
+</div>
+</div>
+
+<script type="module">
+
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getDatabase,ref,push,remove,onValue} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyDYd5jO14_dVM_VTG0-P0m4uCzYRBqheYg",
+authDomain:"iot1-5dea0.firebaseapp.com",
+databaseURL:"https://iot1-5dea0-default-rtdb.firebaseio.com",
+projectId:"iot1-5dea0",
+storageBucket:"iot1-5dea0.appspot.com",
+messagingSenderId:"1092996136822",
+appId:"1:1092996136822:web:127ffa014f0be36225c457"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+let docs=[];
+let cats=[];
+let isAdmin=false;
+
+const ADMIN="phanvo0001@gmail.com";
+
+window.onload=()=>{
+
+const email=localStorage.getItem("user_email");
+
+if(!email){
+location.href="index.html";
+return;
+}
+
+isAdmin=email===ADMIN;
+
+if(isAdmin){
+addDocBtn.style.display="block";
+addCatBtn.style.display="block";
+}
+
+loadCats();
+loadDocs();
+
+};
+
+function loadCats(){
+
+onValue(ref(db,"categories_tl"),snap=>{
+
+cats=[];
+
+snap.forEach(c=>{
+cats.push({key:c.key,name:c.val()});
+});
+
+renderCatDropdown();
+
+});
+
+}
+
+function renderCatDropdown(){
+
+const list=document.getElementById("catList");
+const docCat=document.getElementById("docCat");
+
+list.innerHTML="";
+docCat.innerHTML="";
+
+cats.forEach(c=>{
+list.innerHTML+=`<option value="${c.name}">`;
+docCat.innerHTML+=`<option>${c.name}</option>`;
+});
+
+}
+
+function loadDocs(){
+
+onValue(ref(db,"tailieu"),snap=>{
+
+docs=[];
+
+snap.forEach(d=>{
+docs.push({key:d.key,...d.val()});
+});
+
+renderDocs();
+
+});
+
+}
+
+window.renderDocs=function(){
+
+const q=search.value.toLowerCase();
+const cat=filter.value;
+
+const docsDiv=document.getElementById("docs");
+
+docsDiv.innerHTML="";
+
+docs.filter(d=>{
+return(!q||d.name.toLowerCase().includes(q))
+&&(!cat||d.category===cat);
+})
+.forEach(d=>{
+
+docsDiv.innerHTML+=`
+
+<div class="card">
+
+<img src="${d.img||'https://picsum.photos/500/300'}"
+onerror="this.src='https://picsum.photos/500/300'">
+
+<div class="card-body">
+
+<div class="cat">${d.category}</div>
+
+<div class="title">${d.name}</div>
+
+<div class="actions">
+
+<a href="${d.link}" target="_blank">Xem</a>
+
+${isAdmin?`<button class="delete" onclick="deleteDoc('${d.key}')">Xoá</button>`:""}
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+};
+
+window.addDoc=async function(){
+
+const name=docName.value;
+const cat=docCat.value;
+const link=docLink.value;
+const img=docImg.value;
+
+await push(ref(db,"tailieu"),{
+name:name,
+category:cat,
+link:link,
+img:img,
+createdAt:new Date().toISOString()
+});
+
+closeModal();
+
+};
+
+window.addCategory=async function(){
+
+const name=catName.value;
+if(!name)return;
+
+await push(ref(db,"categories_tl"),name);
+
+closeCatModal();
+
+};
+
+window.deleteDoc=async function(key){
+
+if(confirm("Xoá tài liệu?")){
+await remove(ref(db,"tailieu/"+key));
+}
+
+};
+
+window.openModal=()=>modal.style.display="flex";
+window.closeModal=()=>modal.style.display="none";
+
+window.openCatModal=()=>catModal.style.display="flex";
+window.closeCatModal=()=>catModal.style.display="none";
+
+window.logout=()=>{
+localStorage.clear();
+location.href="home.html";
+};
+
+</script>
+
+</body>
+</html>
