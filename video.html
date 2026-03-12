@@ -378,7 +378,7 @@ const id=getYoutubeId(v.link);
 
 videos.innerHTML+=`
 
-<div class="card" onclick="openVideo('${id}')">
+<div class="card" data-videoid="${id}">
 
 <iframe src="https://www.youtube.com/embed/${id}"></iframe>
 
@@ -387,7 +387,7 @@ videos.innerHTML+=`
 <div class="cat">${v.category}</div>
 <div class="title">${v.title}</div>
 
-${isAdmin?`<button onclick="deleteVideo('${v.key}')">Xoá</button>`:""}
+${isAdmin?`<button class="btn-delete" data-key="${v.key}">Xoá</button>`:""}
 
 </div>
 
@@ -395,6 +395,20 @@ ${isAdmin?`<button onclick="deleteVideo('${v.key}')">Xoá</button>`:""}
 
 `;
 
+});
+
+// Gắn sự kiện sau khi render xong
+document.querySelectorAll('.card').forEach(card=>{
+card.addEventListener('click',function(e){
+if(e.target.classList.contains('btn-delete')){
+e.stopPropagation();
+const key=e.target.getAttribute('data-key');
+window.deleteVideo(key);
+return;
+}
+const id=this.getAttribute('data-videoid');
+window.openVideo(id);
+});
 });
 
 };
@@ -487,4 +501,3 @@ checkLogin();
 </script>
 </body>
 </html>
-
