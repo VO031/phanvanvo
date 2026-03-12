@@ -105,7 +105,10 @@ pointer-events:none;
 }
 
 .videoBox iframe{
-pointer-events:auto;
+width:100%;
+height:550px;
+border-radius:12px;
+pointer-events:auto !important;
 }
 
 .card-body{
@@ -173,12 +176,6 @@ z-index:999;
 .videoBox{
 width:90%;
 max-width:1000px;
-}
-
-.videoBox iframe{
-width:100%;
-height:550px;
-border-radius:12px;
 }
 
 .closeVideo{
@@ -264,7 +261,7 @@ cursor:pointer;
 <div class="closeVideo" onclick="closeVideo()">✕</div>
 
 <div class="videoBox">
-<iframe id="bigVideo" allowfullscreen></iframe>
+<iframe id="bigVideo" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>
 </div>
 
 </div>
@@ -434,7 +431,7 @@ return url.split("/").pop();
 
 window.openVideo=function(id){
 
-bigVideo.src="https://www.youtube.com/embed/"+id+"?autoplay=1";
+bigVideo.src="https://www.youtube.com/embed/"+id+"?rel=0&enablejsapi=1";
 videoModal.style.display="flex";
 
 }
