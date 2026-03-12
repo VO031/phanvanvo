@@ -623,7 +623,7 @@
         <img class="user-avatar" id="user-avatar" src="" alt="Avatar">
         <div class="user-details">
           <div class="user-name" id="user-name">Guest</div>
-          <div class="user-email" id="user-email">user@example.com</div>
+          <div class="user-email" id="user-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c2b7b1a7b082a7baa3afb2aea7eca1adaf">[email&#160;protected]</a></div>
         </div>
       </div>
       <button class="logout-btn" onclick="logout()">Đăng Xuất</button>
@@ -792,7 +792,7 @@
       </div>
     </div>
   </div>
-<script type="module">
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
@@ -920,7 +920,8 @@ const homePlaylist = [
   { id: 'PUJd0kZpSBA', title: 'Ra khơi cùng đức Kito', artist: 'LM Trần Tuấn' }
 ];
 
-// Load YouTube IFrame API and create a player that autoplays muted.
+// Load YouTube IFrame API and create a player that autoplays muted (required by browser policy).
+// After user clicks the gate button, we immediately unmute for sound.
 let homeCurrentIndex = 0;
 (function loadYouTube() {
   const tag = document.createElement('script');
@@ -938,18 +939,15 @@ let homeCurrentIndex = 0;
         rel: 0,
         modestbranding: 1,
         playsinline: 1,
-        mute: 1
+        mute: 1   // must start muted to satisfy browser autoplay policy
       },
       events: {
         onReady: function(event) {
-  try { 
-    event.target.playVideo(); 
-  } catch(e) {}
-}
-        ,onStateChange: function(event) {
+          try { event.target.playVideo(); } catch(e) {}
+        },
+        onStateChange: function(event) {
           try {
             if(typeof YT !== 'undefined' && event.data === YT.PlayerState.ENDED) {
-              // when a video ends, advance to next track
               try { homePlayNext(); } catch(e) {}
             }
           } catch(e) {}
@@ -957,28 +955,17 @@ let homeCurrentIndex = 0;
       }
     });
   };
-  // (removed indirect click wiring) — the unmute button is wired on DOMContentLoaded
-  
-  // Try to unmute/play on the first user gesture (best-effort).
-  (function tryUnmuteOnFirstGesture(){
-    function doUnmute(){
-      try {
-        if(window.ytHomePlayer && typeof window.ytHomePlayer.unMute === 'function'){
-          window.ytHomePlayer.unMute();
-          window.ytHomePlayer.playVideo && window.ytHomePlayer.playVideo();
-        }
-      } catch(e) {}
-      const overlay = document.getElementById('unmute-overlay');
-      if(overlay) overlay.style.display = 'none';
-      removeListeners();
-    }
 
-    function removeListeners(){
-      ['click','keydown','touchstart','mousemove'].forEach(ev => document.removeEventListener(ev, doUnmute));
-    }
-
-    ['click','keydown','touchstart','mousemove'].forEach(ev => document.addEventListener(ev, doUnmute, {passive:true}));
-  })();
+  // Global unmute helper — called by the gate button
+  window.unmuteAndPlay = function() {
+    try {
+      if(window.ytHomePlayer && typeof window.ytHomePlayer.unMute === 'function') {
+        window.ytHomePlayer.unMute();
+        window.ytHomePlayer.setVolume && window.ytHomePlayer.setVolume(100);
+        window.ytHomePlayer.playVideo && window.ytHomePlayer.playVideo();
+      }
+    } catch(e) {}
+  };
 })();
 
 function homeInitPlaylist() {
@@ -1031,50 +1018,32 @@ window.homePlayPrevious = homePlayPrevious;
 // Khởi tạo music player khi trang load
 document.addEventListener('DOMContentLoaded', () => {
   homeInitPlaylist();
-  // Show unmute overlay immediately and wire button to unmute when pressed
-  if(overlay) overlay.style.display = 'flex';
-  if(btn) {
-    btn.addEventListener('click', function(){
-      try {
-        if(window.ytHomePlayer && typeof window.ytHomePlayer.unMute === 'function'){
-          window.ytHomePlayer.unMute();
-          window.ytHomePlayer.playVideo && window.ytHomePlayer.playVideo();
-        } else {
-          // If API not ready, attempt to replace fallback iframe with autoplay (may still be muted by browser)
-          const container = document.getElementById('home-youtube-player');
-          if(container) container.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${homePlaylist[homeCurrentIndex].id}?autoplay=1&controls=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
-        }
-      } catch(e) {}
-      if(overlay) overlay.style.display = 'none';
-    });
-  }
-  // Audio gate: require pressing button to enter site on every load (no persistence)
+
+  // Audio gate: hiện overlay mỗi lần load, yêu cầu nhấn để bật âm thanh
   const gate = document.getElementById('audio-gate');
   const gateBtn = document.getElementById('gate-unmute-btn');
-  // always show gate each load
   if(gate) gate.style.display = 'flex';
   document.body.classList.add('no-scroll');
-  if(gateBtn) {
-    gateBtn.addEventListener('click', function(){
-      try {
-        if(window.ytHomePlayer && typeof window.ytHomePlayer.unMute === 'function'){
-          window.ytHomePlayer.unMute();
-          window.ytHomePlayer.playVideo && window.ytHomePlayer.playVideo();
-        } else {
-          const container = document.getElementById('home-youtube-player');
-          if(container) container.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${homePlaylist[homeCurrentIndex].id}?autoplay=1&controls=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
-        }
-      } catch(e) {}
-      if(gate) gate.style.display = 'none';
-      document.body.classList.remove('no-scroll');
-    });
-  }
-});
-</script>
-<script type="module">
-import {checkLogin} from "./auth.js";
 
-checkLogin();
+  function doUnmuteAndEnter() {
+    // Đây là user gesture hợp lệ → unmute ngay lập tức
+    try {
+      if(window.ytHomePlayer && typeof window.ytHomePlayer.unMute === 'function'){
+        window.ytHomePlayer.unMute();
+        window.ytHomePlayer.setVolume && window.ytHomePlayer.setVolume(100);
+        window.ytHomePlayer.playVideo && window.ytHomePlayer.playVideo();
+      } else {
+        // API chưa sẵn sàng: thay iframe với autoplay có âm
+        const container = document.getElementById('home-youtube-player');
+        if(container) container.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${homePlaylist[homeCurrentIndex].id}?autoplay=1&controls=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+      }
+    } catch(e) {}
+    if(gate) gate.style.display = 'none';
+    document.body.classList.remove('no-scroll');
+  }
+
+  if(gateBtn) gateBtn.addEventListener('click', doUnmuteAndEnter);
+});-e 
 </script>
 </body>
 </html>
