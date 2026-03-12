@@ -255,5 +255,10 @@ function showMessage(text, type) {
   setTimeout(() => { el.className = 'message'; }, 4000);
 }
 </script>
+<script type="module">
+import {checkAdmin} from "./auth.js";
+
+checkAdmin();
+</script>
 </body>
 </html>
