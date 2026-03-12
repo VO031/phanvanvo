@@ -256,12 +256,12 @@ cursor:pointer;
 
 <!-- VIDEO PLAYER LỚN -->
 
-<div class="videoModal" id="videoModal">
+<div class="videoModal" id="videoModal" onclick="closeVideo()">
 
-<div class="closeVideo" onclick="closeVideo()">✕</div>
+<div class="closeVideo">✕</div>
 
-<div class="videoBox">
-<iframe id="bigVideo" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>
+<div class="videoBox" onclick="event.stopPropagation()">
+<iframe id="bigVideo" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" style="pointer-events:auto!important"></iframe>
 </div>
 
 </div>
